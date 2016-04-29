@@ -1,3 +1,5 @@
+import java.util.List;
+import java.util.Scanner;
 
 public class ProgramChair extends User {
 
@@ -5,12 +7,21 @@ public class ProgramChair extends User {
 		super(theName, theEmail);
 	}
 
-	private Manuscript viewManuscripts() {
+	private Manuscript viewManuscripts(List theManuscripts) {
 		
-		return new Manuscript();  //temp
+		return theManuscripts.toString();  //temp
 	}
 	
-	private void submitDecision() {
+	private void submitDecision(Manuscript theManuscript, boolean isAccepted) {
+//		Scanner s = new Scanner(System.in);
+//		System.out.println("Please indicate your decision for this manuscript.\nEnter A for accept or R for reject.");
+//		String choice = s.next();
+//		if (s.equals("A")){
+//			theManuscript.acceptanceStatus = True;
+//		} else {
+//			theManuscript.acceptanceStatus = False;
+//		}
+		theManuscript.acceptanceStatus = isAccepted;
 		
 	}
 	
