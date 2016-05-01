@@ -29,9 +29,6 @@ public class Author extends User {
 			myManuscripts.remove(index);
 		}
 	}
-		}
-		
-	}
 
 	public void editManuscript() {
 		
