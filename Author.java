@@ -25,7 +25,7 @@ public class Author extends User {
 				found  = true;
 			}
 		}
-		if (found = true) {
+		if (found = true) { //index out of bounds
 			myManuscripts.remove(index);
 		}
 	}
