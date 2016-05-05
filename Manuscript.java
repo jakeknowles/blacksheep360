@@ -1,20 +1,26 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.io.Serializable;
 
-public class Manuscript {
+public class Manuscript implements java.io.Serializable {
 
 	public File myManuscript;
-	public String myEmail;
+	public List myReviews;
+	public String myAuthorName;
+	public Recommendation myRecommendation;
+	public Boolean myApproval;
 	
-	public Manuscript() {
-		
-	}
-	
-	public void login() {
-		
+	public Manuscript(File theManuscript, String theAuthorName) {
+		myManuscript = theManuscript;
+		myReviews = new ArrayList<Review>();
+		myAuthorName = theAuthorName;
+		myApproval = false;
+		myRecommendation = null;
 	}
 	
 	public String toString() {
-		return "I'm a Manuscript";
+		return myManuscript.getName();
 	}
 	
 }

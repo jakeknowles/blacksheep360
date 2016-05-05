@@ -1,6 +1,7 @@
 import java.io.File;
+import java.io.Serializable;
 
-public class Review {
+public class Review implements java.io.Serializable {
 	
 	public File myReviewForm;
 	

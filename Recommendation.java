@@ -1,6 +1,7 @@
 import java.io.File;
+import java.io.Serializable;
 
-public class Recommendation {
+public class Recommendation implements java.io.Serializable {
 	
 	public File myRecommendationForm;
 	
