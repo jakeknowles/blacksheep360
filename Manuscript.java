@@ -3,6 +3,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 
+/**
+ * @author Alexandria Reynolds
+ * @author Carl Huntington
+ * @author Geoffrey Tanay
+ * @author Jake Knowles
+ *  
+ * @version 4/29/2016
+ */
 public class Manuscript implements java.io.Serializable {
 
 	public File myManuscript;
