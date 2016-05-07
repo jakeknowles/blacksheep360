@@ -1,7 +1,12 @@
 
 import java.io.Serializable;
  
-public class User implements java.io.Serializable {
+public class User implements Serializable {
+	
+	public static final String SUBPROGRAM_CHAIR = "SubProgram Chair";
+	public static final String AUTHOR = "Author";
+	public static final String REVIEWER = "Reviewer";
+	public static final String PROGRAM_CHAIR = "Program Chair";
 
 	public String myName;
 	public Roles myRoles;
@@ -12,13 +17,13 @@ public class User implements java.io.Serializable {
 	}
 
 	public boolean isRole(String theRole) {
-		if (theRole.equals("Author")) {
+		if (theRole.equals(AUTHOR)) {
 			return myRoles.myAuthor != null;
-		} else if (theRole.equals("Reviewer")) {
+		} else if (theRole.equals(REVIEWER)) {
 			return myRoles.myReviewer != null;
-		} else if (theRole.equals("SubProgramChair")) {
+		} else if (theRole.equals(SUBPROGRAM_CHAIR)) {
 			return myRoles.mySubProgramChair != null;
-		} else if (theRole.equals("ProgramChair")) {
+		} else if (theRole.equals(PROGRAM_CHAIR)) {
 			return myRoles.myProgramChair != null;
 		}
 		return false;

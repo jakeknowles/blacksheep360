@@ -1,28 +1,41 @@
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 
-public class Reviewer implements java.io.Serializable {
+public class Reviewer implements Serializable {
 
-	public Manuscript[] myManuscripts;
-	public Review[] myReview;
+	public static final int MANUSCRIPT_LIMIT = 4;
+	public List<Manuscript> myManuscripts;
+	public List<Review> myReview;
 	
 	public Reviewer(String theName) {
-		myManuscripts = new Manuscript[4];
+		myManuscripts = new ArrayList<Manuscript>(MANUSCRIPT_LIMIT);
 
 	}
 
-	public void submitReview(File theReview, int theReviewNum) {
-		myReview[theReviewNum] = new Review(theReview);
+	public void submitReview(File theReview, Manuscript theManuscript) {
+		Review rev = new Review(theReview);
+		myReview.add(rev);
+		theManuscript.myReviews.add(rev);
 	}
 	
-// Note: Commenting this out b/c I don't believe it's required since there is no user story.
-//	public void editReview() {
-//		
-//	}
-	
-	public String toString() {
-		return  "Im a Reviewer";
+	public boolean addManuscript(Manuscript theManuscript, String theUserName) {
+		boolean result = false;
+		if(myManuscripts.size() < MANUSCRIPT_LIMIT && !theManuscript.myAuthorName.equals(theUserName)) {
+			myManuscripts.add(theManuscript);
+			result = true;
+		}
+		return result;
 	}
-
+	
+	public String getManuscripts() {
+		StringBuilder str = new StringBuilder();
+		for (int i = 0; i < myManuscripts.size(); i++) {
+			str.append(i + 1);
+			str.append(". ");
+			str.append(myManuscripts.get(i).toString() + "\n");
+		}
+		return str.toString();
+	}
 }

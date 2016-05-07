@@ -3,10 +3,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 
-public class Manuscript implements java.io.Serializable {
+public class Manuscript implements Serializable {
 
+	public String myTitle;
 	public File myManuscript;
-	public List myReviews;
+	public List<Review> myReviews;
 	public String myAuthorName;
 	public Recommendation myRecommendation;
 	public Boolean myApproval;
@@ -17,10 +18,11 @@ public class Manuscript implements java.io.Serializable {
 		myAuthorName = theAuthorName;
 		myApproval = false;
 		myRecommendation = null;
+		myTitle = theManuscript.getName();
 	}
 	
 	public String toString() {
-		return myManuscript.getName();
+		return myTitle + " - " + myAuthorName;
 	}
 	
 }

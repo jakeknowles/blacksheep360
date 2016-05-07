@@ -1,7 +1,7 @@
 import java.io.File;
 import java.io.Serializable;
 
-public class Recommendation implements java.io.Serializable {
+public class Recommendation implements Serializable {
 	
 	public File myRecommendationForm;
 	
@@ -10,7 +10,7 @@ public class Recommendation implements java.io.Serializable {
 	}
 	
 	public String toString() {
-		return "I'm a recommendation";
+		return myRecommendationForm.getName();
 	}
 
 }

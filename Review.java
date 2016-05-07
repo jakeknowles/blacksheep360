@@ -1,7 +1,7 @@
 import java.io.File;
 import java.io.Serializable;
 
-public class Review implements java.io.Serializable {
+public class Review implements Serializable {
 	
 	public File myReviewForm;
 	
@@ -10,7 +10,7 @@ public class Review implements java.io.Serializable {
 	}
 	
 	public String toString() {
-		return "I'm a review";
+		return myReviewForm.getName();
 	}
 
 }

@@ -1,42 +1,34 @@
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 
 
-public class Author implements java.io.Serializable {
+public class Author implements Serializable {
 
-	public List myManuscripts;
-	public Manuscript myManuscript;
+	public List<Manuscript> myManuscripts;
+	public String myName;
 	
 	public Author(String theName) {
+		myName = theName;
+		myManuscripts = new ArrayList<Manuscript>();
 	}
 
-	private void submitManuscript(File theManuscript) {
-//		myManuscript = theManuscript;
-//		mFixMe= new Manuscript(myManuscript);
-		
+	public Manuscript submitManuscript(File theManuscript) {
+		Manuscript submitted = new Manuscript(theManuscript, myName);
+		myManuscripts.add(submitted);
+		return submitted;
 	}
 	
 	
-	public void deleteManuscript(File theManuscript) { //A very brief outline 
-		boolean isFound = false;
-//		myManuscript = theManuscript;
-//		for (int index = 0; !found && (index < myManuscripts); index++) {
-//			if (myManuscript.equals(myManuscripts[index]) {
-//				found  = true;
-//			}
-//		}
-//		if (found = true) { //index out of bounds
-//			myManuscripts.remove(index);
-//		}
+	public void deleteManuscript(Manuscript theManuscript) {
+		int index = myManuscripts.indexOf(theManuscript);
+		if (index > -1) {
+			myManuscripts.remove(index);
+		}
 	}
 
-	public void editManuscript() {
-		
+	public void editManuscript(Manuscript theManuscript, File theNewFile) {
+		theManuscript.myManuscript = theNewFile;
 	}
-
-	public String toString() {
-		return "Im a Author";
-	}
-
 }

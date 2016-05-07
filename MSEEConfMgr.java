@@ -16,11 +16,11 @@ import java.io.Serializable;
  */
 
 
-public class MSEEConfMgr implements Serializable {
+public class MSEEConfMgr {
 
 	static MSEEConfMgr serializeMe = new MSEEConfMgr();
-	static HashMap<String, User> myUsers = new HashMap();
-	static Conference myConf = new Conference(new ProgramChair("Kevin"), "Innovative Trends in Science");
+	static HashMap<String, User> myUsers = new HashMap<String, User>();
+	static Conference myConf = new Conference(new User("Kevin"), "Innovative Trends in Science");
 	static String myWhoAmI;
 	static String myRole;
 	
@@ -38,34 +38,32 @@ public class MSEEConfMgr implements Serializable {
 		
 		myUsers.put("Ron", new User("Ron")); //Name/Role
 		myUsers.get("Ron").myRoles.myReviewer = new Reviewer("Ron");
-		myUsers.get("Ron").myRoles.myReviewer.myManuscripts[0] = 
-				new Manuscript(new File("src/AntiSocialNetwork.doc"), "Arthur");
+		myUsers.get("Ron").myRoles.myReviewer.addManuscript(new Manuscript(new File("src/AntiSocialNetwork.doc"), "Arthur"), "Ron");
 		
 		myUsers.put("Steve", new User("Steve")); //Name/Role
-		myUsers.get("Steve").myRoles.mySubProgramChair = new SubProgramChair("Steve");
-		myUsers.get("Steve").myRoles.mySubProgramChair.myManuscripts[0] = 
-				new Manuscript(new File("src/AntiSocialNetwork.doc"), "Arthur");
+		myUsers.get("Steve").myRoles.mySubProgramChair = new SubProgramChair();
+		myUsers.get("Steve").myRoles.mySubProgramChair.addManuscript(new Manuscript(new File("src/AntiSocialNetwork.doc"), "Arthur"), "Steve");
 
 		myUsers.put("Peter", new User("Peter")); //Name/Role
-		myUsers.get("Peter").myRoles.myProgramChair = new ProgramChair("Peter");
+		myUsers.get("Peter").myRoles.myProgramChair = new ProgramChair();
 		for (int i = 0; i < 5; i++) {
 			myConf.myManuscripts.put("name" + i, new Manuscript(new File("src/review.txt"), "something"));
 		}
 		
-		try {
-			FileInputStream fileIn = new FileInputStream("src/MSEE.ser");
-	        ObjectInputStream in = new ObjectInputStream(fileIn);
-	        serializeMe = (MSEEConfMgr) in.readObject();
-	        in.close();
-	        fileIn.close();
-		} catch(IOException i) {
-	        i.printStackTrace();
-	        return;
-		} catch(ClassNotFoundException c) {
-	        System.out.println("MSEE class not found");
-	        c.printStackTrace();
-	        return;
-		}
+//		try {
+//			FileInputStream fileIn = new FileInputStream("src/MSEE.ser");
+//	        ObjectInputStream in = new ObjectInputStream(fileIn);
+//	        serializeMe = (MSEEConfMgr) in.readObject();
+//	        in.close();
+//	        fileIn.close();
+//		} catch(IOException i) {
+//	        i.printStackTrace();
+//	        return;
+//		} catch(ClassNotFoundException c) {
+//	        System.out.println("MSEE class not found");
+//	        c.printStackTrace();
+//	        return;
+//		}
 		
 		String whoAmI = login();
 		myWhoAmI = whoAmI;
@@ -81,6 +79,7 @@ public class MSEEConfMgr implements Serializable {
 		String userName = console.next();
 		System.out.print("Enter Your Role > ");
 		myRole = console.next();
+		console.close();
 		return userName;
 	}
 	
@@ -112,19 +111,23 @@ public class MSEEConfMgr implements Serializable {
 		System.out.println("\t4. Exit");
 		System.out.println("Enter a selection");
 		temp = console.nextInt();
+		console.close();
 		switch (temp) {
 		case 1:
+			console.close();
 			submitManuscript();
 			break;
 		case 2:
+			console.close();
 			editManuscript();
 			break;
 		case 3:
+			console.close();
 			removeManuscript();
 			break;
 		case 4:
 			System.out.println("Exiting - Goodbye!"); 
-			serial();
+			//serial();
 			break;
 
 		}
@@ -144,11 +147,10 @@ public class MSEEConfMgr implements Serializable {
 		System.out.println("\t5. Exit");
 		System.out.println("Enter a selection");
 		temp = console.nextInt();
+		console.close();
 		switch (temp) {
 		case 1:
-			for (String s : myConf.myManuscripts.keySet()) {
-				System.out.println(myConf.myManuscripts.get(s));
-			}
+			myUsers.get(theWhoIam).myRoles.myProgramChair.viewManuscripts(myConf.myManuscripts);
 			pcInterface(myWhoAmI);
 			break;
 		case 2:
@@ -157,9 +159,8 @@ public class MSEEConfMgr implements Serializable {
 		case 3:
 			for (String s : myUsers.keySet()) {
 				if (myUsers.get(s).isRole("SubProgramChair")) {
-					for (int i = 0; i < myUsers.get(s).myRoles.mySubProgramChair.myManuscripts.length; i++) {
-						System.out.println(s + myUsers.get(s).myRoles.mySubProgramChair.myManuscripts[i]);
-					}
+					System.out.println(s + ":");
+					System.out.println(myUsers.get(s).myRoles.mySubProgramChair.getManuscripts());
 				}
 			}
 			pcInterface(myWhoAmI);
@@ -169,7 +170,7 @@ public class MSEEConfMgr implements Serializable {
 			break;
 		case 5:
 			System.out.println("Exiting - Goodbye!");
-			serial();
+			//serial();
 			break;
 		}
 	}
@@ -186,11 +187,13 @@ public class MSEEConfMgr implements Serializable {
 		String name = s.next();
 		if (name.equals("1")) {
 			if (myUsers.get(myWhoAmI).isRole(myRole)) {
+				s.close();
 				pcInterface(myWhoAmI); //GO TO AUTHOR
 			}
 		} else if (name.equals("2")) {
+			s.close();
 			System.out.println("Exiting - Goodbye!");
-			serial();
+			//serial();
 		} else {
 			System.out.println("Please enter the name of the manuscript you wish to assign:");
 			for (String str : myConf.myManuscripts.keySet()) {
@@ -200,12 +203,9 @@ public class MSEEConfMgr implements Serializable {
 			}
 			System.out.println("> ");
 			String selection = s.next();
-			for (int i = 0; i < 4; i++) {
-				if (myUsers.get(name).myRoles.mySubProgramChair.myManuscripts[i] == null) {
-					myUsers.get(name).myRoles.mySubProgramChair.myManuscripts[i] = myConf.myManuscripts.get(selection);
-				}
-			}
+			myUsers.get(myWhoAmI).myRoles.myProgramChair.assignManuscripts(myUsers.get(name), myConf.myManuscripts.get(selection));
 			System.out.println("SUCCESS!");
+			s.close();
 			assignSPC();
 		}
 	}
@@ -214,27 +214,27 @@ public class MSEEConfMgr implements Serializable {
 		Scanner s = new Scanner(System.in);
 		System.out.println("MSEE Conference Management");
 		System.out.println("Program Chair - " + myWhoAmI);
-		int i = 1;
 		for (String str : myConf.myManuscripts.keySet()) {
 			System.out.print(str + " ");
 			System.out.println(myConf.myManuscripts.get(str));
 		}
-		System.out.println("Enter the name of the Author for the "
+		System.out.println("Enter the title of the "
 				+ "manuscript you want to accept/reject.");
 		System.out.println("\n\t- OR -");
 		System.out.println("\t1. Back");
 		System.out.println("\t2. Exit");
 		System.out.print("> ");
 		String input = s.next();
+		s.close();
 		if (input.equals("1")) {
 			if (myUsers.get(myWhoAmI).isRole(myRole)) {
 				pcInterface(myWhoAmI); //GO TO AUTHOR
 			}
 		} else if (input.equals("2")) {
 			System.out.println("Exiting - Goodbye!");
-			serial();
+			//serial();
 		} else {
-			myConf.myManuscripts.get(input).myApproval = true;
+			myUsers.get(myWhoAmI).myRoles.myProgramChair.submitDecision(myConf.myManuscripts.get(input), true);
 			System.out.println("SUCCESS!");
 			acceptance();
 		}
@@ -252,6 +252,7 @@ public class MSEEConfMgr implements Serializable {
 		System.out.println("\t3. Exit");
 		System.out.println("Enter a selection");
 		temp = console.nextInt();
+		console.close();
 		switch (temp) {
 		case 1:
 			assignReviewer();
@@ -261,7 +262,7 @@ public class MSEEConfMgr implements Serializable {
 			break;
 		case 3:
 			System.out.println("Exiting - Goodbye!");
-			serial();
+			//serial();
 			break;
 		}
 	}
@@ -280,33 +281,24 @@ public class MSEEConfMgr implements Serializable {
 		String name = s.next();
 		if (name.equals("1")) {
 			if (myUsers.get(myWhoAmI).isRole(myRole)) {
+				s.close();
 				subpcInterface(myWhoAmI); //GO TO AUTHOR
 			}
 		} else if (name.equals("2")) {
+			s.close();
 			System.out.println("Exiting - Goodbye!");
-			serial();
+			//serial();
 		} else {
 			//Show a list (with numbers) of papers with exception of those authored by that reviewer
 			//Select a paper number
 			//Attach selected paper to selected reviewer			
 			System.out.println("Please select the manuscript number you wish to assign:");
-			for (int i = 0; i < 4; i++) {
-				if (myUsers.get(myWhoAmI).myRoles.mySubProgramChair.myManuscripts[i] != null
-						&& !myUsers.get(myWhoAmI).myRoles.mySubProgramChair.myManuscripts[i]
-								.myAuthorName.equals(name)) {
-					System.out.println((i + 1) + ". " + myUsers.get(myWhoAmI)
-							.myRoles.mySubProgramChair.myManuscripts[i].toString());	
-				}
-			}
+			System.out.println(myUsers.get(myWhoAmI).myRoles.mySubProgramChair.getManuscripts());
 			System.out.println("> ");
 			int selection = s.nextInt();
-			for (int i = 0; i < 4; i++) {
-				if (myUsers.get(name).myRoles.myReviewer.myManuscripts[i] == null) {
-					myUsers.get(name).myRoles.myReviewer.myManuscripts[i] = myUsers.get(myWhoAmI)
-							.myRoles.mySubProgramChair.myManuscripts[selection - 1];
-				}
-			}
-//			System.out.println(myUsers.get(name).myRoles.myReviewer.myManuscripts[0]);
+			s.close();
+			SubProgramChair me = myUsers.get(myWhoAmI).myRoles.mySubProgramChair;
+			me.assignReviewer(me.myManuscripts.get(selection - 1), myUsers.get(name));
 			System.out.println("SUCCESS!");
 			assignReviewer();
 		}
@@ -324,6 +316,7 @@ public class MSEEConfMgr implements Serializable {
 		System.out.println("\t3. Exit");
 		System.out.println("Enter a selection");
 		temp = console.nextInt();
+		console.close();
 		switch (temp) {
 		case 1:
 			submitReview();
@@ -332,7 +325,7 @@ public class MSEEConfMgr implements Serializable {
 			break;
 		case 3:
 			System.out.println("Exiting - Goodbye!");
-			serial();
+			//serial();
 			break;
 
 		}
@@ -349,20 +342,20 @@ public class MSEEConfMgr implements Serializable {
 		System.out.println("\t2. Exit");
 		System.out.println("Enter a selection");
 		temp = console.nextInt();
+		console.close();
 		switch (temp) {
 			case 1:
 				submitManuscript();
 				break;
 			case 2:
 				System.out.println("Exiting - Goodbye!");
-				serial();
+				//serial();
 				break;
 
 		}
 	}
 	
 	public static void submitManuscript() {
-		int temp = 0;
 		Scanner s = new Scanner(System.in);
 		System.out.println("MSEE Conference Management");
 //		System.out.println(myUsers.get(myWhoAmI).getClass().toString().
@@ -377,6 +370,7 @@ public class MSEEConfMgr implements Serializable {
 		System.out.println("\t2. Exit");
 		System.out.println("> ");
 		String file = s.nextLine();
+		s.close();
 		if (file.equals("1")) {
 			if (myUsers.get(myWhoAmI).isRole(myRole)) {
 				authorInterface(myWhoAmI); //GO TO AUTHOR
@@ -385,20 +379,23 @@ public class MSEEConfMgr implements Serializable {
 			}
 		} else if (file.equals("2")) {
 			System.out.println("Exiting - Goodbye!");
-			serial();
+			//serial();
 		} else {
 			File toBeSaved = new File(file);
-//			System.out.println(toBeSaved.length());
-			myConf.addManuscript(myWhoAmI, toBeSaved);
+			User me = myUsers.get(myWhoAmI);
+			if (!me.isRole(User.AUTHOR)) {
+				me.myRoles.myAuthor = new Author(me.myName);
+			}
+			Manuscript newManuscript = me.myRoles.myAuthor.submitManuscript(toBeSaved);
+			myConf.addManuscript(newManuscript);
+			System.out.println(toBeSaved.length());
 			System.out.println("SUCCESS!");
-			myUsers.get(myWhoAmI).myRoles.myAuthor = new Author(myWhoAmI);
 			myRole = "Author";
 			submitManuscript();
 		}
 	}
 	
 	public static void editManuscript() {
-		int temp = 0;
 		Scanner s = new Scanner(System.in);
 		System.out.println("MSEE Conference Management");
 //		System.out.println(myUsers.get(myWhoAmI).getClass().toString().
@@ -413,29 +410,29 @@ public class MSEEConfMgr implements Serializable {
 		System.out.println("\t2. Exit");
 		System.out.println("> ");
 		String file = s.nextLine();
+		s.close();
 		if (file.equals("1")) {
 			authorInterface(myWhoAmI); //GO TO AUTHOR
 		} else if (file.equals("2")) {
 			System.out.println("Exiting - Goodbye!");
-			serial();
+			//serial();
 		} else {
 			File toBeSaved = new File(file);
-//			System.out.println(toBeSaved.length());
-			myConf.addManuscript(myWhoAmI, toBeSaved);
+			Manuscript change = myConf.myManuscripts.get(toBeSaved.getName());
+			myUsers.get(myWhoAmI).myRoles.myAuthor.editManuscript(change, toBeSaved);
 			System.out.println("SUCCESS!");
 			editManuscript();
 		}
 	}
 	
 	public static void removeManuscript() {
-		int temp = 0;
 		Scanner s = new Scanner(System.in);
 		System.out.println("MSEE Conference Management");
 //		System.out.println(myUsers.get(myWhoAmI).getClass().toString().
 //				substring(6, myUsers.get(myWhoAmI).getClass().
 //						toString().length()) +" " + myWhoAmI);
 		System.out.println(myRole + " - " + myWhoAmI);
-		System.out.println("Enter the file path and name for the manuscript");
+		System.out.println("Enter the title for the manuscript");
 		System.out.println("you wish to remove");
 		System.out.println("ex. C:\\Documents\\example.doc");
 		System.out.println("\n\t- OR -");
@@ -443,21 +440,23 @@ public class MSEEConfMgr implements Serializable {
 		System.out.println("\t2. Exit");
 		System.out.println("> ");
 		String file = s.nextLine();
+		s.close();
 		if (file.equals("1")) {
 			authorInterface(myWhoAmI); //GO TO AUTHOR
 		} else if (file.equals("2")) {
 			System.out.println("Exiting - Goodbye!");
-			serial();
+			//serial();
 		} else {
 //			System.out.println(toBeSaved.length());
-			myConf.removeManuscript(myWhoAmI);
+			Manuscript toBeDeleted = myConf.myManuscripts.get(file);
+			myConf.removeManuscript(file);
+			myUsers.get(myWhoAmI).myRoles.myAuthor.deleteManuscript(toBeDeleted);
 			System.out.println("SUCCESS!");
 			editManuscript();
 		}
 	}
 	
 	public static void submitReview() {
-		int temp = 0;
 		Scanner s = new Scanner(System.in);
 		System.out.println("MSEE Conference Management");
 //		System.out.println(myUsers.get(myWhoAmI).getClass().toString().
@@ -473,30 +472,27 @@ public class MSEEConfMgr implements Serializable {
 		System.out.println("> ");
 		String file = s.nextLine();
 		if (file.equals("1")) {
+			s.close();
 			reviewerInterface(myWhoAmI); //GO TO AUTHOR
 		} else if (file.equals("2")) {
+			s.close();
 			System.out.println("Exiting - Goodbye!");
-			serial();
+			//serial();
 		} else {
-//			System.out.println(toBeSaved.length());
 			System.out.println("Please select the manuscript number you are reviewing:");
-			for (int i = 0; i < 4; i++) {
-				if (myUsers.get(myWhoAmI).myRoles.myReviewer.myManuscripts[i] != null) {
-					System.out.println((i + 1) + ". " + myUsers.get(myWhoAmI)
-							.myRoles.myReviewer.myManuscripts[i].toString());	
-				}
-			}
+			Reviewer me = myUsers.get(myWhoAmI).myRoles.myReviewer;
+			System.out.println(me.getManuscripts());
 			System.out.println("> ");
 			int selection = s.nextInt();
-			myUsers.get(myWhoAmI).myRoles.myReviewer.myManuscripts[selection - 1]
-					.myReviews.add(new Review(new File(file)));
+			Manuscript man = me.myManuscripts.get(selection - 1);
+			me.addManuscript(man, myUsers.get(myWhoAmI).myName);
 			System.out.println("SUCCESS!");
+			s.close();
 			submitReview();
 		}
 	}
 	
 	public static void submitRecommendation() {
-		int temp = 0;
 		Scanner s = new Scanner(System.in);
 		System.out.println("MSEE Conference Management");
 //		System.out.println(myUsers.get(myWhoAmI).getClass().toString().
@@ -512,41 +508,39 @@ public class MSEEConfMgr implements Serializable {
 		System.out.println("> ");
 		String file = s.nextLine();
 		if (file.equals("1")) {
+			s.close();
 			subpcInterface(myWhoAmI); //GO TO AUTHOR
 		} else if (file.equals("2")) {
+			s.close();
 			System.out.println("Exiting - Goodbye!");
-			serial();
+			//serial();
 		} else {
 //			System.out.println(toBeSaved.length());
+			SubProgramChair me = myUsers.get(myWhoAmI).myRoles.mySubProgramChair;
 			System.out.println("Please select the manuscript number ");
 			System.out.println("you are making a recommendation for:");
-			for (int i = 0; i < 4; i++) {
-				if (myUsers.get(myWhoAmI).myRoles.mySubProgramChair.myManuscripts[i] != null) {
-					System.out.println((i + 1) + ". " + myUsers.get(myWhoAmI)
-							.myRoles.mySubProgramChair.myManuscripts[i].toString());	
-				}
-			}
+			System.out.println(me.getManuscripts());
 			System.out.println("> ");
 			int selection = s.nextInt();
-			myUsers.get(myWhoAmI).myRoles.mySubProgramChair.myManuscripts[selection - 1]
-					.myRecommendation = new Recommendation(new File(file));
+			me.submitRecommendation(me.myManuscripts.get(selection - 1), new File(file));
 			System.out.println("SUCCESS!");
+			s.close();
 			submitRecommendation();
 		}
 	}
 	
-	public static void serial() {
-	    try {
-	    	FileOutputStream fileOut = new FileOutputStream("src/MSEE.ser");
-	        ObjectOutputStream out = new ObjectOutputStream(fileOut);
-	        out.writeObject(serializeMe);
-	        out.close();
-	        fileOut.close();
-	        System.out.printf("Serialized file saved in /src/MSEE.ser");
-	      } catch(IOException i) {
-	    	  i.printStackTrace();
-	      }
-		
-	}
+//	public static void serial() {
+//	    try {
+//	    	FileOutputStream fileOut = new FileOutputStream("src/MSEE.ser");
+//	        ObjectOutputStream out = new ObjectOutputStream(fileOut);
+//	        out.writeObject(serializeMe);
+//	        out.close();
+//	        fileOut.close();
+//	        System.out.printf("Serialized file saved in /src/MSEE.ser");
+//	      } catch(IOException i) {
+//	    	  i.printStackTrace();
+//	      }
+//		
+//	}
 	
 }

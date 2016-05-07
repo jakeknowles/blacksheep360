@@ -1,12 +1,15 @@
+import java.util.ArrayList;
 import java.util.List;
+import java.io.File;
 import java.io.Serializable;
 
-public class SubProgramChair implements java.io.Serializable {
+public class SubProgramChair implements Serializable {
 
-	public Manuscript[] myManuscripts;
+	public static final int  MANUSCRIPT_LIMIT = 4;
+	public List<Manuscript> myManuscripts;
 	
-	public SubProgramChair(String theName) {
-		myManuscripts = new Manuscript[4];
+	public SubProgramChair() {
+		myManuscripts = new ArrayList<Manuscript>(MANUSCRIPT_LIMIT);
 	}
 
 	/**
@@ -21,11 +24,13 @@ public class SubProgramChair implements java.io.Serializable {
 	 * @author Geoffrey Tanay
 	 * @version 05/01/2016
 	 */
-	public void assignReviewer(final Manuscript theManuscript, final Reviewer theReviewer) {
-//		int index = myManuscripts.indexOf(theManuscript);
-//		if (index >= 0 && theReviewer.myReviews < 4 && !theManuscript.getAuthor().equals(theReviwer.getName())) {
-//			myManuscripts.get(index).addReviewer(theReviewer);
-//		}
+	public boolean assignReviewer(final Manuscript theManuscript, final User theReviewer) {
+		boolean result = false;
+		if(!theReviewer.isRole(User.REVIEWER)) {
+			theReviewer.myRoles.mySubProgramChair = new SubProgramChair();
+		}
+		result = theReviewer.myRoles.mySubProgramChair.addManuscript(theManuscript, theReviewer.myName);
+		return result;
 	}
 	
 	/**
@@ -37,11 +42,8 @@ public class SubProgramChair implements java.io.Serializable {
 	 * @author Geoffrey Tanay
 	 * @version 05/01/2016
 	 */
-	public void submitRecommendation(final Manuscript theManuscript, final Recommendation theRecommendation) {
-//		int index = myManuscripts.indexOf(theManuscript);
-//		if (index >=? 0) {
-//			myManuscripts.get(index).addRecommendation(theRecommendation);
-//		}	?
+	public void submitRecommendation(final Manuscript theManuscript, final File theRecommendation) {
+		theManuscript.myRecommendation = new Recommendation(theRecommendation);
 	}
 	
 	/**
@@ -52,20 +54,23 @@ public class SubProgramChair implements java.io.Serializable {
 	 * @author Geoffrey Tanay
 	 * @version 05/01/2016
 	 */
-	public void addManuscript(final Manuscript theManuscript) {
-//		if (!this.myName.equals(theManuscript.myAuthor) && myManuscript.size() < 4) {
-//			myManuscripts.add(theManuscript);
-//		}
+	public boolean addManuscript(final Manuscript theManuscript, final String theUserName) {
+		boolean result = false;
+		if(myManuscripts.size() < MANUSCRIPT_LIMIT && !theManuscript.myAuthorName.equals(theUserName)) {
+			myManuscripts.add(theManuscript);
+			result = true;
+		}
+		return result;
 	}
 	
-	
-	
-	private Recommendation viewRecommendation() {
-		return new Recommendation(null);
-	}
-	
-	public void editRecommendation() {
-		
+	public String getManuscripts() {
+		StringBuilder str = new StringBuilder();
+		for (int i = 0; i < myManuscripts.size(); i++) {
+			str.append(i + 1);
+			str.append(". ");
+			str.append(myManuscripts.get(i).toString() + "\n");
+		}
+		return str.toString();
 	}
 	
 	public String toString() {

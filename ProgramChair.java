@@ -1,33 +1,31 @@
-import java.util.List;
-import java.util.Scanner;
+import java.util.Collection;
+import java.util.HashMap;
 import java.io.Serializable;
 
-public class ProgramChair {
+public class ProgramChair implements Serializable{
 
-	public ProgramChair(String theName) {
+	public ProgramChair() {
 	}
 
-	private String viewManuscripts(List theManuscripts) {
-		
-		return theManuscripts.toString();  //temp
+	public String viewManuscripts(HashMap<String, Manuscript> theManuscripts) {
+		StringBuilder str = new StringBuilder();
+		for (String s : theManuscripts.keySet()) {
+			str.append(theManuscripts.get(s) + "\n");
+		}
+		return str.toString();
 	}
 	
-	private void submitDecision(Manuscript theManuscript, boolean isAccepted) {
-//		Scanner s = new Scanner(System.in);
-//		System.out.println("Please indicate your decision for this manuscript.\nEnter A for accept or R for reject.");
-//		String choice = s.next();
-//		if (s.equals("A")){
-//			theManuscript.acceptanceStatus = True;
-//		} else {
-//			theManuscript.acceptanceStatus = False;
-//		}
-		//FIX ME
-//		theManuscript.acceptanceStatus = isAccepted;
-		
+	public void submitDecision(Manuscript theManuscript, boolean isAccepted) {
+		theManuscript.myApproval = isAccepted;
 	}
 	
-	private void assignManuscripts() {
-		
+	public boolean assignManuscripts(User theSubProgramChair, Manuscript theManuscript) {
+		boolean result = false;
+		if(!theSubProgramChair.isRole(User.SUBPROGRAM_CHAIR)) {
+			theSubProgramChair.myRoles.mySubProgramChair = new SubProgramChair();
+		}
+		result = theSubProgramChair.myRoles.mySubProgramChair.addManuscript(theManuscript, theSubProgramChair.myName);
+		return result;
 	}
 	
 	public String toString() {
