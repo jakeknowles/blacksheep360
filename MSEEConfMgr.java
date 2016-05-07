@@ -1,13 +1,13 @@
 import java.io.File;
 import java.util.HashMap;
+//import java.io.Serializable;
+//import java.io.FileInputStream;
+//import java.io.FileOutputStream;
+//import java.io.IOException;
+//import java.io.ObjectInputStream;
+//import java.io.ObjectOutputStream;
 import java.util.Scanner;
-import java.io.Serializable;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+
 
 /**
  * 
@@ -23,6 +23,7 @@ public class MSEEConfMgr {
 	static Conference myConf = new Conference(new User("Kevin"), "Innovative Trends in Science");
 	static String myWhoAmI;
 	static String myRole;
+	static Scanner console;
 	
 	
 	public MSEEConfMgr() {
@@ -64,22 +65,21 @@ public class MSEEConfMgr {
 //	        c.printStackTrace();
 //	        return;
 //		}
-		
+		console = new Scanner(System.in);
 		String whoAmI = login();
 		myWhoAmI = whoAmI;
 //		System.out.println(myUsers.get(whoAmI).getClass().toString());
 		displayInterface(whoAmI, myUsers);
+		console.close();
 		
 	}
 	
 	public static String login() {
-		Scanner console = new Scanner(System.in);
 		System.out.println("Welcome to the MSEE Conference Manager.");
 		System.out.print("Please enter your User Name > ");
 		String userName = console.next();
 		System.out.print("Enter Your Role > ");
 		myRole = console.next();
-		console.close();
 		return userName;
 	}
 	
@@ -99,7 +99,6 @@ public class MSEEConfMgr {
 	}
 	
 	public static void authorInterface(String theWhoIam) {
-		Scanner console = new Scanner(System.in);
 		int temp = 0;
 		System.out.println();
 		System.out.println("MSEE Conference Management");
@@ -111,18 +110,14 @@ public class MSEEConfMgr {
 		System.out.println("\t4. Exit");
 		System.out.println("Enter a selection");
 		temp = console.nextInt();
-		console.close();
 		switch (temp) {
 		case 1:
-			console.close();
 			submitManuscript();
 			break;
 		case 2:
-			console.close();
 			editManuscript();
 			break;
 		case 3:
-			console.close();
 			removeManuscript();
 			break;
 		case 4:
@@ -134,7 +129,6 @@ public class MSEEConfMgr {
 	}
 	
 	public static void pcInterface(String theWhoIam) {
-		Scanner console = new Scanner(System.in);
 		int temp = 0;
 		System.out.println();
 		System.out.println("MSEE Conference Management");
@@ -147,7 +141,6 @@ public class MSEEConfMgr {
 		System.out.println("\t5. Exit");
 		System.out.println("Enter a selection");
 		temp = console.nextInt();
-		console.close();
 		switch (temp) {
 		case 1:
 			myUsers.get(theWhoIam).myRoles.myProgramChair.viewManuscripts(myConf.myManuscripts);
@@ -176,7 +169,6 @@ public class MSEEConfMgr {
 	}
 
 	public static void assignSPC() {
-		Scanner s = new Scanner(System.in);
 		System.out.println("MSEE Conference Management");
 		System.out.println("Program Chair - " + myWhoAmI);
 		System.out.println("Enter the name of the subprogram chair you want to assign to a manuscript.");
@@ -184,14 +176,12 @@ public class MSEEConfMgr {
 		System.out.println("\t1. Back");
 		System.out.println("\t2. Exit");
 		System.out.println("> ");
-		String name = s.next();
+		String name = console.next();
 		if (name.equals("1")) {
 			if (myUsers.get(myWhoAmI).isRole(myRole)) {
-				s.close();
 				pcInterface(myWhoAmI); //GO TO AUTHOR
 			}
 		} else if (name.equals("2")) {
-			s.close();
 			System.out.println("Exiting - Goodbye!");
 			//serial();
 		} else {
@@ -202,16 +192,14 @@ public class MSEEConfMgr {
 				}
 			}
 			System.out.println("> ");
-			String selection = s.next();
+			String selection = console.next();
 			myUsers.get(myWhoAmI).myRoles.myProgramChair.assignManuscripts(myUsers.get(name), myConf.myManuscripts.get(selection));
 			System.out.println("SUCCESS!");
-			s.close();
 			assignSPC();
 		}
 	}
 	
 	public static void acceptance() {
-		Scanner s = new Scanner(System.in);
 		System.out.println("MSEE Conference Management");
 		System.out.println("Program Chair - " + myWhoAmI);
 		for (String str : myConf.myManuscripts.keySet()) {
@@ -224,8 +212,7 @@ public class MSEEConfMgr {
 		System.out.println("\t1. Back");
 		System.out.println("\t2. Exit");
 		System.out.print("> ");
-		String input = s.next();
-		s.close();
+		String input = console.next();
 		if (input.equals("1")) {
 			if (myUsers.get(myWhoAmI).isRole(myRole)) {
 				pcInterface(myWhoAmI); //GO TO AUTHOR
@@ -241,7 +228,6 @@ public class MSEEConfMgr {
 	}
 	
 	public static void subpcInterface(String theWhoIam) {
-		Scanner console = new Scanner(System.in);
 		int temp = 0;
 		System.out.println();
 		System.out.println("MSEE Conference Management");
@@ -252,7 +238,6 @@ public class MSEEConfMgr {
 		System.out.println("\t3. Exit");
 		System.out.println("Enter a selection");
 		temp = console.nextInt();
-		console.close();
 		switch (temp) {
 		case 1:
 			assignReviewer();
@@ -270,7 +255,6 @@ public class MSEEConfMgr {
 
 	
 	public static void assignReviewer() {
-		Scanner s = new Scanner(System.in);
 		System.out.println("MSEE Conference Management");
 		System.out.println("Subprogram Chair - " + myWhoAmI);
 		System.out.println("Enter the name of the reviewer you want to assign.");
@@ -278,14 +262,12 @@ public class MSEEConfMgr {
 		System.out.println("\t1. Back");
 		System.out.println("\t2. Exit");
 		System.out.println("> ");
-		String name = s.next();
+		String name = console.next();
 		if (name.equals("1")) {
 			if (myUsers.get(myWhoAmI).isRole(myRole)) {
-				s.close();
 				subpcInterface(myWhoAmI); //GO TO AUTHOR
 			}
 		} else if (name.equals("2")) {
-			s.close();
 			System.out.println("Exiting - Goodbye!");
 			//serial();
 		} else {
@@ -295,8 +277,7 @@ public class MSEEConfMgr {
 			System.out.println("Please select the manuscript number you wish to assign:");
 			System.out.println(myUsers.get(myWhoAmI).myRoles.mySubProgramChair.getManuscripts());
 			System.out.println("> ");
-			int selection = s.nextInt();
-			s.close();
+			int selection = console.nextInt();
 			SubProgramChair me = myUsers.get(myWhoAmI).myRoles.mySubProgramChair;
 			me.assignReviewer(me.myManuscripts.get(selection - 1), myUsers.get(name));
 			System.out.println("SUCCESS!");
@@ -305,7 +286,6 @@ public class MSEEConfMgr {
 	}
 	
 	public static void reviewerInterface(String theWhoIam) {
-		Scanner console = new Scanner(System.in);
 		int temp = 0;
 		System.out.println();
 		System.out.println("MSEE Conference Management");
@@ -316,7 +296,6 @@ public class MSEEConfMgr {
 		System.out.println("\t3. Exit");
 		System.out.println("Enter a selection");
 		temp = console.nextInt();
-		console.close();
 		switch (temp) {
 		case 1:
 			submitReview();
@@ -332,7 +311,6 @@ public class MSEEConfMgr {
 	}
 	
 	public static void userInterface(String theWhoIam) {
-		Scanner console = new Scanner(System.in);
 		int temp = 0;
 		System.out.println();
 		System.out.println("MSEE Conference Management");
@@ -342,7 +320,7 @@ public class MSEEConfMgr {
 		System.out.println("\t2. Exit");
 		System.out.println("Enter a selection");
 		temp = console.nextInt();
-		console.close();
+
 		switch (temp) {
 			case 1:
 				submitManuscript();
@@ -356,7 +334,6 @@ public class MSEEConfMgr {
 	}
 	
 	public static void submitManuscript() {
-		Scanner s = new Scanner(System.in);
 		System.out.println("MSEE Conference Management");
 //		System.out.println(myUsers.get(myWhoAmI).getClass().toString().
 //				substring(6, myUsers.get(myWhoAmI).getClass().
@@ -369,8 +346,7 @@ public class MSEEConfMgr {
 		System.out.println("\t1. Back");
 		System.out.println("\t2. Exit");
 		System.out.println("> ");
-		String file = s.nextLine();
-		s.close();
+		String file = console.nextLine();
 		if (file.equals("1")) {
 			if (myUsers.get(myWhoAmI).isRole(myRole)) {
 				authorInterface(myWhoAmI); //GO TO AUTHOR
@@ -396,7 +372,6 @@ public class MSEEConfMgr {
 	}
 	
 	public static void editManuscript() {
-		Scanner s = new Scanner(System.in);
 		System.out.println("MSEE Conference Management");
 //		System.out.println(myUsers.get(myWhoAmI).getClass().toString().
 //				substring(6, myUsers.get(myWhoAmI).getClass().
@@ -409,8 +384,7 @@ public class MSEEConfMgr {
 		System.out.println("\t1. Back");
 		System.out.println("\t2. Exit");
 		System.out.println("> ");
-		String file = s.nextLine();
-		s.close();
+		String file = console.nextLine();
 		if (file.equals("1")) {
 			authorInterface(myWhoAmI); //GO TO AUTHOR
 		} else if (file.equals("2")) {
@@ -426,7 +400,6 @@ public class MSEEConfMgr {
 	}
 	
 	public static void removeManuscript() {
-		Scanner s = new Scanner(System.in);
 		System.out.println("MSEE Conference Management");
 //		System.out.println(myUsers.get(myWhoAmI).getClass().toString().
 //				substring(6, myUsers.get(myWhoAmI).getClass().
@@ -439,8 +412,7 @@ public class MSEEConfMgr {
 		System.out.println("\t1. Back");
 		System.out.println("\t2. Exit");
 		System.out.println("> ");
-		String file = s.nextLine();
-		s.close();
+		String file = console.nextLine();
 		if (file.equals("1")) {
 			authorInterface(myWhoAmI); //GO TO AUTHOR
 		} else if (file.equals("2")) {
@@ -457,7 +429,6 @@ public class MSEEConfMgr {
 	}
 	
 	public static void submitReview() {
-		Scanner s = new Scanner(System.in);
 		System.out.println("MSEE Conference Management");
 //		System.out.println(myUsers.get(myWhoAmI).getClass().toString().
 //				substring(6, myUsers.get(myWhoAmI).getClass().
@@ -470,12 +441,10 @@ public class MSEEConfMgr {
 		System.out.println("\t1. Back");
 		System.out.println("\t2. Exit");
 		System.out.println("> ");
-		String file = s.nextLine();
+		String file = console.nextLine();
 		if (file.equals("1")) {
-			s.close();
 			reviewerInterface(myWhoAmI); //GO TO AUTHOR
 		} else if (file.equals("2")) {
-			s.close();
 			System.out.println("Exiting - Goodbye!");
 			//serial();
 		} else {
@@ -483,17 +452,15 @@ public class MSEEConfMgr {
 			Reviewer me = myUsers.get(myWhoAmI).myRoles.myReviewer;
 			System.out.println(me.getManuscripts());
 			System.out.println("> ");
-			int selection = s.nextInt();
+			int selection = console.nextInt();
 			Manuscript man = me.myManuscripts.get(selection - 1);
 			me.addManuscript(man, myUsers.get(myWhoAmI).myName);
 			System.out.println("SUCCESS!");
-			s.close();
 			submitReview();
 		}
 	}
 	
 	public static void submitRecommendation() {
-		Scanner s = new Scanner(System.in);
 		System.out.println("MSEE Conference Management");
 //		System.out.println(myUsers.get(myWhoAmI).getClass().toString().
 //				substring(6, myUsers.get(myWhoAmI).getClass().
@@ -506,12 +473,10 @@ public class MSEEConfMgr {
 		System.out.println("\t1. Back");
 		System.out.println("\t2. Exit");
 		System.out.println("> ");
-		String file = s.nextLine();
+		String file = console.nextLine();
 		if (file.equals("1")) {
-			s.close();
 			subpcInterface(myWhoAmI); //GO TO AUTHOR
 		} else if (file.equals("2")) {
-			s.close();
 			System.out.println("Exiting - Goodbye!");
 			//serial();
 		} else {
@@ -521,10 +486,9 @@ public class MSEEConfMgr {
 			System.out.println("you are making a recommendation for:");
 			System.out.println(me.getManuscripts());
 			System.out.println("> ");
-			int selection = s.nextInt();
+			int selection = console.nextInt();
 			me.submitRecommendation(me.myManuscripts.get(selection - 1), new File(file));
 			System.out.println("SUCCESS!");
-			s.close();
 			submitRecommendation();
 		}
 	}
