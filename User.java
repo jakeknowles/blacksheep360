@@ -3,6 +3,10 @@ import java.io.Serializable;
  
 public class User implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5751299948810425611L;
 	public static final String SUBPROGRAM_CHAIR = "SubProgram Chair";
 	public static final String AUTHOR = "Author";
 	public static final String REVIEWER = "Reviewer";

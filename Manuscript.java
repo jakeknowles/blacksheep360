@@ -5,6 +5,10 @@ import java.io.Serializable;
 
 public class Manuscript implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6767811284956410619L;
 	public String myTitle;
 	public File myManuscript;
 	public List<Review> myReviews;

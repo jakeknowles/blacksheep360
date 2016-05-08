@@ -1,11 +1,17 @@
+import java.util.Date;
 import java.util.HashMap;
 import java.io.Serializable;
 
 public class Conference implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5606112605169805993L;
 	public User myProgramChair;
 	public String myConfName;
 	public HashMap<String, Manuscript> myManuscripts;
+	public Date myManuscriptDeadline;
 	
 	public Conference(User thePC, String theConfName) {
 		myProgramChair = thePC;

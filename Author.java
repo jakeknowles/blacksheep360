@@ -6,6 +6,11 @@ import java.io.Serializable;
 
 public class Author implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5568459789990717495L;
+	
 	public List<Manuscript> myManuscripts;
 	public String myName;
 	

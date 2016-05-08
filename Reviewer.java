@@ -5,6 +5,10 @@ import java.io.Serializable;
 
 public class Reviewer implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -497021263135386895L;
 	public static final int MANUSCRIPT_LIMIT = 4;
 	public List<Manuscript> myManuscripts;
 	public List<Review> myReview;

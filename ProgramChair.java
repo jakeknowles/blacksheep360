@@ -1,8 +1,12 @@
-import java.util.Collection;
 import java.util.HashMap;
 import java.io.Serializable;
 
 public class ProgramChair implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8511840844224397611L;
 
 	public ProgramChair() {
 	}

@@ -5,6 +5,10 @@ import java.io.Serializable;
 
 public class SubProgramChair implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7066022273971728744L;
 	public static final int  MANUSCRIPT_LIMIT = 4;
 	public List<Manuscript> myManuscripts;
 	
