@@ -191,7 +191,7 @@ public class MSEEConfMgr {
 			break;
 		case 3:
 			for (String s : myUsers.keySet()) {
-				if (myUsers.get(s).isRole("SubProgramChair")) {
+				if (myUsers.get(s).isRole(User.SUBPROGRAM_CHAIR)) {
 					System.out.println(s + ":");
 					System.out.println(myUsers.get(s).myRoles.mySubProgramChair.getManuscripts());
 				}
@@ -238,8 +238,12 @@ public class MSEEConfMgr {
 			}
 			System.out.println("> ");
 			String selection = console.nextLine();
-			myUsers.get(myWhoAmI).myRoles.myProgramChair.assignManuscripts(myUsers.get(name), myConf.myManuscripts.get(selection));
-			System.out.println("SUCCESS!");
+			boolean result = myUsers.get(myWhoAmI).myRoles.myProgramChair.assignManuscripts(myUsers.get(name), myConf.myManuscripts.get(selection));
+			if (result) {
+				System.out.println("SUCCESS!");
+			} else {
+				System.out.println("FAILED!");
+			}
 			assignSPC();
 		}
 	}
@@ -340,8 +344,12 @@ public class MSEEConfMgr {
 			int selection = console.nextInt();
 			console.nextLine();
 			SubProgramChair me = myUsers.get(myWhoAmI).myRoles.mySubProgramChair;
-			me.assignReviewer(me.myManuscripts.get(selection - 1), myUsers.get(name));
-			System.out.println("SUCCESS!");
+			boolean result = me.assignReviewer(me.myManuscripts.get(selection - 1), myUsers.get(name));
+			if (result) {
+				System.out.println("SUCCESS!");
+			} else {
+				System.out.println("FAILED!");
+			}
 			assignReviewer();
 		}
 	}
