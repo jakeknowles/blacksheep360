@@ -3,15 +3,34 @@ import java.util.List;
 import java.io.File;
 import java.io.Serializable;
 
+/**
+ * A subprogram chair.
+ * 
+ * @author Alexandria Reynolds
+ * @author Carl Huntington
+ * @author Geoffrey Tanay
+ * @author Jake Knowles
+ *  
+ * @version 5/8/2016
+ */
+
 public class SubProgramChair implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7066022273971728744L;
+	/**
+	 * The maximum number of manuscripts that can be assigned to a subprogram chair.
+	 */
 	public static final int  MANUSCRIPT_LIMIT = 4;
+	/**
+	 * The list of manuscripts assigned to the subprogram chair.
+	 */
 	public List<Manuscript> myManuscripts;
 	
+	/**
+	 * Constructor.
+	 * 
+	 * @version 5/8/2016
+	 */
 	public SubProgramChair() {
 		myManuscripts = new ArrayList<Manuscript>(MANUSCRIPT_LIMIT);
 	}
@@ -26,14 +45,14 @@ public class SubProgramChair implements Serializable {
 	 * @param theReviewer the Reviewer that is assigned a manuscript
 	 * 
 	 * @author Geoffrey Tanay
-	 * @version 05/01/2016
+	 * @version 05/08/2016
 	 */
 	public boolean assignReviewer(final Manuscript theManuscript, final User theReviewer) {
 		boolean result = false;
 		if(!theReviewer.isRole(User.REVIEWER)) {
-			theReviewer.myRoles.mySubProgramChair = new SubProgramChair();
+			theReviewer.myRoles.myReviewer = new Reviewer(theReviewer.myName);
 		}
-		result = theReviewer.myRoles.mySubProgramChair.addManuscript(theManuscript, theReviewer.myName);
+		result = theReviewer.myRoles.myReviewer.addManuscript(theManuscript, theReviewer.myName);
 		return result;
 	}
 	
@@ -44,7 +63,7 @@ public class SubProgramChair implements Serializable {
 	 * @param theRecommendation
 	 * 
 	 * @author Geoffrey Tanay
-	 * @version 05/01/2016
+	 * @version 05/08/2016
 	 */
 	public void submitRecommendation(final Manuscript theManuscript, final File theRecommendation) {
 		theManuscript.myRecommendation = new Recommendation(theRecommendation);
@@ -56,7 +75,7 @@ public class SubProgramChair implements Serializable {
 	 * @param theManuscript
 	 * 
 	 * @author Geoffrey Tanay
-	 * @version 05/01/2016
+	 * @version 05/08/2016
 	 */
 	public boolean addManuscript(final Manuscript theManuscript, final String theUserName) {
 		boolean result = false;
@@ -66,7 +85,12 @@ public class SubProgramChair implements Serializable {
 		}
 		return result;
 	}
-	
+
+	/**
+	 * Returns a string representation of the manuscripts assigned to the subprogram chair.
+	 * 
+	 * @version 5/8/2016
+	 */
 	public String getManuscripts() {
 		StringBuilder str = new StringBuilder();
 		for (int i = 0; i < myManuscripts.size(); i++) {

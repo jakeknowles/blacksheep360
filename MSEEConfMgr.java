@@ -1,4 +1,11 @@
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.Date;
 import java.util.HashMap;
 //import java.io.Serializable;
 //import java.io.FileInputStream;
@@ -10,61 +17,61 @@ import java.util.Scanner;
 
 
 /**
- * 
+ * @author Alexandria Reynolds
  * @author Carl Huntington
- * @version 4/29/2016
+ * @author Geoffrey Tanay
+ * @author Jake Knowles
+ *  
+ * @version 5/8/2016
  */
 
 
 public class MSEEConfMgr {
 
-	static MSEEConfMgr serializeMe = new MSEEConfMgr();
-	static HashMap<String, User> myUsers = new HashMap<String, User>();
-	static Conference myConf = new Conference(new User("Kevin"), "Innovative Trends in Science");
+	static HashMap<String, User> myUsers;
+	static Conference myConf;
 	static String myWhoAmI;
 	static String myRole;
 	static Scanner console;
-	
 	
 	public MSEEConfMgr() {
 		
 	}
 	
+	/**
+	 * Main method, serializes and deserializes stored data. If there is no stored data
+	 * then a new list of users is initialized.
+	 * 
+	 * @version 5/8/2016
+	 */
 	public static void main(String[] theArgs) {
 		  
-		myUsers.put("Josh", new User("Josh")); //Name/Role
+		try {
+			FileInputStream fileIn = new FileInputStream("./MSEEdata.ser");	
+	        ObjectInputStream in = new ObjectInputStream(fileIn);
+	        myUsers = (HashMap<String, User>) in.readObject();
+	        myConf = (Conference) in.readObject();
+	        in.close();
+	        fileIn.close();
+		} catch(FileNotFoundException f) {
+			System.out.println("No existing data initializing new conference data\n");
+			myUsers = new HashMap<String, User>();
+			myUsers.put("Josh", new User("Josh")); //Name/Role
+			myUsers.put("Arthur", new User("Arthur")); //Name/Role
+			myUsers.put("Ron", new User("Ron")); //Name/Role
+			myUsers.put("Steve", new User("Steve")); //Name/Role
+			myUsers.put("Peter", new User("Peter")); //Name/Role
+			Date deadline = new Date(System.currentTimeMillis() + 1209600000);
+			myConf = new Conference(myUsers.get("Peter"), "Innovative Trends in Science", deadline);
+		} catch(IOException i) {
+	        i.printStackTrace();
+	        return;
+		} catch(ClassNotFoundException c) {
+	        System.out.println("MSEE class not found");
+	        c.printStackTrace();
+	        return;
+		} 
 		
-		myUsers.put("Arthur", new User("Arthur")); //Name/Role
-		myUsers.get("Arthur").myRoles.myAuthor = new Author("Arthur");
-		
-		myUsers.put("Ron", new User("Ron")); //Name/Role
-		myUsers.get("Ron").myRoles.myReviewer = new Reviewer("Ron");
-		myUsers.get("Ron").myRoles.myReviewer.addManuscript(new Manuscript(new File("src/AntiSocialNetwork.doc"), "Arthur"), "Ron");
-		
-		myUsers.put("Steve", new User("Steve")); //Name/Role
-		myUsers.get("Steve").myRoles.mySubProgramChair = new SubProgramChair();
-		myUsers.get("Steve").myRoles.mySubProgramChair.addManuscript(new Manuscript(new File("src/AntiSocialNetwork.doc"), "Arthur"), "Steve");
-
-		myUsers.put("Peter", new User("Peter")); //Name/Role
-		myUsers.get("Peter").myRoles.myProgramChair = new ProgramChair();
-		for (int i = 0; i < 5; i++) {
-			myConf.myManuscripts.put("name" + i, new Manuscript(new File("src/review.txt"), "something"));
-		}
-		
-//		try {
-//			FileInputStream fileIn = new FileInputStream("src/MSEE.ser");
-//	        ObjectInputStream in = new ObjectInputStream(fileIn);
-//	        serializeMe = (MSEEConfMgr) in.readObject();
-//	        in.close();
-//	        fileIn.close();
-//		} catch(IOException i) {
-//	        i.printStackTrace();
-//	        return;
-//		} catch(ClassNotFoundException c) {
-//	        System.out.println("MSEE class not found");
-//	        c.printStackTrace();
-//	        return;
-//		}
 		console = new Scanner(System.in);
 		String whoAmI = login();
 		myWhoAmI = whoAmI;
@@ -72,25 +79,46 @@ public class MSEEConfMgr {
 		displayInterface(whoAmI, myUsers);
 		console.close();
 		
+		try {
+	    	FileOutputStream fileOut = new FileOutputStream("./MSEEdata.ser");
+	        ObjectOutputStream out = new ObjectOutputStream(fileOut);
+	        out.writeObject(myUsers);
+	        out.writeObject(myConf);
+	        out.close();
+	        fileOut.close();
+	        System.out.printf("Serialized file saved in ./MSEEdata.ser");
+	      } catch(IOException i) {
+	    	  i.printStackTrace();
+	      }
 	}
 	
+	/**
+	 * Login as a user and role.
+	 * 
+	 * @version 5/8/2016
+	 */
 	public static String login() {
 		System.out.println("Welcome to the MSEE Conference Manager.");
 		System.out.print("Please enter your User Name > ");
-		String userName = console.next();
+		String userName = console.nextLine();
 		System.out.print("Enter Your Role > ");
-		myRole = console.next();
+		myRole = console.nextLine();
 		return userName;
 	}
 	
+	/**
+	 * displays the appropriate user interface for the role the user logged in as.
+	 * 
+	 * @version 5/8/2016
+	 */
 	public static void displayInterface(String theWhoIam, HashMap<String, User> theUsers) {
-		if (myUsers.get(myWhoAmI).isRole(myRole) && myRole.equals("Author")) {
+		if (myUsers.get(myWhoAmI).isRole(myRole) && myRole.equals(User.AUTHOR)) {
 			authorInterface(myWhoAmI);
-		} else if (myUsers.get(myWhoAmI).isRole(myRole) && myRole.equals("ProgramChair")) {
+		} else if (myUsers.get(myWhoAmI).isRole(myRole) && myRole.equals(User.PROGRAM_CHAIR)) {
 			pcInterface(myWhoAmI);
-		} else if (myUsers.get(myWhoAmI).isRole(myRole) && myRole.equals("Reviewer")) {
+		} else if (myUsers.get(myWhoAmI).isRole(myRole) && myRole.equals(User.REVIEWER)) {
 			reviewerInterface(myWhoAmI);
-		} else if (myUsers.get(myWhoAmI).isRole(myRole) && myRole.equals("SubProgramChair")) {
+		} else if (myUsers.get(myWhoAmI).isRole(myRole) && myRole.equals(User.SUBPROGRAM_CHAIR)) {
 			subpcInterface(myWhoAmI);
 		} else {
 			myRole = "User";
@@ -98,6 +126,11 @@ public class MSEEConfMgr {
 		}
 	}
 	
+	/**
+	 * displays the author interface and gets input.
+	 * 
+	 * @version 5/8/2016
+	 */
 	public static void authorInterface(String theWhoIam) {
 		int temp = 0;
 		System.out.println();
@@ -110,6 +143,7 @@ public class MSEEConfMgr {
 		System.out.println("\t4. Exit");
 		System.out.println("Enter a selection");
 		temp = console.nextInt();
+		console.nextLine();
 		switch (temp) {
 		case 1:
 			submitManuscript();
@@ -128,6 +162,11 @@ public class MSEEConfMgr {
 		}
 	}
 	
+	/**
+	 * displays the program chair interface and reads user input.
+	 * 
+	 * @version 5/8/2016
+	 */
 	public static void pcInterface(String theWhoIam) {
 		int temp = 0;
 		System.out.println();
@@ -141,9 +180,10 @@ public class MSEEConfMgr {
 		System.out.println("\t5. Exit");
 		System.out.println("Enter a selection");
 		temp = console.nextInt();
+		console.nextLine();
 		switch (temp) {
 		case 1:
-			myUsers.get(theWhoIam).myRoles.myProgramChair.viewManuscripts(myConf.myManuscripts);
+			System.out.println(myUsers.get(theWhoIam).myRoles.myProgramChair.viewManuscripts(myConf.myManuscripts));
 			pcInterface(myWhoAmI);
 			break;
 		case 2:
@@ -168,6 +208,11 @@ public class MSEEConfMgr {
 		}
 	}
 
+	/**
+	 * User interface for assigning a subprogram chair to a manuscript.
+	 * 
+	 * @version 5/8/2016
+	 */
 	public static void assignSPC() {
 		System.out.println("MSEE Conference Management");
 		System.out.println("Program Chair - " + myWhoAmI);
@@ -176,7 +221,7 @@ public class MSEEConfMgr {
 		System.out.println("\t1. Back");
 		System.out.println("\t2. Exit");
 		System.out.println("> ");
-		String name = console.next();
+		String name = console.nextLine();
 		if (name.equals("1")) {
 			if (myUsers.get(myWhoAmI).isRole(myRole)) {
 				pcInterface(myWhoAmI); //GO TO AUTHOR
@@ -192,13 +237,18 @@ public class MSEEConfMgr {
 				}
 			}
 			System.out.println("> ");
-			String selection = console.next();
+			String selection = console.nextLine();
 			myUsers.get(myWhoAmI).myRoles.myProgramChair.assignManuscripts(myUsers.get(name), myConf.myManuscripts.get(selection));
 			System.out.println("SUCCESS!");
 			assignSPC();
 		}
 	}
 	
+	/**
+	 * User interface for a program chair to accept a paper.
+	 * 
+	 * @version 5/8/2016
+	 */
 	public static void acceptance() {
 		System.out.println("MSEE Conference Management");
 		System.out.println("Program Chair - " + myWhoAmI);
@@ -212,7 +262,7 @@ public class MSEEConfMgr {
 		System.out.println("\t1. Back");
 		System.out.println("\t2. Exit");
 		System.out.print("> ");
-		String input = console.next();
+		String input = console.nextLine();
 		if (input.equals("1")) {
 			if (myUsers.get(myWhoAmI).isRole(myRole)) {
 				pcInterface(myWhoAmI); //GO TO AUTHOR
@@ -227,6 +277,11 @@ public class MSEEConfMgr {
 		}
 	}
 	
+	/**
+	 * User interface for a subprogram chair to select actions.
+	 * 
+	 * @version 5/8/2016
+	 */
 	public static void subpcInterface(String theWhoIam) {
 		int temp = 0;
 		System.out.println();
@@ -238,6 +293,7 @@ public class MSEEConfMgr {
 		System.out.println("\t3. Exit");
 		System.out.println("Enter a selection");
 		temp = console.nextInt();
+		console.nextLine();
 		switch (temp) {
 		case 1:
 			assignReviewer();
@@ -253,7 +309,11 @@ public class MSEEConfMgr {
 	}
 	
 
-	
+	/**
+	 * user interface for a subprogram chair to assign a reviewer to a manuscript.
+	 * 
+	 * @version 5/8/2016
+	 */
 	public static void assignReviewer() {
 		System.out.println("MSEE Conference Management");
 		System.out.println("Subprogram Chair - " + myWhoAmI);
@@ -262,7 +322,7 @@ public class MSEEConfMgr {
 		System.out.println("\t1. Back");
 		System.out.println("\t2. Exit");
 		System.out.println("> ");
-		String name = console.next();
+		String name = console.nextLine();
 		if (name.equals("1")) {
 			if (myUsers.get(myWhoAmI).isRole(myRole)) {
 				subpcInterface(myWhoAmI); //GO TO AUTHOR
@@ -278,6 +338,7 @@ public class MSEEConfMgr {
 			System.out.println(myUsers.get(myWhoAmI).myRoles.mySubProgramChair.getManuscripts());
 			System.out.println("> ");
 			int selection = console.nextInt();
+			console.nextLine();
 			SubProgramChair me = myUsers.get(myWhoAmI).myRoles.mySubProgramChair;
 			me.assignReviewer(me.myManuscripts.get(selection - 1), myUsers.get(name));
 			System.out.println("SUCCESS!");
@@ -285,6 +346,11 @@ public class MSEEConfMgr {
 		}
 	}
 	
+	/**
+	 * User interface for a reviewer to select actions. 
+	 * 
+	 * @version 5/8/2016
+	 */
 	public static void reviewerInterface(String theWhoIam) {
 		int temp = 0;
 		System.out.println();
@@ -296,6 +362,7 @@ public class MSEEConfMgr {
 		System.out.println("\t3. Exit");
 		System.out.println("Enter a selection");
 		temp = console.nextInt();
+		console.nextLine();
 		switch (temp) {
 		case 1:
 			submitReview();
@@ -310,6 +377,11 @@ public class MSEEConfMgr {
 		}
 	}
 	
+	/**
+	 * User interface for a basic user.
+	 * 
+	 * @version 5/8/2016
+	 */
 	public static void userInterface(String theWhoIam) {
 		int temp = 0;
 		System.out.println();
@@ -320,7 +392,7 @@ public class MSEEConfMgr {
 		System.out.println("\t2. Exit");
 		System.out.println("Enter a selection");
 		temp = console.nextInt();
-
+		console.nextLine();
 		switch (temp) {
 			case 1:
 				submitManuscript();
@@ -333,6 +405,11 @@ public class MSEEConfMgr {
 		}
 	}
 	
+	/**
+	 * User interface for submitting manuscripts.
+	 * 
+	 * @version 5/8/2016
+	 */
 	public static void submitManuscript() {
 		System.out.println("MSEE Conference Management");
 //		System.out.println(myUsers.get(myWhoAmI).getClass().toString().
@@ -362,7 +439,7 @@ public class MSEEConfMgr {
 			if (!me.isRole(User.AUTHOR)) {
 				me.myRoles.myAuthor = new Author(me.myName);
 			}
-			Manuscript newManuscript = me.myRoles.myAuthor.submitManuscript(toBeSaved);
+			Manuscript newManuscript = me.myRoles.myAuthor.submitManuscript(toBeSaved, myConf.myManuscriptDeadline);
 			myConf.addManuscript(newManuscript);
 			System.out.println(toBeSaved.length());
 			System.out.println("SUCCESS!");
@@ -371,6 +448,11 @@ public class MSEEConfMgr {
 		}
 	}
 	
+	/**
+	 * User interface for an author to change a manuscript.
+	 * 
+	 * @version 5/8/2016
+	 */
 	public static void editManuscript() {
 		System.out.println("MSEE Conference Management");
 //		System.out.println(myUsers.get(myWhoAmI).getClass().toString().
@@ -399,6 +481,11 @@ public class MSEEConfMgr {
 		}
 	}
 	
+	/**
+	 * User interface to remove a submitted manuscript.
+	 * 
+	 * @version 5/8/2016
+	 */
 	public static void removeManuscript() {
 		System.out.println("MSEE Conference Management");
 //		System.out.println(myUsers.get(myWhoAmI).getClass().toString().
@@ -428,6 +515,11 @@ public class MSEEConfMgr {
 		}
 	}
 	
+	/**
+	 * User interface to submit a review.
+	 * 
+	 * @version 5/8/2016
+	 */
 	public static void submitReview() {
 		System.out.println("MSEE Conference Management");
 //		System.out.println(myUsers.get(myWhoAmI).getClass().toString().
@@ -453,6 +545,7 @@ public class MSEEConfMgr {
 			System.out.println(me.getManuscripts());
 			System.out.println("> ");
 			int selection = console.nextInt();
+			console.nextLine();
 			Manuscript man = me.myManuscripts.get(selection - 1);
 			me.addManuscript(man, myUsers.get(myWhoAmI).myName);
 			System.out.println("SUCCESS!");
@@ -460,6 +553,11 @@ public class MSEEConfMgr {
 		}
 	}
 	
+	/**
+	 * User interface to submit a recommendation.
+	 * 
+	 * @version 5/8/2016
+	 */
 	public static void submitRecommendation() {
 		System.out.println("MSEE Conference Management");
 //		System.out.println(myUsers.get(myWhoAmI).getClass().toString().
@@ -487,24 +585,11 @@ public class MSEEConfMgr {
 			System.out.println(me.getManuscripts());
 			System.out.println("> ");
 			int selection = console.nextInt();
+			console.nextLine();
 			me.submitRecommendation(me.myManuscripts.get(selection - 1), new File(file));
 			System.out.println("SUCCESS!");
 			submitRecommendation();
 		}
 	}
-	
-//	public static void serial() {
-//	    try {
-//	    	FileOutputStream fileOut = new FileOutputStream("src/MSEE.ser");
-//	        ObjectOutputStream out = new ObjectOutputStream(fileOut);
-//	        out.writeObject(serializeMe);
-//	        out.close();
-//	        fileOut.close();
-//	        System.out.printf("Serialized file saved in /src/MSEE.ser");
-//	      } catch(IOException i) {
-//	    	  i.printStackTrace();
-//	      }
-//		
-//	}
 	
 }
