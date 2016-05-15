@@ -1,37 +1,68 @@
-import java.util.List;
-import java.util.Scanner;
+import java.util.HashMap;
+import java.io.Serializable;
 
-public class ProgramChair extends User {
+/**
+ * This class represents a ProgramChair.
+ * 
+ * @author Alexandria Reynolds
+ * @author Carl Huntington
+ * @author Geoffrey Tanay
+ * @author Jake Knowles
+ *  
+ * @version 5/8/2016
+ */
 
-	public ProgramChair(String theName, String theEmail) {
-		super(theName, theEmail);
+public class ProgramChair implements Serializable{
+
+	private static final long serialVersionUID = 8511840844224397611L;
+
+	/**
+	 * Constructor.
+	 * 
+	 * @version 5/8/2016
+	 */
+	public ProgramChair() {
 	}
 
-	private Manuscript viewManuscripts(List theManuscripts) {
-		
-		return theManuscripts.toString();  //temp
+	/**
+	 * Views all submitted manuscripts.
+	 * 
+	 * @version 5/8/2016
+	 */
+	public String viewManuscripts(HashMap<String, Manuscript> theManuscripts) {
+		StringBuilder str = new StringBuilder();
+		for (String s : theManuscripts.keySet()) {
+			str.append(theManuscripts.get(s) + "\n");
+		}
+		return str.toString();
 	}
 	
-	private void submitDecision(Manuscript theManuscript, boolean isAccepted) {
-//		Scanner s = new Scanner(System.in);
-//		System.out.println("Please indicate your decision for this manuscript.\nEnter A for accept or R for reject.");
-//		String choice = s.next();
-//		if (s.equals("A")){
-//			theManuscript.acceptanceStatus = True;
-//		} else {
-//			theManuscript.acceptanceStatus = False;
-//		}
-		theManuscript.acceptanceStatus = isAccepted;
-		
+	/**
+	 * Gives decision on a manuscript.
+	 * 
+	 * @version 5/8/2016
+	 */
+	public void submitDecision(Manuscript theManuscript, boolean isAccepted) {
+		theManuscript.myApproval = isAccepted;
 	}
 	
-	private void assignManuscripts() {
-		
+	/**
+	 * Assigns a manuscript to a subprogram chair.
+	 * 
+	 * @version 5/8/2016
+	 */
+	public boolean assignManuscripts(User theSubProgramChair, Manuscript theManuscript) {
+		boolean result = false;
+		if(!theSubProgramChair.isRole(User.SUBPROGRAM_CHAIR)) {
+			theSubProgramChair.myRoles.mySubProgramChair = new SubProgramChair();
+		}
+		result = theSubProgramChair.myRoles.mySubProgramChair.addManuscript(theManuscript, theSubProgramChair.myName);
+		return result;
 	}
 	
-	public String toString() {
-		return "I'm a ProgramChair";
-	}
+//	public String toString() {
+//		return "I'm a ProgramChair";
+//	}
 	
 }
 

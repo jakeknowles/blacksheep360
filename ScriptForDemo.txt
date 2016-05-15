@@ -1,0 +1,55 @@
+INPUTS FOR USER
+	Josh
+	User
+	2				//exit
+
+INPUTS FOR AUTHOR
+	Arthur
+	Author
+	1				//submit manuscript
+	src/AntiSocialNetwork.doc
+	1				//back to main author menu
+	2				//edit manuscript
+	src/AntiSocialNetwork.doc
+	1				//back to main author menu
+	3				//unsubmit manuscript
+	src/AntiSocialNetwork.doc
+	1				//back to main author menu
+	4				//exit
+	
+
+INPUTS FOR REVIEWER
+	Ron
+	Reviewer
+	1				//submit review
+	src/review.txt
+	1				//selected review
+	1				//back to main reviewer menu
+	3				//exit
+
+INPUTS FOR SUBPROGRAM CHAIR
+	Steve
+	SubProgramChair
+	1				//assign reviewer to paper
+	Ron
+	1				//selected paper
+	1				//back to main SubProgramChair menu
+	2				//submit reccommendation
+	src/review.txt
+	1				//selected paper
+	1				//back to main SubProgramChair menu
+	2				//exit
+
+INPUTS FOR PROGRAM CHAIR
+	Peter
+	ProgramChair
+	1				//view list of submitted manuscripts
+	2				//make acceptance decision
+	name3	
+	1				//back to menu
+	3				//view subprogramchair assignments
+	4				//assign subprogram chair to paper
+	Steve
+	review.txt
+	1				//back to menu
+	5				//exit

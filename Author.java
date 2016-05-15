@@ -1,29 +1,82 @@
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.io.Serializable;
 
+/**
+ * This class represents the role of an author in the system.
+ * 
+ * @author Alexandria Reynolds
+ * @author Carl Huntington
+ * @author Geoffrey Tanay
+ * @author Jake Knowles
+ *  
+ * @version 5/8/2016
+ */
 
-public class Author extends User {
+public class Author implements Serializable {
 
-	public List myManuscripts;
 	
-	public Author(String theName, String theEmail) {
-		super(theName, theEmail);
+	private static final long serialVersionUID = -5568459789990717495L;
+	
+	/**
+	 * A list of manuscripts written by the author.
+	 */
+	public List<Manuscript> myManuscripts;
+	
+	/**
+	 * The name of the author.
+	 */
+	public String myName;
+	
+	/**
+	 * Constructor
+	 *  
+	 * @version 5/8/2016
+	 * 
+	 * @param theName the name of the author
+	 */
+	public Author(String theName) {
+		myName = theName;
+		myManuscripts = new ArrayList<Manuscript>();
 	}
 
-	private void submitManuscript() {
-		
+	/**
+	 * submits a manuscript by creating a manuscript from a file and adding it
+	 * to the authors list of manuscripts.
+	 * 
+	 * @version 5/8/2016
+	 */
+	public Manuscript submitManuscript(File theManuscript, Date theDeadline, String theTitle) {
+		Date now = new Date(System.currentTimeMillis());
+		if (now.before(theDeadline)) {
+			Manuscript submitted = new Manuscript(theManuscript, myName, theTitle);
+			myManuscripts.add(submitted);
+			return submitted;
+		} else { 
+			return null;
+		}
 	}
 	
-	
-	public void deleteManuscript() {
-			
+	/**
+	 * Removes or unsubmits a manuscript that was submitted.
+	 * 
+	 * @version 5/8/2016
+	 */
+	public void deleteManuscript(Manuscript theManuscript) {
+		int index = myManuscripts.indexOf(theManuscript);
+		if (index > -1) {
+			myManuscripts.remove(index);
+		}
 	}
 
-	public void editManuscript() {
-		
+	/**
+	 * Changes a submitted manuscript.
+	 * 
+	 * @version 5/8/2016
+	 */
+	public void editManuscript(Manuscript theManuscript, File theNewFile) {
+		theManuscript.myManuscript = theNewFile;
 	}
-
-	public String toString() {
-		return "Im a Author";
-	}
-
 }
