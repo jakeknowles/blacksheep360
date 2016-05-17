@@ -1,3 +1,4 @@
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,8 +47,8 @@ public class Reviewer implements Serializable {
 	 * 
 	 * @version 5/8/2016
 	 */
-	public void submitReview(File theReview, Manuscript theManuscript) {
-		Review rev = new Review(theReview);
+	public void submitReview(File theReview, Manuscript theManuscript, int theRating) {
+		Review rev = new Review(theReview, theRating);
 		myReview.add(rev);
 		theManuscript.myReviews.add(rev);
 	}

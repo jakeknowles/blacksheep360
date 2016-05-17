@@ -1,4 +1,5 @@
 
+
 import java.io.Serializable;
  
 /**
@@ -68,7 +69,7 @@ public class User implements Serializable {
 	 * 
 	 * @version 5/8/2016
 	 */
-	class Roles implements Serializable{
+	public class Roles implements Serializable{
 		/**
 		 * 
 		 */

@@ -1,3 +1,5 @@
+
+
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -25,7 +27,7 @@ public class ProgramChairTest {
 	@Test
 	public void testSubmitDecision() {
 		File manFile = new File("./AlexTest.txt");
-		Manuscript aManuscript = new Manuscript(manFile, "Tester");
+		Manuscript aManuscript = new Manuscript(manFile, "Tester", "test");
 		User progChair = new User("Program Chairman");
 		progChair.myRoles.myProgramChair = new ProgramChair();
 		progChair.myRoles.myProgramChair.submitDecision(aManuscript, true);
@@ -43,7 +45,7 @@ public class ProgramChairTest {
 		progChair.myRoles.myProgramChair = new ProgramChair();
 		User subChair = new User("Sub Chairman");
 		File manFile = new File("./AlexTest.txt");
-		Manuscript manu = new Manuscript(manFile, "Tester");
+		Manuscript manu = new Manuscript(manFile, "Tester", "test");
 		assertTrue(progChair.myRoles.myProgramChair.assignManuscripts(subChair, manu));
 		assertEquals(subChair.myRoles.mySubProgramChair.myManuscripts.size(), 1);
 	}
@@ -60,7 +62,7 @@ public class ProgramChairTest {
 		progChair.myRoles.myProgramChair = new ProgramChair();
 		User subChair = new User("Sub Chairman");
 		File manFile = new File("./AlexTest.txt");
-		Manuscript manu = new Manuscript(manFile, "Sub Chairman");
+		Manuscript manu = new Manuscript(manFile, "Sub Chairman", "test");
 		assertFalse(progChair.myRoles.myProgramChair.assignManuscripts(subChair, manu));
 		assertEquals(subChair.myRoles.mySubProgramChair.myManuscripts.size(), 0);	
 	}

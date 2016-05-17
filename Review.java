@@ -1,3 +1,4 @@
+
 import java.io.File;
 import java.io.Serializable;
 
@@ -20,14 +21,16 @@ public class Review implements Serializable {
 	 * The review form.
 	 */
 	public File myReviewForm;
+	public int myRating;
 	
 	/**
 	 * Constructor.
 	 * 
 	 * @version 5/8/2016
 	 */
-	public Review(File theReviewForm) {
+	public Review(File theReviewForm, int theRating) {
 		myReviewForm = theReviewForm;
+		myRating = theRating;
 	}
 	
 	public String toString() {

@@ -1,3 +1,5 @@
+
+
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -29,7 +31,7 @@ public class SubProgramChairTest {
 		subChair.myRoles.mySubProgramChair = new SubProgramChair();
 		reviewer.myRoles.myReviewer = new Reviewer(reviewer.myName);
 		File manFile = new File("./AntiSocialNetWork.doc");
-		Manuscript manu = new Manuscript(manFile, "Tester");
+		Manuscript manu = new Manuscript(manFile, "Tester", "test");
 		assertTrue(subChair.myRoles.mySubProgramChair.assignReviewer(manu, reviewer));
 		}
 	
@@ -44,7 +46,7 @@ public class SubProgramChairTest {
 		subChair.myRoles.mySubProgramChair = new SubProgramChair();
 		File manFile = new File("./AntiSocialNetWork.doc");
 		File recFile = new File("./review.txt");
-		Manuscript manu = new Manuscript(manFile, "Tester");
+		Manuscript manu = new Manuscript(manFile, "Tester", "test");
 		subChair.myRoles.mySubProgramChair.submitRecommendation(manu, recFile);
 		assertEquals(manu.myRecommendation.myRecommendationForm, recFile);
 	}
@@ -59,7 +61,7 @@ public class SubProgramChairTest {
 		User subChair = new User("Sub Chairman");
 		subChair.myRoles.mySubProgramChair = new SubProgramChair();
 		File manFile = new File("./AntiSocialNetWork.doc");
-		Manuscript manu = new Manuscript(manFile, "Tester");
+		Manuscript manu = new Manuscript(manFile, "Tester", "test");
 		assertTrue(subChair.myRoles.mySubProgramChair.addManuscript(manu, subChair.myName));
 		assertEquals(subChair.myRoles.mySubProgramChair.myManuscripts.size(), 1);
 	}
@@ -75,7 +77,7 @@ public class SubProgramChairTest {
 		User subChair = new User("Sub Chairman");
 		subChair.myRoles.mySubProgramChair = new SubProgramChair();
 		File manFile = new File("./AntiSocialNetWork.doc");
-		Manuscript manu = new Manuscript(manFile, "Sub Chairman");
+		Manuscript manu = new Manuscript(manFile, "Sub Chairman", "test");
 		assertFalse(subChair.myRoles.mySubProgramChair.addManuscript(manu, subChair.myName));
 		assertEquals(subChair.myRoles.mySubProgramChair.myManuscripts.size(), 0);
 	}
@@ -95,11 +97,11 @@ public class SubProgramChairTest {
 		File manFile3 = new File("./checkin3.doc");
 		File manFile4 = new File("./review.txt");
 		File manFile5 = new File("./Class Diagram.pdf");
-		Manuscript manu = new Manuscript(manFile, "Arthur");
-		Manuscript manu2 = new Manuscript(manFile2, "Arthur");
-		Manuscript manu3 = new Manuscript(manFile3, "Arthur");
-		Manuscript manu4 = new Manuscript(manFile4, "Arthur");
-		Manuscript manu5 = new Manuscript(manFile5, "Arthur");
+		Manuscript manu = new Manuscript(manFile, "Arthur", "test");
+		Manuscript manu2 = new Manuscript(manFile2, "Arthur", "test");
+		Manuscript manu3 = new Manuscript(manFile3, "Arthur", "test");
+		Manuscript manu4 = new Manuscript(manFile4, "Arthur", "test");
+		Manuscript manu5 = new Manuscript(manFile5, "Arthur", "test");
 		assertTrue(subChair.myRoles.mySubProgramChair.addManuscript(manu, subChair.myName));
 		assertTrue(subChair.myRoles.mySubProgramChair.addManuscript(manu2, subChair.myName));
 		assertTrue(subChair.myRoles.mySubProgramChair.addManuscript(manu3, subChair.myName));
