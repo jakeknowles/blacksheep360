@@ -74,13 +74,7 @@ public class Reviewer implements Serializable {
 	 * 
 	 * @version 5/8/2016
 	 */
-	public String getManuscripts() {
-		StringBuilder str = new StringBuilder();
-		for (int i = 0; i < myManuscripts.size(); i++) {
-			str.append(i + 1);
-			str.append(". ");
-			str.append(myManuscripts.get(i).toString() + "\n");
-		}
-		return str.toString();
+	public List<Manuscript> getManuscripts() {
+		return myManuscripts;
 	}
 }
