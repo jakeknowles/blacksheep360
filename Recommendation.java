@@ -1,7 +1,6 @@
 
 import java.io.File;
 import java.io.Serializable;
-<<<<<<< HEAD
 
 /**
  * A subprogram chair's recommendation.
@@ -14,20 +13,6 @@ import java.io.Serializable;
  * @version 5/8/2016
  */
 
-=======
-
-/**
- * A subprogram chair's recommendation.
- * 
- * @author Alexandria Reynolds
- * @author Carl Huntington
- * @author Geoffrey Tanay
- * @author Jake Knowles
- *  
- * @version 5/8/2016
- */
-
->>>>>>> master
 public class Recommendation implements Serializable {
 	
 
