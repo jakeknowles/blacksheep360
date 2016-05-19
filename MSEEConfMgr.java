@@ -1,6 +1,5 @@
 
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -64,7 +63,7 @@ public class MSEEConfMgr {
 			myUsers = new HashMap<String, User>();
 			myUsers.put("Josh", new User("Josh")); //Name/Role
 			myUsers.put("Arthur", new User("Arthur")); //Name/Role
-			myUsers.get("Arthur").myRoles.myAuthor = new Author("Arthur");
+			//myUsers.get("Arthur").myRoles.myAuthor = new Author("Arthur");
 			myUsers.put("Ron", new User("Ron")); //Name/Role
 			myUsers.put("Steve", new User("Steve")); //Name/Role
 			myUsers.put("Peter", new User("Peter")); //Name/Role

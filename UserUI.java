@@ -82,7 +82,7 @@ public class UserUI {
 		System.out.println("> ");
 		String file = console.nextLine();
 		if (file.equals("1")) {
-			if (myUsers.get(myWhoAmI).isRole(myRole)) {  //Alexandria, 5/17/16 - wouldn't this send them to the author menu as soon as they hit "back", even if they didn't submit anything?
+			if (myUsers.get(myWhoAmI).isRole(myRole)) {  //Alexandria, 5/17/16 - wouldn't this send them to the author menu as soon as they hit "back", even if they didn't submit anything? EDIT: nevermind I was reading it wrong
 				AuthorUI aui = new AuthorUI(myUsers, myConf, myWhoAmI, myRole, 
 						currDateString, console);
 				aui.authorInterface(myWhoAmI);
@@ -110,6 +110,11 @@ public class UserUI {
 		}
 	}
 	
+	/**
+	 * Prints a list of this user's submitted manuscripts.
+	 * 
+	 * @version 5/15/16
+	 */
 	public static void viewMyManuscripts(){
 		System.out.println("Manuscripts submitted: ");
 		for (String str : myConf.myManuscripts.keySet()){

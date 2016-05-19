@@ -30,7 +30,8 @@ public class ReviewerTest {
 		File revFile = new File("./review.txt");
 		File manFile = new File("./AntiSocialNetwork.doc");
 		Manuscript manu = new Manuscript(manFile, "Arthur", "test");
-		ron.myRoles.myReviewer.submitReview(revFile, manu);
+		int SCORE = 79;
+		ron.myRoles.myReviewer.submitReview(revFile, manu, SCORE);
 		assertEquals(ron.myRoles.myReviewer.myReview.size(), 1);
 		assertEquals(ron.myRoles.myReviewer.myReview.get(0), manu.myReviews.get(0));
 	}

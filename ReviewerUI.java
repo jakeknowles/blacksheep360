@@ -52,7 +52,7 @@ public class ReviewerUI {
 		case 1:
 			submitReview();
 			break;
-		case 2:		//Alexandria, 5/15/16 - we need this in order to do submitReview()
+		case 2:		//Alexandria, 5/15/16 - we need this in order to do submitReview() EDIT: done!
 			viewMyReviews();
 			break;
 		case 3:
@@ -91,11 +91,14 @@ public class ReviewerUI {
 			System.out.println("Exiting - Goodbye!");
 			//serial();
 		} else {
-			System.out.println("Please enter the numeric score of your review: "); //Alexandria, 5/17/16 - We need a max score value stored somewhere. Also, wording help please.
+			System.out.println("Please enter the numeric score of your review: "); //TODO Alexandria, 5/17/16 - We need a max score value stored somewhere. Also, wording help please.
 			int rating = console.nextInt();
 			System.out.println("Please select the manuscript number you are reviewing: ");
 			Reviewer me = myUsers.get(myWhoAmI).myRoles.myReviewer;
-			System.out.println(me.getManuscripts());
+			for (int i = 0; i < me.getManuscripts().size(); i++){
+				System.out.println((i+1) + me.myManuscripts.get(i).myTitle); //Alexandria, 5/19/16 - this should now print the manuscript titles along with numbers
+			}
+			//System.out.println(me.getManuscripts());
 			System.out.println("> ");
 			int selection = console.nextInt();
 			console.nextLine();
@@ -107,10 +110,9 @@ public class ReviewerUI {
 		}
 	}
 	
-	public static void viewMyReviews(){
+	public static void viewMyReviews(){ //Alexandria, 5/19/16 - I had to make small changes to Review and Reviewer to make this work
 		for (Review r : myUsers.get(myWhoAmI).myRoles.myReviewer.myReview){
-			//TODO
-			//System.out.print(r.);
+			System.out.println("Manuscript title: " + r.myReviewedManuscriptTitle + "\nRating: " + r.myRating + "\n");
 		}
 	}
 

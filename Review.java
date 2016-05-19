@@ -22,15 +22,17 @@ public class Review implements Serializable {
 	 */
 	public File myReviewForm;
 	public int myRating;
+	public String myReviewedManuscriptTitle;
 	
 	/**
 	 * Constructor.
 	 * 
 	 * @version 5/8/2016
 	 */
-	public Review(File theReviewForm, int theRating) {
+	public Review(File theReviewForm, int theRating, String theReviewedManuscriptTitle) {
 		myReviewForm = theReviewForm;
 		myRating = theRating;
+		myReviewedManuscriptTitle = theReviewedManuscriptTitle;
 	}
 	
 	public String toString() {

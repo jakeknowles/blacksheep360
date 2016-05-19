@@ -88,7 +88,7 @@ public class SubProgramChair implements Serializable {
 	}
 
 	/**
-	 * Returns a string representation of the manuscripts assigned to the subprogram chair.
+	 * Returns a List of the manuscripts assigned to the subprogram chair.
 	 * 
 	 * @version 5/8/2016
 	 */
