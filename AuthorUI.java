@@ -1,9 +1,6 @@
 
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -134,9 +131,9 @@ public class AuthorUI {
 //		System.out.println(myRole + " - " + myWhoAmI);
 		header(myWhoAmI);
 		viewMyManuscripts();//Alexandria, 5/15/16 - added this to print manuscript titles available for editing
-		System.out.println("Enter the file path and name for the manuscript"); //Alexandria, 5/17/16 - should be just name
+		System.out.println("Enter the name of the manuscript"); //Alexandria, 5/17/16 - should be just name EDIT: done!
 		System.out.println("you wish to edit");
-		System.out.println("ex. C:\\Documents\\example.doc"); //Alexandria, 5/15/16 - we need a submenu to ask them if they want to change the title, or upload an updated manuscript
+		System.out.println("ex. C:\\Documents\\example.doc"); //Alexandria, 5/15/16 - we need a submenu to ask them if they want to change the title, or upload an updated manuscript EDIT: done!
 		System.out.println("\n\t- OR -");
 		System.out.println("\t1. Back");
 		System.out.println("\t2. Exit");
@@ -210,6 +207,11 @@ public class AuthorUI {
 	}
 	
 	
+	/**
+	 * Prints a list of this user's submitted manuscripts.
+	 * 
+	 * @version 5/15/16
+	 */
 	public static void viewMyManuscripts(){
 		System.out.println("Manuscripts submitted: ");
 		for (String str : myConf.myManuscripts.keySet()){

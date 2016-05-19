@@ -52,7 +52,7 @@ public class ProgramChairUI {
 		console.nextLine();
 		switch (temp) {
 		case 1:
-			System.out.println(myUsers.get(theWhoIam).myRoles.myProgramChair.viewManuscripts(myConf.myManuscripts)); //Alexandria, 5/15/16 - can we put view manuscripts in a method so it can be called from acceptance()?
+			System.out.println(myUsers.get(theWhoIam).myRoles.myProgramChair.viewManuscripts(myConf.myManuscripts)); //Alexandria, 5/15/16 - can we put view manuscripts in a method so it can be called from acceptance()? EDIT: nevermind
 			pcInterface(myWhoAmI);
 			break;
 		case 2:
@@ -60,7 +60,7 @@ public class ProgramChairUI {
 			break;
 		case 3:
 			for (String s : myUsers.keySet()) {
-				if (myUsers.get(s).isRole(User.SUBPROGRAM_CHAIR)) { 	//Alexandria, 5/15/16 - same goes for this code inside the for each loop. Could use it for assignSPC()
+				if (myUsers.get(s).isRole(User.SUBPROGRAM_CHAIR)) { 	//Alexandria, 5/15/16 - same goes for this code inside the for each loop. Could use it for assignSPC() EDIT: nevermind
 					System.out.println(s + ":");
 					System.out.println(myUsers.get(s).myRoles.mySubProgramChair.getManuscripts());
 				}
@@ -92,7 +92,7 @@ public class ProgramChairUI {
 			System.out.println(myUsers.get(str).myName);
 			}
 		}
-		System.out.println("Enter the name of the subprogram chair you want to assign to a manuscript."); //Alexandria, 5/15/16 - display list of subprogram chairs here
+		System.out.println("Enter the name of the subprogram chair you want to assign to a manuscript."); //Alexandria, 5/15/16 - display list of subprogram chairs here EDIT: done!
 		System.out.println("\n\t- OR -");
 		System.out.println("\t1. Back");
 		System.out.println("\t2. Exit");
@@ -106,7 +106,11 @@ public class ProgramChairUI {
 			System.out.println("Exiting - Goodbye!");
 			//serial();
 		} else {
-			System.out.println("Please enter the name of the manuscript you wish to assign:"); //Alexandria, 5/15/16 - prior to this, print out the manuscripts already assigned to this SPC
+			System.out.println("Manuscripts already assigned to " + name + ":");
+			for (Manuscript manuscript : myUsers.get(name).myRoles.mySubProgramChair.getManuscripts()){
+				System.out.println(manuscript.myTitle);
+			}
+			System.out.println("\nPlease enter the name of the manuscript you wish to assign:"); //Alexandria, 5/15/16 - prior to this, print out the manuscripts already assigned to this SPC EDIT: done!
 			for (String str : myConf.myManuscripts.keySet()) {
 				if (!myConf.myManuscripts.get(str).myAuthorName.equals(name)) {
 					System.out.println(myConf.myManuscripts.get(str).myTitle); //Alexandria, 5/17/16 - now prints the manuscript titles
@@ -134,11 +138,11 @@ public class ProgramChairUI {
 //		System.out.println("Program Chair - " + myWhoAmI);
 		header(myWhoAmI);
 		for (String str : myConf.myManuscripts.keySet()) { //Alexandria, 5/15/16 - if we put view manuscripts into a method we could call that here, unless we wanted to not show already accepted manuscripts.
-			System.out.print(str + " "); ////Alexandria, 5/17/16 - These two lines would print out the some thing, wouldn't they? Did I do that?
+			//System.out.print(str + " "); ////Alexandria, 5/17/16 - These two lines would print out the some thing, wouldn't they? Did I do that?
 			System.out.println(myConf.myManuscripts.get(str).myTitle);
 		}
 		System.out.println("Enter the title of the "
-				+ "manuscript you want to accept/reject."); //Alexandria, 5/15/16 - problem here: we're telling them they can accept and reject, but when they input a name the system "accepts" it. Need group input on this one.
+				+ "manuscript you want to accept/reject."); //TODO Alexandria, 5/15/16 - problem here: we're telling them they can accept and reject, but when they input a name the system "accepts" it. Need group input on this one.
 		System.out.println("\n\t- OR -");
 		System.out.println("\t1. Back");
 		System.out.println("\t2. Exit");
@@ -152,6 +156,7 @@ public class ProgramChairUI {
 			System.out.println("Exiting - Goodbye!");
 			//serial();
 		} else {
+			//TODO Alexandria, 5/19/16 - I think we somehow need to add the three states for manuscripts that Tennenberg talked about (undecided, accepted, rejected)
 			myUsers.get(myWhoAmI).myRoles.myProgramChair.submitDecision(myConf.myManuscripts.get(input), true);
 			System.out.println(myConf.myManuscripts.get(input).myTitle + " has been accepted to " + myConf.myConfName + "."); //Alexandria, 5/15/16 - "nameOfPaper has been accepted" or something like that EDIT: done
 			acceptance();

@@ -48,7 +48,7 @@ public class Reviewer implements Serializable {
 	 * @version 5/8/2016
 	 */
 	public void submitReview(File theReview, Manuscript theManuscript, int theRating) {
-		Review rev = new Review(theReview, theRating);
+		Review rev = new Review(theReview, theRating, theManuscript.myTitle);
 		myReview.add(rev);
 		theManuscript.myReviews.add(rev);
 	}
@@ -70,7 +70,7 @@ public class Reviewer implements Serializable {
 	}
 	
 	/**
-	 * Returns a String representation of all manuscripts assigned to the reviewer.
+	 * Returns a List of all manuscripts assigned to the reviewer.
 	 * 
 	 * @version 5/8/2016
 	 */
