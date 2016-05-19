@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> master
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -27,7 +30,11 @@ public class ProgramChairTest {
 	@Test
 	public void testSubmitDecision() {
 		File manFile = new File("./AlexTest.txt");
+<<<<<<< HEAD
 		Manuscript aManuscript = new Manuscript(manFile, "Tester", "test");
+=======
+		Manuscript aManuscript = new Manuscript(manFile, "Tester");
+>>>>>>> master
 		User progChair = new User("Program Chairman");
 		progChair.myRoles.myProgramChair = new ProgramChair();
 		progChair.myRoles.myProgramChair.submitDecision(aManuscript, true);
@@ -45,7 +52,11 @@ public class ProgramChairTest {
 		progChair.myRoles.myProgramChair = new ProgramChair();
 		User subChair = new User("Sub Chairman");
 		File manFile = new File("./AlexTest.txt");
+<<<<<<< HEAD
 		Manuscript manu = new Manuscript(manFile, "Tester", "test");
+=======
+		Manuscript manu = new Manuscript(manFile, "Tester");
+>>>>>>> master
 		assertTrue(progChair.myRoles.myProgramChair.assignManuscripts(subChair, manu));
 		assertEquals(subChair.myRoles.mySubProgramChair.myManuscripts.size(), 1);
 	}
@@ -62,7 +73,11 @@ public class ProgramChairTest {
 		progChair.myRoles.myProgramChair = new ProgramChair();
 		User subChair = new User("Sub Chairman");
 		File manFile = new File("./AlexTest.txt");
+<<<<<<< HEAD
 		Manuscript manu = new Manuscript(manFile, "Sub Chairman", "test");
+=======
+		Manuscript manu = new Manuscript(manFile, "Sub Chairman");
+>>>>>>> master
 		assertFalse(progChair.myRoles.myProgramChair.assignManuscripts(subChair, manu));
 		assertEquals(subChair.myRoles.mySubProgramChair.myManuscripts.size(), 0);	
 	}

@@ -1,4 +1,5 @@
 
+<<<<<<< HEAD
 
 import java.io.Serializable;
  
@@ -13,6 +14,21 @@ import java.io.Serializable;
  * @version 5/8/2016
  */
 
+=======
+import java.io.Serializable;
+ 
+/**
+ * A User of the system.
+ * 
+ * @author Alexandria Reynolds
+ * @author Carl Huntington
+ * @author Geoffrey Tanay
+ * @author Jake Knowles
+ *  
+ * @version 5/8/2016
+ */
+
+>>>>>>> master
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 5751299948810425611L;
@@ -69,7 +85,11 @@ public class User implements Serializable {
 	 * 
 	 * @version 5/8/2016
 	 */
+<<<<<<< HEAD
 	public class Roles implements Serializable{
+=======
+	class Roles implements Serializable{
+>>>>>>> master
 		/**
 		 * 
 		 */

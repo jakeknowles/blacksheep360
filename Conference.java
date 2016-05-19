@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 import java.util.Date;
 import java.util.HashMap;
@@ -14,6 +15,23 @@ import java.io.Serializable;
  * @version 5/8/2016
  */
 
+=======
+import java.util.Date;
+import java.util.HashMap;
+import java.io.Serializable;
+
+/**
+ * This class represents a conference. 
+ * 
+ * @author Alexandria Reynolds
+ * @author Carl Huntington
+ * @author Geoffrey Tanay
+ * @author Jake Knowles
+ *  
+ * @version 5/8/2016
+ */
+
+>>>>>>> master
 public class Conference implements Serializable {
 
 	private static final long serialVersionUID = 5606112605169805993L;

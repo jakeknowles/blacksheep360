@@ -3,6 +3,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
+<<<<<<< HEAD
 
 /**
  * The class representing a manuscript.
@@ -17,6 +18,22 @@ import java.io.Serializable;
 
 public class Manuscript implements Serializable {
 
+=======
+
+/**
+ * The class representing a manuscript.
+ * 
+ * @author Alexandria Reynolds
+ * @author Carl Huntington
+ * @author Geoffrey Tanay
+ * @author Jake Knowles
+ *  
+ * @version 5/8/2016
+ */
+
+public class Manuscript implements Serializable {
+
+>>>>>>> master
 	private static final long serialVersionUID = 6767811284956410619L;
 	/**
 	 * Title of the manuscript.
@@ -48,13 +65,21 @@ public class Manuscript implements Serializable {
 	 * 
 	 * @version 5/8/2016
 	 */
+<<<<<<< HEAD
 	public Manuscript(File theManuscript, String theAuthorName, String theTitle) {
+=======
+	public Manuscript(File theManuscript, String theAuthorName) {
+>>>>>>> master
 		myManuscript = theManuscript;
 		myReviews = new ArrayList<Review>();
 		myAuthorName = theAuthorName;
 		myApproval = false;
 		myRecommendation = null;
+<<<<<<< HEAD
 		myTitle = theTitle;
+=======
+		myTitle = theManuscript.getName();
+>>>>>>> master
 	}
 	
 	/**
