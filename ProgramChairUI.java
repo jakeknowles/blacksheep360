@@ -52,8 +52,9 @@ public class ProgramChairUI {
 		console.nextLine();
 		switch (temp) {
 		case 1:
-			System.out.println(myUsers.get(theWhoIam).myRoles.myProgramChair.viewManuscripts(myConf.myManuscripts)); //Alexandria, 5/15/16 - can we put view manuscripts in a method so it can be called from acceptance()? EDIT: nevermind
-			pcInterface(myWhoAmI);
+			//System.out.println(myUsers.get(theWhoIam).myRoles.myProgramChair.viewManuscripts(myConf.myManuscripts)); //Alexandria, 5/15/16 - can we put view manuscripts in a method so it can be called from acceptance()? EDIT: nevermind
+			viewManuscripts();
+			//pcInterface(myWhoAmI);
 			break;
 		case 2:
 			acceptance();
@@ -160,6 +161,27 @@ public class ProgramChairUI {
 			myUsers.get(myWhoAmI).myRoles.myProgramChair.submitDecision(myConf.myManuscripts.get(input), true);
 			System.out.println(myConf.myManuscripts.get(input).myTitle + " has been accepted to " + myConf.myConfName + "."); //Alexandria, 5/15/16 - "nameOfPaper has been accepted" or something like that EDIT: done
 			acceptance();
+		}
+	}
+	
+	/**
+	 * Displays a list of all manuscripts submitted to this conference.
+	 * 
+	 * @version 5/19/16
+	 */
+	public static void viewManuscripts(){
+		System.out.println(myUsers.get(myWhoAmI).myRoles.myProgramChair.viewManuscripts(myConf.myManuscripts));
+		System.out.println("\t1. Back");
+		System.out.println("\t2. Exit");
+		System.out.print("> ");
+		String input = console.nextLine();
+		if (input.equals("1")) {
+			if (myUsers.get(myWhoAmI).isRole(myRole)) {
+				pcInterface(myWhoAmI); //GO TO AUTHOR
+			}
+		} else if (input.equals("2")) {
+			System.out.println("Exiting - Goodbye!");
+			//serial();
 		}
 	}
 	
