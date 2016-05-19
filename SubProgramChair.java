@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+
+=======
+>>>>>>> master
 import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
@@ -91,6 +95,10 @@ public class SubProgramChair implements Serializable {
 	 * 
 	 * @version 5/8/2016
 	 */
+<<<<<<< HEAD
+	public List<Manuscript> getManuscripts() {
+		return myManuscripts;
+=======
 	public String getManuscripts() {
 		StringBuilder str = new StringBuilder();
 		for (int i = 0; i < myManuscripts.size(); i++) {
@@ -99,6 +107,7 @@ public class SubProgramChair implements Serializable {
 			str.append(myManuscripts.get(i).toString() + "\n");
 		}
 		return str.toString();
+>>>>>>> master
 	}
 	
 	public String toString() {

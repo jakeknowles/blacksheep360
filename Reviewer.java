@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+
+=======
+>>>>>>> master
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,8 +50,13 @@ public class Reviewer implements Serializable {
 	 * 
 	 * @version 5/8/2016
 	 */
+<<<<<<< HEAD
+	public void submitReview(File theReview, Manuscript theManuscript, int theRating) {
+		Review rev = new Review(theReview, theRating);
+=======
 	public void submitReview(File theReview, Manuscript theManuscript) {
 		Review rev = new Review(theReview);
+>>>>>>> master
 		myReview.add(rev);
 		theManuscript.myReviews.add(rev);
 	}
@@ -73,6 +82,12 @@ public class Reviewer implements Serializable {
 	 * 
 	 * @version 5/8/2016
 	 */
+<<<<<<< HEAD
+	public List<Manuscript> getManuscripts() {
+		return myManuscripts;
+	}
+}
+=======
 	public String getManuscripts() {
 		StringBuilder str = new StringBuilder();
 		for (int i = 0; i < myManuscripts.size(); i++) {
@@ -83,3 +98,4 @@ public class Reviewer implements Serializable {
 		return str.toString();
 	}
 }
+>>>>>>> master

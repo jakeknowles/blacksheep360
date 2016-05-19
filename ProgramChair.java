@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+
 import java.util.HashMap;
 import java.io.Serializable;
 
@@ -12,6 +14,22 @@ import java.io.Serializable;
  * @version 5/8/2016
  */
 
+=======
+import java.util.HashMap;
+import java.io.Serializable;
+
+/**
+ * This class represents a ProgramChair.
+ * 
+ * @author Alexandria Reynolds
+ * @author Carl Huntington
+ * @author Geoffrey Tanay
+ * @author Jake Knowles
+ *  
+ * @version 5/8/2016
+ */
+
+>>>>>>> master
 public class ProgramChair implements Serializable{
 
 	private static final long serialVersionUID = 8511840844224397611L;
