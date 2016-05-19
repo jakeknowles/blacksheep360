@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 
-=======
->>>>>>> master
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,7 +20,6 @@ public class Author implements Serializable {
 
 	
 	private static final long serialVersionUID = -5568459789990717495L;
-<<<<<<< HEAD
 	
 	/**
 	 * A list of manuscripts written by the author.
@@ -36,20 +32,6 @@ public class Author implements Serializable {
 	public String myName;
 	
 	/**
-=======
-	
-	/**
-	 * A list of manuscripts written by the author.
-	 */
-	public List<Manuscript> myManuscripts;
-	
-	/**
-	 * The name of the author.
-	 */
-	public String myName;
-	
-	/**
->>>>>>> master
 	 * Constructor
 	 *  
 	 * @version 5/8/2016
@@ -67,17 +49,10 @@ public class Author implements Serializable {
 	 * 
 	 * @version 5/8/2016
 	 */
-<<<<<<< HEAD
 	public Manuscript submitManuscript(File theManuscript, Date theDeadline, String theTitle) {
 		Date now = new Date(System.currentTimeMillis());
 		if (now.before(theDeadline)) {
 			Manuscript submitted = new Manuscript(theManuscript, myName, theTitle);
-=======
-	public Manuscript submitManuscript(File theManuscript, Date theDeadline) {
-		Date now = new Date(System.currentTimeMillis());
-		if (now.before(theDeadline)) {
-			Manuscript submitted = new Manuscript(theManuscript, myName);
->>>>>>> master
 			myManuscripts.add(submitted);
 			return submitted;
 		} else { 

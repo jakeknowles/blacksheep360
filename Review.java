@@ -1,7 +1,6 @@
 
 import java.io.File;
 import java.io.Serializable;
-<<<<<<< HEAD
 
 /**
  * A review.
@@ -14,20 +13,6 @@ import java.io.Serializable;
  * @version 5/8/2016
  */
 
-=======
-
-/**
- * A review.
- * 
- * @author Alexandria Reynolds
- * @author Carl Huntington
- * @author Geoffrey Tanay
- * @author Jake Knowles
- *  
- * @version 5/8/2016
- */
-
->>>>>>> master
 public class Review implements Serializable {
 	
 	
@@ -43,11 +28,7 @@ public class Review implements Serializable {
 	 * 
 	 * @version 5/8/2016
 	 */
-<<<<<<< HEAD
 	public Review(File theReviewForm, int theRating) {
-=======
-	public Review(File theReviewForm) {
->>>>>>> master
 		myReviewForm = theReviewForm;
 		myRating = theRating;
 	}

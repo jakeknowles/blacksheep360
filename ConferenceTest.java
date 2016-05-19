@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 
 
-=======
->>>>>>> master
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -31,11 +28,7 @@ public class ConferenceTest {
 		Date deadline = new Date(System.currentTimeMillis() + 3600000);
 		Conference testConf = new Conference(new User("Tester"), "TestConference", deadline);
 		File manFile = new File("AlexTest.txt");
-<<<<<<< HEAD
 		Manuscript man = new Manuscript(manFile, "Tester", "test");
-=======
-		Manuscript man = new Manuscript(manFile, "Tester");
->>>>>>> master
 		testConf.addManuscript(man);
 		assertEquals(testConf.myManuscripts.get(man.myTitle), man);
 	}
@@ -50,11 +43,7 @@ public class ConferenceTest {
 		Date deadline = new Date(System.currentTimeMillis() + 3600000);
 		Conference testConf = new Conference(new User("Tester"), "TestConference", deadline);
 		File manFile = new File("AlexTest.txt");
-<<<<<<< HEAD
 		Manuscript man = new Manuscript(manFile, "Tester", "test");
-=======
-		Manuscript man = new Manuscript(manFile, "Tester");
->>>>>>> master
 		testConf.addManuscript(man);
 		testConf.removeManuscript(man.myTitle);
 		assertTrue(testConf.myManuscripts.isEmpty());
