@@ -1,34 +1,108 @@
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 
 /**
+ * The class representing a manuscript.
+ * 
  * @author Alexandria Reynolds
  * @author Carl Huntington
  * @author Geoffrey Tanay
  * @author Jake Knowles
  *  
- * @version 4/29/2016
+ * @version 5/8/2016
  */
-public class Manuscript implements java.io.Serializable {
 
-	public File myManuscript;
-	public List myReviews;
-	public String myAuthorName;
-	public Recommendation myRecommendation;
-	public Boolean myApproval;
+public class Manuscript implements Serializable {
+
+	private static final long serialVersionUID = 6767811284956410619L;
+	/**
+	 * Title of the manuscript.
+	 */
+	private String myTitle;
+	/**
+	 * The file containing the manuscript.
+	 */
+	private File myManuscript;
+	/**
+	 * A list of reviews of the manuscript.
+	 */
+	private List<Review> myReviews;
+	/**
+	 * The name of the submitting author.
+	 */
+	private String myAuthorName;
+	/**
+	 * The recommendation of the subprogram chair assigned to this manuscript.
+	 */
+	private Recommendation myRecommendation;
+	/**
+	 * The program chair's approval of this manuscript.
+	 */
+	private Boolean myApproval;
 	
-	public Manuscript(File theManuscript, String theAuthorName) {
-		myManuscript = theManuscript;
-		myReviews = new ArrayList<Review>();
-		myAuthorName = theAuthorName;
-		myApproval = false;
-		myRecommendation = null;
+	/**
+	 * Constructor.
+	 * 
+	 * @version 5/8/2016
+	 */
+	public Manuscript(File theManuscript, String theAuthorName, String theTitle) {
+		setMyManuscript(theManuscript);
+		setMyReviews(new ArrayList<Review>());
+		setMyAuthorName(theAuthorName);
+		setMyApproval(false);
+		setMyRecommendation(null);
+		setMyTitle(theTitle);
 	}
-	
-	public String toString() {
-		return myManuscript.getName();
+
+	public String getMyTitle() {
+		return myTitle;
+	}
+
+	public String getMyAuthorName() {
+		return myAuthorName;
+	}
+
+	public Boolean getMyApproval() {
+		return myApproval;
+	}
+
+	public File getMyManuscript() {
+		return myManuscript;
+	}
+
+	public void setMyManuscript(File myManuscript) {
+		this.myManuscript = myManuscript;
+	}
+
+	public List<Review> getMyReviews() {
+		return myReviews;
+	}
+
+	public void setMyReviews(List<Review> myReviews) {
+		this.myReviews = myReviews;
+	}
+
+	public Recommendation getMyRecommendation() {
+		return myRecommendation;
+	}
+
+	public void setMyRecommendation(Recommendation myRecommendation) {
+		this.myRecommendation = myRecommendation;
+	}
+
+	public void setMyApproval(Boolean myApproval) {
+		this.myApproval = myApproval;
+	}
+
+	public void setMyAuthorName(String myAuthorName) {
+		this.myAuthorName = myAuthorName;
+	}
+
+	public void setMyTitle(String myTitle) {
+		this.myTitle = myTitle;
 	}
 	
 }

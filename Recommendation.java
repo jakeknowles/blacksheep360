@@ -1,24 +1,38 @@
+
 import java.io.File;
 import java.io.Serializable;
 
 /**
+ * A subprogram chair's recommendation.
+ * 
  * @author Alexandria Reynolds
  * @author Carl Huntington
  * @author Geoffrey Tanay
  * @author Jake Knowles
  *  
- * @version 4/29/2016
+ * @version 5/8/2016
  */
-public class Recommendation implements java.io.Serializable {
+
+public class Recommendation implements Serializable {
 	
-	public File myRecommendationForm;
+
+	private static final long serialVersionUID = -7409304984185013329L;
+	/**
+	 * The recommendation form.
+	 */
+	private File myRecommendationForm;
 	
+	/**
+	 * Constructor.
+	 * 
+	 * @version 5/8/2016
+	 */
 	public Recommendation(File theRecommendationForm) {
 		myRecommendationForm = theRecommendationForm;
 	}
 	
 	public String toString() {
-		return "I'm a recommendation";
+		return myRecommendationForm.getName();
 	}
 
 }

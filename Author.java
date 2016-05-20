@@ -1,49 +1,83 @@
+
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.io.Serializable;
 
 /**
+ * This class represents the role of an author in the system.
+ * 
  * @author Alexandria Reynolds
  * @author Carl Huntington
  * @author Geoffrey Tanay
  * @author Jake Knowles
  *  
- * @version 4/29/2016
+ * @version 5/8/2016
  */
-public class Author implements java.io.Serializable {
 
-	public List myManuscripts;
-	public Manuscript myManuscript;
+public class Author implements Serializable {
+
 	
+	private static final long serialVersionUID = -5568459789990717495L;
+	
+	/**
+	 * A list of manuscripts written by the author.
+	 */
+	private List<Manuscript> myManuscripts;
+	
+	/**
+	 * The name of the author.
+	 */
+	private String myName;
+	
+	/**
+	 * Constructor
+	 *  
+	 * @version 5/8/2016
+	 * 
+	 * @param theName the name of the author
+	 */
 	public Author(String theName) {
+		myName = theName;
+		myManuscripts = new ArrayList<Manuscript>();
 	}
 
-	private void submitManuscript(File theManuscript) {
-//		myManuscript = theManuscript;
-//		mFixMe= new Manuscript(myManuscript);
-		
+	/**
+	 * submits a manuscript by creating a manuscript from a file and adding it
+	 * to the authors list of manuscripts.
+	 * 
+	 * @version 5/8/2016
+	 */
+	public Manuscript submitManuscript(File theManuscript, Date theDeadline, String theTitle) {
+		Date now = new Date(System.currentTimeMillis());
+		if (now.before(theDeadline)) {
+			Manuscript submitted = new Manuscript(theManuscript, myName, theTitle);
+			myManuscripts.add(submitted);
+			return submitted;
+		} else { 
+			return null;
+		}
 	}
 	
-	
-	public void deleteManuscript(File theManuscript) { //A very brief outline 
-		boolean isFound = false;
-//		myManuscript = theManuscript;
-//		for (int index = 0; !found && (index < myManuscripts); index++) {
-//			if (myManuscript.equals(myManuscripts[index]) {
-//				found  = true;
-//			}
-//		}
-//		if (found = true) { //index out of bounds
-//			myManuscripts.remove(index);
-//		}
+	/**
+	 * Removes or unsubmits a manuscript that was submitted.
+	 * 
+	 * @version 5/8/2016
+	 */
+	public void deleteManuscript(Manuscript theManuscript) {
+		int index = myManuscripts.indexOf(theManuscript);
+		if (index > -1) {
+			myManuscripts.remove(index);
+		}
 	}
 
-	public void editManuscript() {
-		
+	/**
+	 * Changes a submitted manuscript.
+	 * 
+	 * @version 5/8/2016
+	 */
+	public void editManuscript(Manuscript theManuscript, File theNewFile) {
+		theManuscript.setMyManuscript(theNewFile);
 	}
-
-	public String toString() {
-		return "Im a Author";
-	}
-
 }
