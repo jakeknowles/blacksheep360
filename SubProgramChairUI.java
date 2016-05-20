@@ -90,8 +90,13 @@ public class SubProgramChairUI {
 			//Show a list (with numbers) of papers with exception of those authored by that reviewer
 			//Select a paper number
 			//Attach selected paper to selected reviewer			
-			System.out.println("Please select the manuscript number you wish to assign:"); //Alexandria, 5/15/16 - I don't see where a number is being displayed. Need to fix that. Also, show manuscripts already assigned to this reviewer.
-			System.out.println(myUsers.get(myWhoAmI).myRoles.mySubProgramChair.getManuscripts());
+			System.out.println("Please select the manuscript number you wish to assign:");
+			int i = 1;
+			//Alexandria, 5/15/16 - I don't see where a number is being displayed. Need to fix that. Also, show manuscripts already assigned to this reviewer.
+			for (Manuscript manuscript: myUsers.get(myWhoAmI).myRoles.mySubProgramChair.getManuscripts()){
+				System.out.println(i + ". " + manuscript.myTitle);
+				i++;
+			}
 			System.out.println("> ");
 			int selection = console.nextInt(); //Alexandria, 5/15/16 - should have a 0 as an option to return to reviewer selection instead of proceeding
 			console.nextLine();
