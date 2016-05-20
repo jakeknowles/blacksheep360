@@ -83,6 +83,7 @@ public class MSEEConfMgr {
 		currDateString = dateFormat.format(currDate);		//stored as a string
 		
 		console = new Scanner(System.in);
+		myConf = selectConference();
 		String whoAmI = login();
 		myWhoAmI = whoAmI;
 //		System.out.println(myUsers.get(whoAmI).getClass().toString());
@@ -102,6 +103,18 @@ public class MSEEConfMgr {
 	      }
 	}
 	
+	public static Conference selectConference() {
+		int i = 1;
+		System.out.println("Select a conference number:");
+		for (Conference conf : myConferences){
+			System.out.println(i + ". " + myConferences.get(i-1).myConfName);
+		}
+		int selection = console.nextInt();
+		console.nextLine();
+		Conference selectedConference = myConferences.get(selection-1);
+		return selectedConference;
+	}
+
 	/**
 	 * Login as a user and role.
 	 * 
