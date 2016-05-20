@@ -57,14 +57,4 @@ public class Manuscript implements Serializable {
 		myTitle = theTitle;
 	}
 	
-	/**
-	 * Prints the string representation in the form:
-	 * Title - Author.
-	 * 
-	 * @version 5/8/2016
-	 */
-	public String toString() {
-		return myTitle + " - " + myAuthorName;
-	}
-	
 }
