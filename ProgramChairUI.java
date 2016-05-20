@@ -138,9 +138,12 @@ public class ProgramChairUI {
 //		System.out.println("MSEE Conference Management");
 //		System.out.println("Program Chair - " + myWhoAmI);
 		header(myWhoAmI);
+		System.out.println("Unaccepted Manuscripts: ");
 		for (String str : myConf.myManuscripts.keySet()) { //Alexandria, 5/15/16 - if we put view manuscripts into a method we could call that here, unless we wanted to not show already accepted manuscripts.
 			//System.out.print(str + " "); ////Alexandria, 5/17/16 - These two lines would print out the some thing, wouldn't they? Did I do that?
-			System.out.println(myConf.myManuscripts.get(str).myTitle);
+			if (!myConf.myManuscripts.get(str).myApproval){
+				System.out.println(myConf.myManuscripts.get(str).myTitle);  //Alexandria, 5/19/16 - this should only display unaccepted manuscript titles now
+			}
 		}
 		System.out.println("Enter the title of the "
 				+ "manuscript you want to accept/reject."); //TODO Alexandria, 5/15/16 - problem here: we're telling them they can accept and reject, but when they input a name the system "accepts" it. Need group input on this one.
