@@ -27,6 +27,7 @@ public class UserUI {
 	public static void header(String theWhoIam){
 		System.out.println("MSEE Conference Management");
 		System.out.println( myRole + " - " + theWhoIam);
+		System.out.println(myConf.getMyConfName());
 		System.out.println("Date: " + currDateString); //Alexandria, 5/15/16 - displays the current date
 	}
 
@@ -45,7 +46,7 @@ public class UserUI {
 		System.out.println("Select an action:");
 		System.out.println("\t1. Submit a manuscript");
 		System.out.println("\t2. Exit");
-		System.out.println("Enter a selection");
+		System.out.println("Enter a selection > ");
 		temp = console.nextInt();
 		console.nextLine();
 		switch (temp) {
@@ -79,7 +80,7 @@ public class UserUI {
 		System.out.println("\n\t- OR -");
 		System.out.println("\t1. Back");
 		System.out.println("\t2. Exit");
-		System.out.println("> ");
+		System.out.print("> ");
 		String file = console.nextLine();
 		if (file.equals("1")) {
 			if (myUsers.get(myWhoAmI).isRole(myRole)) {  //Alexandria, 5/17/16 - wouldn't this send them to the author menu as soon as they hit "back", even if they didn't submit anything? EDIT: nevermind I was reading it wrong
@@ -98,10 +99,10 @@ public class UserUI {
 			System.out.println("Now enter the title of your submission \n>");
 			String paperName = console.nextLine();
 			if (!me.isRole(User.AUTHOR)) {
-				me.myRoles.myAuthor = new Author(me.myName);
+				me.getMyRoles().myAuthor = new Author(me.getMyName());
 			}
-			Manuscript newManuscript = me.myRoles.myAuthor.submitManuscript(toBeSaved, 
-					myConf.myManuscriptDeadline, paperName); // Alexandria, 5/15/16 - I made changes to Author and Manuscript to allow the user to specify the title.
+			Manuscript newManuscript = me.getMyRoles().myAuthor.submitManuscript(toBeSaved, 
+					myConf.getMyManuscriptDeadline(), paperName); // Alexandria, 5/15/16 - I made changes to Author and Manuscript to allow the user to specify the title.
 			myConf.addManuscript(newManuscript);
 			System.out.println(toBeSaved.length());
 			System.out.println("SUCCESS!");
@@ -117,8 +118,8 @@ public class UserUI {
 	 */
 	public static void viewMyManuscripts(){
 		System.out.println("Manuscripts submitted: ");
-		for (String str : myConf.myManuscripts.keySet()){
-			if (myConf.myManuscripts.get(str).myAuthorName.equals(myWhoAmI)){
+		for (String str : myConf.getMyManuscripts().keySet()){
+			if (myConf.getMyManuscripts().get(str).getMyAuthorName().equals(myWhoAmI)){
 				System.out.println(str);
 			}
 		}

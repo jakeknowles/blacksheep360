@@ -28,6 +28,7 @@ public class SubProgramChairUI {
 	public static void header(String theWhoIam){
 		System.out.println("MSEE Conference Management");
 		System.out.println( myRole + " - " + theWhoIam);
+		System.out.println(myConf.getMyConfName());
 		System.out.println("Date: " + currDateString); //Alexandria, 5/15/16 - displays the current date
 	}
 	
@@ -90,13 +91,18 @@ public class SubProgramChairUI {
 			//Show a list (with numbers) of papers with exception of those authored by that reviewer
 			//Select a paper number
 			//Attach selected paper to selected reviewer			
-			System.out.println("Please select the manuscript number you wish to assign:"); //Alexandria, 5/15/16 - I don't see where a number is being displayed. Need to fix that. Also, show manuscripts already assigned to this reviewer.
-			System.out.println(myUsers.get(myWhoAmI).myRoles.mySubProgramChair.getManuscripts());
+			System.out.println("Please select the manuscript number you wish to assign:");
+			int i = 1;
+			//Alexandria, 5/15/16 - I don't see where a number is being displayed. Need to fix that. Also, show manuscripts already assigned to this reviewer.
+			for (Manuscript manuscript: myUsers.get(myWhoAmI).getMyRoles().mySubProgramChair.getManuscripts()){
+				System.out.println(i + ". " + manuscript.getMyTitle());
+				i++;
+			}
 			System.out.println("> ");
 			int selection = console.nextInt(); //Alexandria, 5/15/16 - should have a 0 as an option to return to reviewer selection instead of proceeding
 			console.nextLine();
-			SubProgramChair me = myUsers.get(myWhoAmI).myRoles.mySubProgramChair;
-			boolean result = me.assignReviewer(me.myManuscripts.get(selection - 1), myUsers.get(name));
+			SubProgramChair me = myUsers.get(myWhoAmI).getMyRoles().mySubProgramChair;
+			boolean result = me.assignReviewer(me.getMyManuscripts().get(selection - 1), myUsers.get(name));
 			if (result) {
 				System.out.println("SUCCESS!");//Alexandria, 5/15/16 - "paperName assigned to reviewerName"
 			} else {
@@ -133,14 +139,14 @@ public class SubProgramChairUI {
 			//serial();
 		} else {
 //			System.out.println(toBeSaved.length());
-			SubProgramChair me = myUsers.get(myWhoAmI).myRoles.mySubProgramChair;
+			SubProgramChair me = myUsers.get(myWhoAmI).getMyRoles().mySubProgramChair;
 			System.out.println("Please select the manuscript number ");
 			System.out.println("you are making a recommendation for:");
 			System.out.println(me.getManuscripts());
 			System.out.println("> ");
 			int selection = console.nextInt();
 			console.nextLine();
-			me.submitRecommendation(me.myManuscripts.get(selection - 1), new File(file));
+			me.submitRecommendation(me.getMyManuscripts().get(selection - 1), new File(file));
 			System.out.println("SUCCESS!");
 			submitRecommendation();
 		}

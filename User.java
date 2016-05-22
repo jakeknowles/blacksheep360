@@ -25,12 +25,12 @@ public class User implements Serializable {
 	/**
 	 * The name of the user.
 	 */
-	public String myName;
+	private String myName;
 	
 	/**
 	 * A collection of the user's roles.
 	 */
-	public Roles myRoles;
+	private Roles myRoles;
 	
 	/**
 	 * Constructor.
@@ -38,8 +38,24 @@ public class User implements Serializable {
 	 * @version 5/8/2016
 	 */
 	public User(String theName) {
-		myName = theName;
-		myRoles = new Roles();
+		setMyName(theName);
+		setMyRoles(new Roles());
+	}
+
+	public String getMyName() {
+		return myName;
+	}
+
+	public void setMyName(String myName) {
+		this.myName = myName;
+	}
+
+	public Roles getMyRoles() {
+		return myRoles;
+	}
+
+	public void setMyRoles(Roles myRoles) {
+		this.myRoles = myRoles;
 	}
 
 	/**
@@ -49,13 +65,13 @@ public class User implements Serializable {
 	 */
 	public boolean isRole(String theRole) {
 		if (theRole.equals(AUTHOR)) {
-			return myRoles.myAuthor != null;
+			return getMyRoles().myAuthor != null;
 		} else if (theRole.equals(REVIEWER)) {
-			return myRoles.myReviewer != null;
+			return getMyRoles().myReviewer != null;
 		} else if (theRole.equals(SUBPROGRAM_CHAIR)) {
-			return myRoles.mySubProgramChair != null;
+			return getMyRoles().mySubProgramChair != null;
 		} else if (theRole.equals(PROGRAM_CHAIR)) {
-			return myRoles.myProgramChair != null;
+			return getMyRoles().myProgramChair != null;
 		}
 		return false;
 	}

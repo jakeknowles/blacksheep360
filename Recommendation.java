@@ -20,7 +20,7 @@ public class Recommendation implements Serializable {
 	/**
 	 * The recommendation form.
 	 */
-	public File myRecommendationForm;
+	private File myRecommendationForm;
 	
 	/**
 	 * Constructor.
@@ -32,7 +32,17 @@ public class Recommendation implements Serializable {
 	}
 	
 	public String toString() {
-		return myRecommendationForm.getName();
+		return getMyRecommendationForm().getName();
 	}
+
+	/**
+	 * Gets the recommendation form of this recommendation.
+	 * 
+	 * @return the myRecommendationForm
+	 */
+	public File getMyRecommendationForm() {
+		return myRecommendationForm;
+	}
+
 
 }

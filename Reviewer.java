@@ -25,11 +25,11 @@ public class Reviewer implements Serializable {
 	/**
 	 * A list of manuscripts that have been assigned to the reviewer.
 	 */
-	public List<Manuscript> myManuscripts;
+	private List<Manuscript> myManuscripts;
 	/**
 	 * A list of reviews submitted by this reviewer.
 	 */
-	public List<Review> myReview;
+	private List<Review> myReview;
 	
 	/**
 	 * Constructor.
@@ -37,8 +37,8 @@ public class Reviewer implements Serializable {
 	 * @version 5/8/2016
 	 */
 	public Reviewer(String theName) {
-		myManuscripts = new ArrayList<Manuscript>(MANUSCRIPT_LIMIT);
-		myReview = new ArrayList<Review>();
+		setMyManuscripts(new ArrayList<Manuscript>(MANUSCRIPT_LIMIT));
+		setMyReview(new ArrayList<Review>());
 
 	}
 
@@ -48,11 +48,27 @@ public class Reviewer implements Serializable {
 	 * @version 5/8/2016
 	 */
 	public void submitReview(File theReview, Manuscript theManuscript, int theRating) {
-		Review rev = new Review(theReview, theRating, theManuscript.myTitle);
-		myReview.add(rev);
-		theManuscript.myReviews.add(rev);
+		Review rev = new Review(theReview, theRating, theManuscript.getMyTitle());
+		getMyReview().add(rev);
+		theManuscript.getMyReviews().add(rev);
 	}
 	
+	public List<Manuscript> getMyManuscripts() {
+		return myManuscripts;
+	}
+
+	public void setMyManuscripts(List<Manuscript> myManuscripts) {
+		this.myManuscripts = myManuscripts;
+	}
+
+	public List<Review> getMyReview() {
+		return myReview;
+	}
+
+	public void setMyReview(List<Review> myReview) {
+		this.myReview = myReview;
+	}
+
 	/**
 	 * Adds a manuscript to those assigned to the reviewer, but checks that the manuscript
 	 * was not authored by the reviewer and that the reviewer is not already at the limit
@@ -62,8 +78,8 @@ public class Reviewer implements Serializable {
 	 */
 	public boolean addManuscript(Manuscript theManuscript, String theUserName) {
 		boolean result = false;
-		if(myManuscripts.size() < MANUSCRIPT_LIMIT && !theManuscript.myAuthorName.equals(theUserName)) {
-			myManuscripts.add(theManuscript);
+		if(getMyManuscripts().size() < MANUSCRIPT_LIMIT && !theManuscript.getMyAuthorName().equals(theUserName)) {
+			getMyManuscripts().add(theManuscript);
 			result = true;
 		}
 		return result;
@@ -75,6 +91,6 @@ public class Reviewer implements Serializable {
 	 * @version 5/8/2016
 	 */
 	public List<Manuscript> getManuscripts() {
-		return myManuscripts;
+		return getMyManuscripts();
 	}
 }

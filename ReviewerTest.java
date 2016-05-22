@@ -26,14 +26,14 @@ public class ReviewerTest {
 	@Test
 	public void testSubmitReview() {
 		User ron = new User("Ron");
-		ron.myRoles.myReviewer = new Reviewer("Ron");
+		ron.getMyRoles().myReviewer = new Reviewer("Ron");
 		File revFile = new File("./review.txt");
 		File manFile = new File("./AntiSocialNetwork.doc");
 		Manuscript manu = new Manuscript(manFile, "Arthur", "test");
 		int SCORE = 79;
-		ron.myRoles.myReviewer.submitReview(revFile, manu, SCORE);
-		assertEquals(ron.myRoles.myReviewer.myReview.size(), 1);
-		assertEquals(ron.myRoles.myReviewer.myReview.get(0), manu.myReviews.get(0));
+		ron.getMyRoles().myReviewer.submitReview(revFile, manu, SCORE);
+		assertEquals(ron.getMyRoles().myReviewer.getMyReview().size(), 1);
+		assertEquals(ron.getMyRoles().myReviewer.getMyReview().get(0), manu.getMyReviews().get(0));
 	}
 	
 	/**
@@ -45,11 +45,11 @@ public class ReviewerTest {
 	@Test
 	public void testAddManuscript() {
 		User ron = new User("Ron");
-		ron.myRoles.myReviewer = new Reviewer("Ron");
+		ron.getMyRoles().myReviewer = new Reviewer("Ron");
 		File manFile = new File("./AntiSocialNetwork.doc");
 		Manuscript manu = new Manuscript(manFile, "Arthur", "test");
-		assertTrue(ron.myRoles.myReviewer.addManuscript(manu, ron.myName));
-		assertEquals(ron.myRoles.myReviewer.myManuscripts.get(0), manu);
+		assertTrue(ron.getMyRoles().myReviewer.addManuscript(manu, ron.getMyName()));
+		assertEquals(ron.getMyRoles().myReviewer.getMyManuscripts().get(0), manu);
 	}
 	
 	/**
@@ -61,11 +61,11 @@ public class ReviewerTest {
 	@Test
 	public void testAddManuscriptSameAuthor() {
 		User ron = new User("Ron");
-		ron.myRoles.myReviewer = new Reviewer("Ron");
+		ron.getMyRoles().myReviewer = new Reviewer("Ron");
 		File manFile = new File("./AntiSocialNetwork.doc");
 		Manuscript manu = new Manuscript(manFile, "Ron", "test");
-		assertFalse(ron.myRoles.myReviewer.addManuscript(manu, ron.myName));
-		assertEquals(ron.myRoles.myReviewer.myReview.size(), 0);
+		assertFalse(ron.getMyRoles().myReviewer.addManuscript(manu, ron.getMyName()));
+		assertEquals(ron.getMyRoles().myReviewer.getMyReview().size(), 0);
 	}
 	
 	/**
@@ -77,7 +77,7 @@ public class ReviewerTest {
 	@Test
 	public void testAddManuscriptAtLimit() {
 		User ron = new User("Ron");
-		ron.myRoles.myReviewer = new Reviewer("Ron");
+		ron.getMyRoles().myReviewer = new Reviewer("Ron");
 		File manFile = new File("./AntiSocialNetwork.doc");
 		File manFile2 = new File("./AlexTest.txt");
 		File manFile3 = new File("./checkin3.doc");
@@ -88,12 +88,12 @@ public class ReviewerTest {
 		Manuscript manu3 = new Manuscript(manFile3, "Arthur", "test");
 		Manuscript manu4 = new Manuscript(manFile4, "Arthur", "test");
 		Manuscript manu5 = new Manuscript(manFile5, "Arthur", "test");
-		assertTrue(ron.myRoles.myReviewer.addManuscript(manu, ron.myName));
-		assertTrue(ron.myRoles.myReviewer.addManuscript(manu2, ron.myName));
-		assertTrue(ron.myRoles.myReviewer.addManuscript(manu3, ron.myName));
-		assertTrue(ron.myRoles.myReviewer.addManuscript(manu4, ron.myName));
-		assertFalse(ron.myRoles.myReviewer.addManuscript(manu5, ron.myName));
-		assertEquals(ron.myRoles.myReviewer.myManuscripts.size(), 4);
+		assertTrue(ron.getMyRoles().myReviewer.addManuscript(manu, ron.getMyName()));
+		assertTrue(ron.getMyRoles().myReviewer.addManuscript(manu2, ron.getMyName()));
+		assertTrue(ron.getMyRoles().myReviewer.addManuscript(manu3, ron.getMyName()));
+		assertTrue(ron.getMyRoles().myReviewer.addManuscript(manu4, ron.getMyName()));
+		assertFalse(ron.getMyRoles().myReviewer.addManuscript(manu5, ron.getMyName()));
+		assertEquals(ron.getMyRoles().myReviewer.getMyManuscripts().size(), 4);
 	}
 	
 }

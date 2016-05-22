@@ -26,11 +26,11 @@ public class AuthorTest {
 	@Test
 	public void testSubmitManuscript() {
 		User testUser = new User("Arthur");
-		testUser.myRoles.myAuthor = new Author(testUser.myName);
+		testUser.getMyRoles().myAuthor = new Author(testUser.getMyName());
 		File manuscriptFile = new File("./AlexTest.txt");
 		Date deadline = new Date(System.currentTimeMillis() + 3600000);
-		testUser.myRoles.myAuthor.submitManuscript(manuscriptFile, deadline, "AlexTest.txt");
-		assertTrue(testUser.myRoles.myAuthor.myManuscripts.get(0).myTitle.equals(manuscriptFile.getName()));
+		testUser.getMyRoles().myAuthor.submitManuscript(manuscriptFile, deadline, "AlexTest.txt");
+		assertTrue(testUser.getMyRoles().myAuthor.getMyManuscripts().get(0).getMyTitle().equals(manuscriptFile.getName()));
 	}
 	
 	/**
@@ -41,10 +41,10 @@ public class AuthorTest {
 	@Test
 	public void testSubmitManuscriptAfterDeadline() {
 		User testUser = new User("Arthur");
-		testUser.myRoles.myAuthor = new Author(testUser.myName);
+		testUser.getMyRoles().myAuthor = new Author(testUser.getMyName());
 		File manuscriptFile = new File("./AlexTest.txt");
 		Date deadline = new Date(System.currentTimeMillis() - 3600000);
-		assertNull(testUser.myRoles.myAuthor.submitManuscript(manuscriptFile, deadline, "test"));
+		assertNull(testUser.getMyRoles().myAuthor.submitManuscript(manuscriptFile, deadline, "test"));
 		//assertTrue(testUser.myRoles.myAuthor.myManuscripts.get(0).myTitle.equals(manuscriptFile.getName()));
 	}
 	
@@ -56,12 +56,12 @@ public class AuthorTest {
 	@Test
 	public void testDeleteManuscript() {
 		User testUser = new User("Arthur");
-		testUser.myRoles.myAuthor = new Author(testUser.myName);
+		testUser.getMyRoles().myAuthor = new Author(testUser.getMyName());
 		Date deadline = new Date(System.currentTimeMillis() + 3600000);
 		File manuscriptFile = new File("./AlexTest.txt");
-		Manuscript manuscriptObj = testUser.myRoles.myAuthor.submitManuscript(manuscriptFile, deadline, "test");
-		testUser.myRoles.myAuthor.deleteManuscript(manuscriptObj);
-		assertEquals(testUser.myRoles.myAuthor.myManuscripts.size(), 0);
+		Manuscript manuscriptObj = testUser.getMyRoles().myAuthor.submitManuscript(manuscriptFile, deadline, "test");
+		testUser.getMyRoles().myAuthor.deleteManuscript(manuscriptObj);
+		assertEquals(testUser.getMyRoles().myAuthor.getMyManuscripts().size(), 0);
 	}
 	
 	/**
@@ -72,13 +72,13 @@ public class AuthorTest {
 	@Test
 	public void testEditManuscript() {
 		User testUser = new User("Arthur");
-		testUser.myRoles.myAuthor = new Author(testUser.myName);
+		testUser.getMyRoles().myAuthor = new Author(testUser.getMyName());
 		File manuscriptFile = new File("./AlexTest.txt");
 		Date deadline = new Date(System.currentTimeMillis() + 3600000);
-		Manuscript manuscriptObj = testUser.myRoles.myAuthor.submitManuscript(manuscriptFile, deadline, "test");
+		Manuscript manuscriptObj = testUser.getMyRoles().myAuthor.submitManuscript(manuscriptFile, deadline, "test");
 		File otherFile = new File("./AntiSocialNetwork.doc");
-		testUser.myRoles.myAuthor.editManuscript(manuscriptObj, otherFile);
-		assertEquals(testUser.myRoles.myAuthor.myManuscripts.get(0).myManuscript, otherFile);
+		testUser.getMyRoles().myAuthor.editManuscript(manuscriptObj, otherFile);
+		assertEquals(testUser.getMyRoles().myAuthor.getMyManuscripts().get(0).getMyManuscript(), otherFile);
 	}
 
 }

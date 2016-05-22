@@ -1,4 +1,5 @@
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.io.Serializable;
 
@@ -26,16 +27,12 @@ public class ProgramChair implements Serializable{
 	}
 
 	/**
-	 * Views all submitted manuscripts.
+	 * Returns all submitted manuscripts.
 	 * 
-	 * @version 5/8/2016
+	 * @version 5/22/2016
 	 */
-	public String viewManuscripts(HashMap<String, Manuscript> theManuscripts) {
-		StringBuilder str = new StringBuilder();
-		for (String s : theManuscripts.keySet()) {
-			str.append(theManuscripts.get(s) + "\n");
-		}
-		return str.toString();
+	public Collection<Manuscript> viewManuscripts(HashMap<String, Manuscript> theManuscripts) { //Alexandria, 5/22/16 - I changed this for the sake of keeping the UI separate. This was basically a toString.
+		return theManuscripts.values();
 	}
 	
 	/**
@@ -43,8 +40,8 @@ public class ProgramChair implements Serializable{
 	 * 
 	 * @version 5/8/2016
 	 */
-	public void submitDecision(Manuscript theManuscript, boolean isAccepted) {
-		theManuscript.myApproval = isAccepted;
+	public void submitDecision(Manuscript theManuscript, ManuscriptAcceptanceStatus myDecision) {
+		theManuscript.setMyApproval(myDecision);
 	}
 	
 	/**
@@ -55,9 +52,9 @@ public class ProgramChair implements Serializable{
 	public boolean assignManuscripts(User theSubProgramChair, Manuscript theManuscript) {
 		boolean result = false;
 		if(!theSubProgramChair.isRole(User.SUBPROGRAM_CHAIR)) {
-			theSubProgramChair.myRoles.mySubProgramChair = new SubProgramChair();
+			theSubProgramChair.getMyRoles().mySubProgramChair = new SubProgramChair();
 		}
-		result = theSubProgramChair.myRoles.mySubProgramChair.addManuscript(theManuscript, theSubProgramChair.myName);
+		result = theSubProgramChair.getMyRoles().mySubProgramChair.addManuscript(theManuscript, theSubProgramChair.getMyName());
 		return result;
 	}
 	

@@ -24,12 +24,12 @@ public class Author implements Serializable {
 	/**
 	 * A list of manuscripts written by the author.
 	 */
-	public List<Manuscript> myManuscripts;
+	private List<Manuscript> myManuscripts;
 	
 	/**
 	 * The name of the author.
 	 */
-	public String myName;
+	private String myName;
 	
 	/**
 	 * Constructor
@@ -53,7 +53,7 @@ public class Author implements Serializable {
 		Date now = new Date(System.currentTimeMillis());
 		if (now.before(theDeadline)) {
 			Manuscript submitted = new Manuscript(theManuscript, myName, theTitle);
-			myManuscripts.add(submitted);
+			getMyManuscripts().add(submitted);
 			return submitted;
 		} else { 
 			return null;
@@ -66,9 +66,9 @@ public class Author implements Serializable {
 	 * @version 5/8/2016
 	 */
 	public void deleteManuscript(Manuscript theManuscript) {
-		int index = myManuscripts.indexOf(theManuscript);
+		int index = getMyManuscripts().indexOf(theManuscript);
 		if (index > -1) {
-			myManuscripts.remove(index);
+			getMyManuscripts().remove(index);
 		}
 	}
 
@@ -78,6 +78,15 @@ public class Author implements Serializable {
 	 * @version 5/8/2016
 	 */
 	public void editManuscript(Manuscript theManuscript, File theNewFile) {
-		theManuscript.myManuscript = theNewFile;
+		theManuscript.setMyManuscript(theNewFile);
+	}
+
+	/**
+	 * Gets a list of this author's manuscripts.
+	 * 
+	 * @return the list of this author's manuscripts
+	 */
+	public List<Manuscript> getMyManuscripts() { //Alexandria, 5/22/2016 - AuthorTest was having issues so I added this to fix it.
+		return myManuscripts;
 	}
 }

@@ -21,27 +21,27 @@ public class Manuscript implements Serializable {
 	/**
 	 * Title of the manuscript.
 	 */
-	public String myTitle;
+	private String myTitle;
 	/**
 	 * The file containing the manuscript.
 	 */
-	public File myManuscript;
+	private File myManuscript;
 	/**
 	 * A list of reviews of the manuscript.
 	 */
-	public List<Review> myReviews;
+	private List<Review> myReviews;
 	/**
 	 * The name of the submitting author.
 	 */
-	public String myAuthorName;
+	private String myAuthorName;
 	/**
 	 * The recommendation of the subprogram chair assigned to this manuscript.
 	 */
-	public Recommendation myRecommendation;
+	private Recommendation myRecommendation;
 	/**
 	 * The program chair's approval of this manuscript.
 	 */
-	public Boolean myApproval;
+	private ManuscriptAcceptanceStatus myStatus;
 	
 	/**
 	 * Constructor.
@@ -49,22 +49,60 @@ public class Manuscript implements Serializable {
 	 * @version 5/8/2016
 	 */
 	public Manuscript(File theManuscript, String theAuthorName, String theTitle) {
-		myManuscript = theManuscript;
-		myReviews = new ArrayList<Review>();
-		myAuthorName = theAuthorName;
-		myApproval = false;
-		myRecommendation = null;
-		myTitle = theTitle;
+		setMyManuscript(theManuscript);
+		setMyReviews(new ArrayList<Review>());
+		setMyAuthorName(theAuthorName);
+		setMyApproval(ManuscriptAcceptanceStatus.NO_DECISION);
+		setMyRecommendation(null);
+		setMyTitle(theTitle);
 	}
-	
-	/**
-	 * Prints the string representation in the form:
-	 * Title - Author.
-	 * 
-	 * @version 5/8/2016
-	 */
-	public String toString() {
-		return myTitle + " - " + myAuthorName;
+
+	public String getMyTitle() {
+		return myTitle;
+	}
+
+	public String getMyAuthorName() {
+		return myAuthorName;
+	}
+
+	public ManuscriptAcceptanceStatus getMyApproval() {
+		return myStatus;
+	}
+
+	public File getMyManuscript() {
+		return myManuscript;
+	}
+
+	public void setMyManuscript(File myManuscript) {
+		this.myManuscript = myManuscript;
+	}
+
+	public List<Review> getMyReviews() {
+		return myReviews;
+	}
+
+	public void setMyReviews(List<Review> myReviews) {
+		this.myReviews = myReviews;
+	}
+
+	public Recommendation getMyRecommendation() {
+		return myRecommendation;
+	}
+
+	public void setMyRecommendation(Recommendation myRecommendation) {
+		this.myRecommendation = myRecommendation;
+	}
+
+	public void setMyApproval(ManuscriptAcceptanceStatus myApproval) {
+		this.myStatus = myApproval;
+	}
+
+	public void setMyAuthorName(String myAuthorName) {
+		this.myAuthorName = myAuthorName;
+	}
+
+	public void setMyTitle(String myTitle) {
+		this.myTitle = myTitle;
 	}
 	
 }

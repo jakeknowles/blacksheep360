@@ -28,11 +28,11 @@ public class SubProgramChairTest {
 	public void testAssignReviewer() {
 		User subChair = new User("Sub Chairman");
 		User reviewer = new User("Rev Ewer");
-		subChair.myRoles.mySubProgramChair = new SubProgramChair();
-		reviewer.myRoles.myReviewer = new Reviewer(reviewer.myName);
+		subChair.getMyRoles().mySubProgramChair = new SubProgramChair();
+		reviewer.getMyRoles().myReviewer = new Reviewer(reviewer.getMyName());
 		File manFile = new File("./AntiSocialNetWork.doc");
 		Manuscript manu = new Manuscript(manFile, "Tester", "test");
-		assertTrue(subChair.myRoles.mySubProgramChair.assignReviewer(manu, reviewer));
+		assertTrue(subChair.getMyRoles().mySubProgramChair.assignReviewer(manu, reviewer));
 		}
 	
 	/**
@@ -43,12 +43,12 @@ public class SubProgramChairTest {
 	@Test
 	public void testSubmitRecommendation() {
 		User subChair = new User("Sub Chairman");
-		subChair.myRoles.mySubProgramChair = new SubProgramChair();
+		subChair.getMyRoles().mySubProgramChair = new SubProgramChair();
 		File manFile = new File("./AntiSocialNetWork.doc");
 		File recFile = new File("./review.txt");
 		Manuscript manu = new Manuscript(manFile, "Tester", "test");
-		subChair.myRoles.mySubProgramChair.submitRecommendation(manu, recFile);
-		assertEquals(manu.myRecommendation.myRecommendationForm, recFile);
+		subChair.getMyRoles().mySubProgramChair.submitRecommendation(manu, recFile);
+		assertEquals(manu.getMyRecommendation().getMyRecommendationForm(), recFile); //Alexandria, 5/22/16 - this line was having issues so I added a getter.
 	}
 	
 	/**
@@ -59,11 +59,11 @@ public class SubProgramChairTest {
 	@Test
 	public void testAddManuscript() {
 		User subChair = new User("Sub Chairman");
-		subChair.myRoles.mySubProgramChair = new SubProgramChair();
+		subChair.getMyRoles().mySubProgramChair = new SubProgramChair();
 		File manFile = new File("./AntiSocialNetWork.doc");
 		Manuscript manu = new Manuscript(manFile, "Tester", "test");
-		assertTrue(subChair.myRoles.mySubProgramChair.addManuscript(manu, subChair.myName));
-		assertEquals(subChair.myRoles.mySubProgramChair.myManuscripts.size(), 1);
+		assertTrue(subChair.getMyRoles().mySubProgramChair.addManuscript(manu, subChair.getMyName()));
+		assertEquals(subChair.getMyRoles().mySubProgramChair.getMyManuscripts().size(), 1);
 	}
 	
 	/**
@@ -75,11 +75,11 @@ public class SubProgramChairTest {
 	@Test
 	public void testAddManuscriptSameAuthor() {
 		User subChair = new User("Sub Chairman");
-		subChair.myRoles.mySubProgramChair = new SubProgramChair();
+		subChair.getMyRoles().mySubProgramChair = new SubProgramChair();
 		File manFile = new File("./AntiSocialNetWork.doc");
 		Manuscript manu = new Manuscript(manFile, "Sub Chairman", "test");
-		assertFalse(subChair.myRoles.mySubProgramChair.addManuscript(manu, subChair.myName));
-		assertEquals(subChair.myRoles.mySubProgramChair.myManuscripts.size(), 0);
+		assertFalse(subChair.getMyRoles().mySubProgramChair.addManuscript(manu, subChair.getMyName()));
+		assertEquals(subChair.getMyRoles().mySubProgramChair.getMyManuscripts().size(), 0);
 	}
 	
 	/**
@@ -91,7 +91,7 @@ public class SubProgramChairTest {
 	@Test
 	public void testAddManuscriptAtLimit() {
 		User subChair = new User("Sub Chairman");
-		subChair.myRoles.mySubProgramChair = new SubProgramChair();
+		subChair.getMyRoles().mySubProgramChair = new SubProgramChair();
 		File manFile = new File("./AntiSocialNetwork.doc");
 		File manFile2 = new File("./AlexTest.txt");
 		File manFile3 = new File("./checkin3.doc");
@@ -102,12 +102,12 @@ public class SubProgramChairTest {
 		Manuscript manu3 = new Manuscript(manFile3, "Arthur", "test");
 		Manuscript manu4 = new Manuscript(manFile4, "Arthur", "test");
 		Manuscript manu5 = new Manuscript(manFile5, "Arthur", "test");
-		assertTrue(subChair.myRoles.mySubProgramChair.addManuscript(manu, subChair.myName));
-		assertTrue(subChair.myRoles.mySubProgramChair.addManuscript(manu2, subChair.myName));
-		assertTrue(subChair.myRoles.mySubProgramChair.addManuscript(manu3, subChair.myName));
-		assertTrue(subChair.myRoles.mySubProgramChair.addManuscript(manu4, subChair.myName));
-		assertFalse(subChair.myRoles.mySubProgramChair.addManuscript(manu5, subChair.myName));
-		assertEquals(subChair.myRoles.mySubProgramChair.myManuscripts.size(), 4);
+		assertTrue(subChair.getMyRoles().mySubProgramChair.addManuscript(manu, subChair.getMyName()));
+		assertTrue(subChair.getMyRoles().mySubProgramChair.addManuscript(manu2, subChair.getMyName()));
+		assertTrue(subChair.getMyRoles().mySubProgramChair.addManuscript(manu3, subChair.getMyName()));
+		assertTrue(subChair.getMyRoles().mySubProgramChair.addManuscript(manu4, subChair.getMyName()));
+		assertFalse(subChair.getMyRoles().mySubProgramChair.addManuscript(manu5, subChair.getMyName()));
+		assertEquals(subChair.getMyRoles().mySubProgramChair.getMyManuscripts().size(), 4);
 	}
 
 }

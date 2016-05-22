@@ -26,6 +26,7 @@ public class ReviewerUI {
 	public static void header(String theWhoIam){
 		System.out.println("MSEE Conference Management");
 		System.out.println( myRole + " - " + theWhoIam);
+		System.out.println(myConf.getMyConfName());
 		System.out.println("Date: " + currDateString); //Alexandria, 5/15/16 - displays the current date
 	}
 	
@@ -45,9 +46,10 @@ public class ReviewerUI {
 		System.out.println("\t1. Submit a review");
 		System.out.println("\t2. View Submitted Reviews");
 		System.out.println("\t3. Exit");
-		System.out.println("Enter a selection");
+		System.out.print("Enter a selection > ");
 		temp = console.nextInt();
 		console.nextLine();
+		System.out.println();
 		switch (temp) {
 		case 1:
 			submitReview();
@@ -75,15 +77,15 @@ public class ReviewerUI {
 ////						toString().length()) +" " + myWhoAmI);
 //		System.out.println(myRole + " - " + myWhoAmI);
 		header(myWhoAmI);
-		System.out.println("Reviews Submitted:");
+		System.out.println("\nReviews Submitted:");
 		viewMyReviews();										  //Alexandria, 5/17/16 - not working currently
-		System.out.println("Enter the file path for the review"); //Alexandria, 5/15/16 - need to ask for number rating as well as show submitted reviews EDIT: now asks for number rating
+		System.out.println("\nEnter the file path for the review"); //Alexandria, 5/15/16 - need to ask for number rating as well as show submitted reviews EDIT: now asks for number rating
 		System.out.println("you wish to submit");
 		System.out.println("ex. C:\\Documents\\example.doc");
 		System.out.println("\n\t- OR -");
 		System.out.println("\t1. Back");
 		System.out.println("\t2. Exit");
-		System.out.println("> ");
+		System.out.print("> ");
 		String file = console.nextLine();
 		if (file.equals("1")) {
 			reviewerInterface(myWhoAmI); //GO TO AUTHOR
@@ -91,28 +93,28 @@ public class ReviewerUI {
 			System.out.println("Exiting - Goodbye!");
 			//serial();
 		} else {
-			System.out.println("Please enter the numeric score of your review: "); //TODO Alexandria, 5/17/16 - We need a max score value stored somewhere. Also, wording help please.
+			System.out.print("\nPlease enter the numeric score of your review: "); //TODO Alexandria, 5/17/16 - We need a max score value stored somewhere. Also, wording help please.
 			int rating = console.nextInt();
-			System.out.println("Please select the manuscript number you are reviewing: ");
-			Reviewer me = myUsers.get(myWhoAmI).myRoles.myReviewer;
+			System.out.println("\nPlease select the manuscript number you are reviewing: ");
+			Reviewer me = myUsers.get(myWhoAmI).getMyRoles().myReviewer;
 			for (int i = 0; i < me.getManuscripts().size(); i++){
-				System.out.println((i+1) + me.myManuscripts.get(i).myTitle); //Alexandria, 5/19/16 - this should now print the manuscript titles along with numbers
+				System.out.println((i+1) + me.getMyManuscripts().get(i).getMyTitle()); //Alexandria, 5/19/16 - this should now print the manuscript titles along with numbers
 			}
 			//System.out.println(me.getManuscripts());
-			System.out.println("> ");
+			System.out.print("> ");
 			int selection = console.nextInt();
 			console.nextLine();
-			Manuscript man = me.myManuscripts.get(selection - 1);
+			Manuscript man = me.getMyManuscripts().get(selection - 1);
 			me.submitReview(new File(file), man, rating); //Alexandria, 5/17/16 - added a rating to the review class
 			//me.addManuscript(man, myUsers.get(myWhoAmI).myName); //Alexandria, 5/17/16 - shouldn't this be calling me.submitReview(new File(file), man)?
-			System.out.println("Review submitted for " + man.myTitle); //Alexandria, 5/15/16 - "review submitted for exampleManuscript"
+			System.out.println("\nReview submitted for " + man.getMyTitle()); //Alexandria, 5/15/16 - "review submitted for exampleManuscript"
 			submitReview();
 		}
 	}
 	
 	public static void viewMyReviews(){ //Alexandria, 5/19/16 - I had to make small changes to Review and Reviewer to make this work
-		for (Review r : myUsers.get(myWhoAmI).myRoles.myReviewer.myReview){
-			System.out.println("Manuscript title: " + r.myReviewedManuscriptTitle + "\nRating: " + r.myRating + "\n");
+		for (Review r : myUsers.get(myWhoAmI).getMyRoles().myReviewer.getMyReview()){
+			System.out.println("Manuscript title: " + r.getMyReviewedManuscriptTitle() + "\nRating: " + r.getMyRating() + "\n");
 		}
 	}
 

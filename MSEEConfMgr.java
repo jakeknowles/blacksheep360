@@ -8,8 +8,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 //import java.io.Serializable;
 //import java.io.FileInputStream;
 //import java.io.FileOutputStream;
@@ -38,6 +40,7 @@ public class MSEEConfMgr {
 	static String myRole;
 	static String currDateString;
 	static Scanner console;
+	static List<Conference> myConferences;
 	
 	public MSEEConfMgr() {
 		
@@ -55,7 +58,7 @@ public class MSEEConfMgr {
 			FileInputStream fileIn = new FileInputStream("./MSEEdata.ser");	
 	        ObjectInputStream in = new ObjectInputStream(fileIn);
 	        myUsers = (HashMap<String, User>) in.readObject();
-	        myConf = (Conference) in.readObject();
+	        myConferences = (List) in.readObject();
 	        in.close();
 	        fileIn.close();
 		} catch(FileNotFoundException f) {
@@ -69,6 +72,8 @@ public class MSEEConfMgr {
 			myUsers.put("Peter", new User("Peter")); //Name/Role
 			Date deadline = new Date(System.currentTimeMillis() + 1209600000);
 			myConf = new Conference(myUsers.get("Peter"), "Innovative Trends in Science", deadline);
+			myConferences = new ArrayList<Conference>();
+			myConferences.add(myConf);
 		} catch(IOException i) {
 	        i.printStackTrace();
 	        return;
@@ -83,9 +88,11 @@ public class MSEEConfMgr {
 		currDateString = dateFormat.format(currDate);		//stored as a string
 		
 		console = new Scanner(System.in);
+		myConf = selectConference();
 		String whoAmI = login();
 		myWhoAmI = whoAmI;
 //		System.out.println(myUsers.get(whoAmI).getClass().toString());
+		System.out.println();
 		displayInterface(whoAmI, myUsers);
 		console.close();
 		
@@ -93,7 +100,7 @@ public class MSEEConfMgr {
 	    	FileOutputStream fileOut = new FileOutputStream("./MSEEdata.ser");
 	        ObjectOutputStream out = new ObjectOutputStream(fileOut);
 	        out.writeObject(myUsers);
-	        out.writeObject(myConf);
+	        out.writeObject(myConferences);
 	        out.close();
 	        fileOut.close();
 	        System.out.printf("Serialized file saved in ./MSEEdata.ser");
@@ -102,6 +109,20 @@ public class MSEEConfMgr {
 	      }
 	}
 	
+	public static Conference selectConference() {
+		int i = 1;
+		System.out.println("Select a conference number:");
+		for (Conference conf : myConferences){
+			System.out.println(i + ". " + myConferences.get(i-1).getMyConfName());
+		}
+		System.out.print("\n> ");
+		int selection = console.nextInt();
+		console.nextLine();
+		Conference selectedConference = myConferences.get(selection-1);
+		
+		return selectedConference;
+	}
+
 	/**
 	 * Login as a user and role.
 	 * 

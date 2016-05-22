@@ -30,7 +30,7 @@ public class ConferenceTest {
 		File manFile = new File("AlexTest.txt");
 		Manuscript man = new Manuscript(manFile, "Tester", "test");
 		testConf.addManuscript(man);
-		assertEquals(testConf.myManuscripts.get(man.myTitle), man);
+		assertEquals(testConf.getMyManuscripts().get(man.getMyTitle()), man);
 	}
 	
 	/**
@@ -45,8 +45,8 @@ public class ConferenceTest {
 		File manFile = new File("AlexTest.txt");
 		Manuscript man = new Manuscript(manFile, "Tester", "test");
 		testConf.addManuscript(man);
-		testConf.removeManuscript(man.myTitle);
-		assertTrue(testConf.myManuscripts.isEmpty());
+		testConf.removeManuscript(man.getMyTitle());
+		assertTrue(testConf.getMyManuscripts().isEmpty());
 	}
 
 }

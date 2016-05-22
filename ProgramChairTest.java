@@ -29,9 +29,9 @@ public class ProgramChairTest {
 		File manFile = new File("./AlexTest.txt");
 		Manuscript aManuscript = new Manuscript(manFile, "Tester", "test");
 		User progChair = new User("Program Chairman");
-		progChair.myRoles.myProgramChair = new ProgramChair();
-		progChair.myRoles.myProgramChair.submitDecision(aManuscript, true);
-		assertTrue(aManuscript.myApproval);
+		progChair.getMyRoles().myProgramChair = new ProgramChair();
+		progChair.getMyRoles().myProgramChair.submitDecision(aManuscript, ManuscriptAcceptanceStatus.ACCEPTED);
+		assertTrue(aManuscript.getMyApproval().equals(ManuscriptAcceptanceStatus.ACCEPTED));
 	}
 	
 	/**
@@ -42,12 +42,12 @@ public class ProgramChairTest {
 	@Test
 	public void testAssignManuscript() {
 		User progChair = new User("Program Chairman");
-		progChair.myRoles.myProgramChair = new ProgramChair();
+		progChair.getMyRoles().myProgramChair = new ProgramChair();
 		User subChair = new User("Sub Chairman");
 		File manFile = new File("./AlexTest.txt");
 		Manuscript manu = new Manuscript(manFile, "Tester", "test");
-		assertTrue(progChair.myRoles.myProgramChair.assignManuscripts(subChair, manu));
-		assertEquals(subChair.myRoles.mySubProgramChair.myManuscripts.size(), 1);
+		assertTrue(progChair.getMyRoles().myProgramChair.assignManuscripts(subChair, manu));
+		assertEquals(subChair.getMyRoles().mySubProgramChair.getMyManuscripts().size(), 1);
 	}
 	
 	/**
@@ -59,12 +59,12 @@ public class ProgramChairTest {
 	@Test
 	public void testAssignManuscriptToAuthor() {
 		User progChair = new User("Program Chairman");
-		progChair.myRoles.myProgramChair = new ProgramChair();
+		progChair.getMyRoles().myProgramChair = new ProgramChair();
 		User subChair = new User("Sub Chairman");
 		File manFile = new File("./AlexTest.txt");
 		Manuscript manu = new Manuscript(manFile, "Sub Chairman", "test");
-		assertFalse(progChair.myRoles.myProgramChair.assignManuscripts(subChair, manu));
-		assertEquals(subChair.myRoles.mySubProgramChair.myManuscripts.size(), 0);	
+		assertFalse(progChair.getMyRoles().myProgramChair.assignManuscripts(subChair, manu));
+		assertEquals(subChair.getMyRoles().mySubProgramChair.getMyManuscripts().size(), 0);	
 	}
 
 }

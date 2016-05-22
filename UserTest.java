@@ -30,10 +30,10 @@ public class UserTest {
 		assertFalse(test.isRole("SubProgram Chair"));
 		assertFalse(test.isRole("Program Chair"));
 		
-		test.myRoles.myAuthor = new Author(test.myName);
-		test.myRoles.myReviewer = new Reviewer(test.myName);
-		test.myRoles.mySubProgramChair = new SubProgramChair();
-		test.myRoles.myProgramChair = new ProgramChair();
+		test.getMyRoles().myAuthor = new Author(test.getMyName());
+		test.getMyRoles().myReviewer = new Reviewer(test.getMyName());
+		test.getMyRoles().mySubProgramChair = new SubProgramChair();
+		test.getMyRoles().myProgramChair = new ProgramChair();
 		
 		assertTrue(test.isRole("Author"));
 		assertTrue(test.isRole("Reviewer"));

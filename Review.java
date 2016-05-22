@@ -20,9 +20,9 @@ public class Review implements Serializable {
 	/**
 	 * The review form.
 	 */
-	public File myReviewForm;
-	public int myRating;
-	public String myReviewedManuscriptTitle;
+	private File myReviewForm;
+	private int myRating;
+	private String myReviewedManuscriptTitle;
 	
 	/**
 	 * Constructor.
@@ -31,10 +31,26 @@ public class Review implements Serializable {
 	 */
 	public Review(File theReviewForm, int theRating, String theReviewedManuscriptTitle) {
 		myReviewForm = theReviewForm;
-		myRating = theRating;
-		myReviewedManuscriptTitle = theReviewedManuscriptTitle;
+		setMyRating(theRating);
+		setMyReviewedManuscriptTitle(theReviewedManuscriptTitle);
 	}
 	
+	public String getMyReviewedManuscriptTitle() {
+		return myReviewedManuscriptTitle;
+	}
+
+	public int getMyRating() {
+		return myRating;
+	}
+
+	public void setMyRating(int myRating) {
+		this.myRating = myRating;
+	}
+
+	public void setMyReviewedManuscriptTitle(String myReviewedManuscriptTitle) {
+		this.myReviewedManuscriptTitle = myReviewedManuscriptTitle;
+	}
+
 	public String toString() {
 		return myReviewForm.getName();
 	}

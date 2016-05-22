@@ -20,23 +20,23 @@ public class Conference implements Serializable {
 	/**
 	 * the program chair of the conference.
 	 */
-	public User myProgramChair;
+	private User myProgramChair;
 	
 	/**
 	 * The name of the conference.
 	 */
-	public String myConfName;
+	private String myConfName;
 	
 	/**
 	 * A map of the submitted manuscript. With the title of the
 	 * manuscripts as the key.
 	 */
-	public HashMap<String, Manuscript> myManuscripts;
+	private HashMap<String, Manuscript> myManuscripts;
 	
 	/**
 	 * The deadline by which an author must submit a paper.
 	 */
-	public Date myManuscriptDeadline;
+	private Date myManuscriptDeadline;
 	
 	/**
 	 * Constructor
@@ -45,10 +45,10 @@ public class Conference implements Serializable {
 	 */
 	public Conference(User thePC, String theConfName, Date theDeadline) {
 		myProgramChair = thePC;
-		thePC.myRoles.myProgramChair = new ProgramChair();
-		myConfName = theConfName;
-		myManuscripts = new HashMap<String, Manuscript>();
-		myManuscriptDeadline = theDeadline;
+		thePC.getMyRoles().myProgramChair = new ProgramChair();
+		setMyConfName(theConfName);
+		setMyManuscripts(new HashMap<String, Manuscript>());
+		setMyManuscriptDeadline(theDeadline);
 	}
 	
 	/**
@@ -57,15 +57,39 @@ public class Conference implements Serializable {
 	 * @version 5/8/2016
 	 */
 	public void addManuscript(Manuscript theManuscript) {
-		myManuscripts.put(theManuscript.myTitle, theManuscript);
+		getMyManuscripts().put(theManuscript.getMyTitle(), theManuscript);
 	}
 	
+	public Date getMyManuscriptDeadline() {
+		return myManuscriptDeadline;
+	}
+
+	public HashMap<String, Manuscript> getMyManuscripts() {
+		return myManuscripts;
+	}
+
+	public String getMyConfName() {
+		return myConfName;
+	}
+
+	public void setMyConfName(String myConfName) {
+		this.myConfName = myConfName;
+	}
+
+	public void setMyManuscripts(HashMap<String, Manuscript> myManuscripts) {
+		this.myManuscripts = myManuscripts;
+	}
+
+	public void setMyManuscriptDeadline(Date myManuscriptDeadline) {
+		this.myManuscriptDeadline = myManuscriptDeadline;
+	}
+
 	/**
 	 * Removes a manuscript from the submitted manuscripts.
 	 * 
 	 * @version 5/8/2016
 	 */
 	public void removeManuscript(String theTitle) {
-		myManuscripts.remove(theTitle);
+		getMyManuscripts().remove(theTitle);
 	}
 }

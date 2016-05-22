@@ -25,7 +25,7 @@ public class SubProgramChair implements Serializable {
 	/**
 	 * The list of manuscripts assigned to the subprogram chair.
 	 */
-	public List<Manuscript> myManuscripts;
+	private List<Manuscript> myManuscripts;
 	
 	/**
 	 * Constructor.
@@ -33,7 +33,7 @@ public class SubProgramChair implements Serializable {
 	 * @version 5/8/2016
 	 */
 	public SubProgramChair() {
-		myManuscripts = new ArrayList<Manuscript>(MANUSCRIPT_LIMIT);
+		setMyManuscripts(new ArrayList<Manuscript>(MANUSCRIPT_LIMIT));
 	}
 
 	/**
@@ -51,9 +51,9 @@ public class SubProgramChair implements Serializable {
 	public boolean assignReviewer(final Manuscript theManuscript, final User theReviewer) {
 		boolean result = false;
 		if(!theReviewer.isRole(User.REVIEWER)) {
-			theReviewer.myRoles.myReviewer = new Reviewer(theReviewer.myName);
+			theReviewer.getMyRoles().myReviewer = new Reviewer(theReviewer.getMyName());
 		}
-		result = theReviewer.myRoles.myReviewer.addManuscript(theManuscript, theReviewer.myName);
+		result = theReviewer.getMyRoles().myReviewer.addManuscript(theManuscript, theReviewer.getMyName());
 		return result;
 	}
 	
@@ -67,9 +67,17 @@ public class SubProgramChair implements Serializable {
 	 * @version 05/08/2016
 	 */
 	public void submitRecommendation(final Manuscript theManuscript, final File theRecommendation) {
-		theManuscript.myRecommendation = new Recommendation(theRecommendation);
+		theManuscript.setMyRecommendation(new Recommendation(theRecommendation));
 	}
 	
+	public List<Manuscript> getMyManuscripts() {
+		return myManuscripts;
+	}
+
+	public void setMyManuscripts(List<Manuscript> myManuscripts) {
+		this.myManuscripts = myManuscripts;
+	}
+
 	/**
 	 * Adds a manuscript to the list of assigned manuscripts.
 	 * 
@@ -80,8 +88,8 @@ public class SubProgramChair implements Serializable {
 	 */
 	public boolean addManuscript(final Manuscript theManuscript, final String theUserName) {
 		boolean result = false;
-		if(myManuscripts.size() < MANUSCRIPT_LIMIT && !theManuscript.myAuthorName.equals(theUserName)) {
-			myManuscripts.add(theManuscript);
+		if(getMyManuscripts().size() < MANUSCRIPT_LIMIT && !theManuscript.getMyAuthorName().equals(theUserName)) {
+			getMyManuscripts().add(theManuscript);
 			result = true;
 		}
 		return result;
@@ -93,7 +101,7 @@ public class SubProgramChair implements Serializable {
 	 * @version 5/8/2016
 	 */
 	public List<Manuscript> getManuscripts() {
-		return myManuscripts;
+		return getMyManuscripts();
 	}
 	
 	public String toString() {
