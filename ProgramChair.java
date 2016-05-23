@@ -1,4 +1,5 @@
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.io.Serializable;
 
@@ -26,16 +27,12 @@ public class ProgramChair implements Serializable{
 	}
 
 	/**
-	 * Views all submitted manuscripts.
+	 * Returns all submitted manuscripts.
 	 * 
-	 * @version 5/8/2016
+	 * @version 5/22/2016
 	 */
-	public String viewManuscripts(HashMap<String, Manuscript> theManuscripts) {
-		StringBuilder str = new StringBuilder();
-		for (String s : theManuscripts.keySet()) {
-			str.append(theManuscripts.get(s) + "\n");
-		}
-		return str.toString();
+	public Collection<Manuscript> viewManuscripts(HashMap<String, Manuscript> theManuscripts) { //Alexandria, 5/22/16 - I changed this for the sake of keeping the UI separate. This was basically a toString.
+		return theManuscripts.values();
 	}
 	
 	/**
@@ -43,8 +40,8 @@ public class ProgramChair implements Serializable{
 	 * 
 	 * @version 5/8/2016
 	 */
-	public void submitDecision(Manuscript theManuscript, boolean isAccepted) {
-		theManuscript.setMyApproval(isAccepted);
+	public void submitDecision(Manuscript theManuscript, ManuscriptAcceptanceStatus myDecision) {
+		theManuscript.setMyApproval(myDecision);
 	}
 	
 	/**

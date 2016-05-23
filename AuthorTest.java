@@ -30,7 +30,7 @@ public class AuthorTest {
 		File manuscriptFile = new File("./AlexTest.txt");
 		Date deadline = new Date(System.currentTimeMillis() + 3600000);
 		testUser.getMyRoles().myAuthor.submitManuscript(manuscriptFile, deadline, "AlexTest.txt");
-		assertTrue(testUser.getMyRoles().myAuthor.myManuscripts.get(0).getMyTitle().equals(manuscriptFile.getName()));
+		assertTrue(testUser.getMyRoles().myAuthor.getMyManuscripts().get(0).getMyTitle().equals(manuscriptFile.getName()));
 	}
 	
 	/**
@@ -61,7 +61,7 @@ public class AuthorTest {
 		File manuscriptFile = new File("./AlexTest.txt");
 		Manuscript manuscriptObj = testUser.getMyRoles().myAuthor.submitManuscript(manuscriptFile, deadline, "test");
 		testUser.getMyRoles().myAuthor.deleteManuscript(manuscriptObj);
-		assertEquals(testUser.getMyRoles().myAuthor.myManuscripts.size(), 0);
+		assertEquals(testUser.getMyRoles().myAuthor.getMyManuscripts().size(), 0);
 	}
 	
 	/**
@@ -78,7 +78,7 @@ public class AuthorTest {
 		Manuscript manuscriptObj = testUser.getMyRoles().myAuthor.submitManuscript(manuscriptFile, deadline, "test");
 		File otherFile = new File("./AntiSocialNetwork.doc");
 		testUser.getMyRoles().myAuthor.editManuscript(manuscriptObj, otherFile);
-		assertEquals(testUser.getMyRoles().myAuthor.myManuscripts.get(0).getMyManuscript(), otherFile);
+		assertEquals(testUser.getMyRoles().myAuthor.getMyManuscripts().get(0).getMyManuscript(), otherFile);
 	}
 
 }

@@ -27,6 +27,7 @@ public class UserUI {
 	public static void header(String theWhoIam){
 		System.out.println("MSEE Conference Management");
 		System.out.println( myRole + " - " + theWhoIam);
+		System.out.println(myConf.getMyConfName());
 		System.out.println("Date: " + currDateString); //Alexandria, 5/15/16 - displays the current date
 	}
 
@@ -45,7 +46,7 @@ public class UserUI {
 		System.out.println("Select an action:");
 		System.out.println("\t1. Submit a manuscript");
 		System.out.println("\t2. Exit");
-		System.out.println("Enter a selection");
+		System.out.println("Enter a selection > ");
 		temp = console.nextInt();
 		console.nextLine();
 		switch (temp) {
@@ -79,7 +80,7 @@ public class UserUI {
 		System.out.println("\n\t- OR -");
 		System.out.println("\t1. Back");
 		System.out.println("\t2. Exit");
-		System.out.println("> ");
+		System.out.print("> ");
 		String file = console.nextLine();
 		if (file.equals("1")) {
 			if (myUsers.get(myWhoAmI).isRole(myRole)) {  //Alexandria, 5/17/16 - wouldn't this send them to the author menu as soon as they hit "back", even if they didn't submit anything? EDIT: nevermind I was reading it wrong

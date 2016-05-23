@@ -30,8 +30,8 @@ public class ProgramChairTest {
 		Manuscript aManuscript = new Manuscript(manFile, "Tester", "test");
 		User progChair = new User("Program Chairman");
 		progChair.getMyRoles().myProgramChair = new ProgramChair();
-		progChair.getMyRoles().myProgramChair.submitDecision(aManuscript, true);
-		assertTrue(aManuscript.getMyApproval());
+		progChair.getMyRoles().myProgramChair.submitDecision(aManuscript, ManuscriptAcceptanceStatus.ACCEPTED);
+		assertTrue(aManuscript.getMyApproval().equals(ManuscriptAcceptanceStatus.ACCEPTED));
 	}
 	
 	/**

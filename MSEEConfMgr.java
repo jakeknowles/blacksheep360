@@ -92,6 +92,7 @@ public class MSEEConfMgr {
 		String whoAmI = login();
 		myWhoAmI = whoAmI;
 //		System.out.println(myUsers.get(whoAmI).getClass().toString());
+		System.out.println();
 		displayInterface(whoAmI, myUsers);
 		console.close();
 		
@@ -114,7 +115,7 @@ public class MSEEConfMgr {
 		for (Conference conf : myConferences){
 			System.out.println(i + ". " + myConferences.get(i-1).getMyConfName());
 		}
-		System.out.print("\n> \n");
+		System.out.print("\n> ");
 		int selection = console.nextInt();
 		console.nextLine();
 		Conference selectedConference = myConferences.get(selection-1);

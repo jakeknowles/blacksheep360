@@ -41,7 +41,7 @@ public class Manuscript implements Serializable {
 	/**
 	 * The program chair's approval of this manuscript.
 	 */
-	private Boolean myApproval;
+	private ManuscriptAcceptanceStatus myStatus;
 	
 	/**
 	 * Constructor.
@@ -52,7 +52,7 @@ public class Manuscript implements Serializable {
 		setMyManuscript(theManuscript);
 		setMyReviews(new ArrayList<Review>());
 		setMyAuthorName(theAuthorName);
-		setMyApproval(false);
+		setMyApproval(ManuscriptAcceptanceStatus.NO_DECISION);
 		setMyRecommendation(null);
 		setMyTitle(theTitle);
 	}
@@ -65,8 +65,8 @@ public class Manuscript implements Serializable {
 		return myAuthorName;
 	}
 
-	public Boolean getMyApproval() {
-		return myApproval;
+	public ManuscriptAcceptanceStatus getMyApproval() {
+		return myStatus;
 	}
 
 	public File getMyManuscript() {
@@ -93,8 +93,8 @@ public class Manuscript implements Serializable {
 		this.myRecommendation = myRecommendation;
 	}
 
-	public void setMyApproval(Boolean myApproval) {
-		this.myApproval = myApproval;
+	public void setMyApproval(ManuscriptAcceptanceStatus myApproval) {
+		this.myStatus = myApproval;
 	}
 
 	public void setMyAuthorName(String myAuthorName) {

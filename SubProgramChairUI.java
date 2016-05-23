@@ -28,6 +28,7 @@ public class SubProgramChairUI {
 	public static void header(String theWhoIam){
 		System.out.println("MSEE Conference Management");
 		System.out.println( myRole + " - " + theWhoIam);
+		System.out.println(myConf.getMyConfName());
 		System.out.println("Date: " + currDateString); //Alexandria, 5/15/16 - displays the current date
 	}
 	

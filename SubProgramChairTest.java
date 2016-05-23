@@ -48,7 +48,7 @@ public class SubProgramChairTest {
 		File recFile = new File("./review.txt");
 		Manuscript manu = new Manuscript(manFile, "Tester", "test");
 		subChair.getMyRoles().mySubProgramChair.submitRecommendation(manu, recFile);
-		assertEquals(manu.getMyRecommendation().myRecommendationForm, recFile);
+		assertEquals(manu.getMyRecommendation().getMyRecommendationForm(), recFile); //Alexandria, 5/22/16 - this line was having issues so I added a getter.
 	}
 	
 	/**
