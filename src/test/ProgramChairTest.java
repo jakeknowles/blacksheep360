@@ -1,10 +1,15 @@
-
+package test;
 
 import static org.junit.Assert.*;
 
 import java.io.File;
 
 import org.junit.Test;
+
+import model.Manuscript;
+import model.ManuscriptAcceptanceStatus;
+import model.ProgramChair;
+import model.User;
 
 /**
  * Test cases for the Program Chair class.

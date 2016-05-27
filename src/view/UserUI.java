@@ -1,8 +1,13 @@
-
+package view;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Scanner;
+
+import model.Author;
+import model.Conference;
+import model.Manuscript;
+import model.User;
 
 public class UserUI {
 
@@ -86,7 +91,7 @@ public class UserUI {
 			if (myUsers.get(myWhoAmI).isRole(myRole)) {  //Alexandria, 5/17/16 - wouldn't this send them to the author menu as soon as they hit "back", even if they didn't submit anything? EDIT: nevermind I was reading it wrong
 				AuthorUI aui = new AuthorUI(myUsers, myConf, myWhoAmI, myRole, 
 						currDateString, console);
-				aui.authorInterface(myWhoAmI);
+				aui.authorInterfaceHasManuscripts();
 			} else {
 				userInterface(myWhoAmI);
 			}

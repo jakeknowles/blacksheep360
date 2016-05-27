@@ -1,8 +1,14 @@
-
+package test;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import model.Author;
+import model.ProgramChair;
+import model.Reviewer;
+import model.SubProgramChair;
+import model.User;
 
 /**
  * Test class for User.

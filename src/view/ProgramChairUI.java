@@ -1,47 +1,45 @@
-
+package view;
 	
 import java.util.HashMap;
 import java.util.Scanner;
 
+import model.Conference;
+import model.Manuscript;
+import model.ManuscriptAcceptanceStatus;
+import model.User;
+
 public class ProgramChairUI {
 
-	static HashMap<String, User> myUsers;
-	static Conference myConf;
-	static String myWhoAmI;
-	static String myRole;
-	static String currDateString;
-	static Scanner console;
+	private HashMap<String, User> myUsers;
+	private Conference myConf;
+	private String myName;
+	private String myRole;
+	private String currDateString;
+	private Scanner console;
 
 
 	public ProgramChairUI(HashMap<String, User> theUsers, Conference theConf, 
 			String theWhoAmI, String theRole, String theCurrDateString, Scanner theConsole) {
 		myUsers = theUsers; 
 		myConf = theConf;
-		myWhoAmI = theWhoAmI; 
+		myName = theWhoAmI; 
 		myRole = theRole;
 		currDateString = theCurrDateString;
 		console = theConsole;	
 	}
 	
-	public static void header(String theWhoIam){
-		System.out.println("MSEE Conference Management");
-		System.out.println( myRole + " - " + theWhoIam);
-		System.out.println(myConf.getMyConfName());
-		System.out.println("Date: " + currDateString); //Alexandria, 5/15/16 - displays the current date
-	}
-
 	/**
 	 * displays the program chair interface and reads user input.
 	 * 
 	 * @version 5/8/2016
 	 */
-	public static void pcInterface(String theWhoIam) {
+	public void pcInterface(String theWhoIam) {
 		int temp = 0;
 		System.out.println();
 //		System.out.println("MSEE Conference Management");
 //		System.out.println("Program Chair - " + theWhoIam);
 //		System.out.println("Date: " + currDateString);
-		header(theWhoIam);
+		MSEEConfMgr.header(User.AUTHOR, myName, currDateString, myConf.getMyConfName());
 		System.out.println("Select an action:");
 		System.out.println("\t1. View list of submitted manuscripts.");
 		System.out.println("\t2. Make acceptance decision on manuscripts.");
@@ -68,7 +66,7 @@ public class ProgramChairUI {
 					System.out.println(myUsers.get(s).getMyRoles().mySubProgramChair.getManuscripts());
 				}
 			}
-			pcInterface(myWhoAmI);
+			pcInterface(myName);
 			break;
 		case 4:
 			assignSPC();
@@ -85,10 +83,10 @@ public class ProgramChairUI {
 	 * 
 	 * @version 5/8/2016
 	 */
-	public static void assignSPC() {
+	public void assignSPC() {
 //		System.out.println("MSEE Conference Management");
 //		System.out.println("Program Chair - " + myWhoAmI);
-		header(myWhoAmI);
+		MSEEConfMgr.header(User.AUTHOR, myName, currDateString, myConf.getMyConfName());
 		System.out.println("Subprogram Chairs: "); //Alexandria, 5/17/2016 - prints list of subprogram chairs
 		for (String str : myUsers.keySet()){
 			if (myUsers.get(str).isRole(User.SUBPROGRAM_CHAIR)){
@@ -102,8 +100,8 @@ public class ProgramChairUI {
 		System.out.println("> ");
 		String name = console.nextLine();
 		if (name.equals("1")) {
-			if (myUsers.get(myWhoAmI).isRole(myRole)) {
-				pcInterface(myWhoAmI); //GO TO AUTHOR
+			if (myUsers.get(myName).isRole(myRole)) {
+				pcInterface(myName); //GO TO AUTHOR
 			}
 		} else if (name.equals("2")) {
 			System.out.println("Exiting - Goodbye!");
@@ -121,7 +119,7 @@ public class ProgramChairUI {
 			}
 			System.out.println("> ");
 			String selection = console.nextLine();
-			boolean result = myUsers.get(myWhoAmI).getMyRoles().myProgramChair.assignManuscripts(myUsers.get(name), myConf.getMyManuscripts().get(selection));
+			boolean result = myUsers.get(myName).getMyRoles().myProgramChair.assignManuscripts(myUsers.get(name), myConf.getMyManuscripts().get(selection));
 			if (result) {
 				System.out.println(myUsers.get(name).getMyName() + " has been assigned " + myConf.getMyManuscripts().get(selection).getMyTitle()); //Alexandria, 5/15/16 - this should either display "ExampleSPC has been assigned SamplePaperName" or a list of SPCs and their assigned papers.
 			} else {
@@ -136,10 +134,10 @@ public class ProgramChairUI {
 	 * 
 	 * @version 5/8/2016
 	 */
-	public static void acceptance() {
+	public void acceptance() {
 //		System.out.println("MSEE Conference Management");
 //		System.out.println("Program Chair - " + myWhoAmI);
-		header(myWhoAmI);
+		MSEEConfMgr.header(User.AUTHOR, myName, currDateString, myConf.getMyConfName());
 		printManuscripts();
 		System.out.println("Enter the title of the "
 				+ "manuscript you want to accept/reject."); //Alexandria, 5/15/16 - problem here: we're telling them they can accept and reject, but when they input a name the system "accepts" it. Need group input on this one.
@@ -149,8 +147,8 @@ public class ProgramChairUI {
 		System.out.print("> ");
 		String input = console.nextLine();
 		if (input.equals("1")) {
-			if (myUsers.get(myWhoAmI).isRole(myRole)) {
-				pcInterface(myWhoAmI); //GO TO AUTHOR
+			if (myUsers.get(myName).isRole(myRole)) {
+				pcInterface(myName); //GO TO AUTHOR
 			}
 		} else if (input.equals("2")) {
 			System.out.println("Exiting - Goodbye!");
@@ -162,9 +160,9 @@ public class ProgramChairUI {
 			System.out.println("2. Reject");
 			String decision = console.nextLine();
 			if (decision.equals("1")) {
-				myUsers.get(myWhoAmI).getMyRoles().myProgramChair.submitDecision(myConf.getMyManuscripts().get(input), ManuscriptAcceptanceStatus.ACCEPTED);
+				myUsers.get(myName).getMyRoles().myProgramChair.submitDecision(myConf.getMyManuscripts().get(input), ManuscriptAcceptanceStatus.ACCEPTED);
 			} else if (decision.equals("2")) {
-				myUsers.get(myWhoAmI).getMyRoles().myProgramChair.submitDecision(myConf.getMyManuscripts().get(input), ManuscriptAcceptanceStatus.REJECTED);
+				myUsers.get(myName).getMyRoles().myProgramChair.submitDecision(myConf.getMyManuscripts().get(input), ManuscriptAcceptanceStatus.REJECTED);
 			}
 			//System.out.println(myConf.getMyManuscripts().get(input).getMyTitle() + " has been accepted to " + myConf.getMyConfName() + "."); //Alexandria, 5/15/16 - "nameOfPaper has been accepted" or something like that EDIT: done
 			System.out.println("Your decision has been submitted.");
@@ -177,15 +175,15 @@ public class ProgramChairUI {
 	 * 
 	 * @version 5/19/16
 	 */
-	public static void viewManuscripts(){
+	public void viewManuscripts(){
 		printManuscripts();
 		System.out.println("\t1. Back");
 		System.out.println("\t2. Exit");
 		System.out.print("> ");
 		String input = console.nextLine();
 		if (input.equals("1")) {
-			if (myUsers.get(myWhoAmI).isRole(myRole)) {
-				pcInterface(myWhoAmI); //GO TO AUTHOR
+			if (myUsers.get(myName).isRole(myRole)) {
+				pcInterface(myName); //GO TO AUTHOR
 			}
 		} else if (input.equals("2")) {
 			System.out.println("Exiting - Goodbye!");
@@ -198,10 +196,10 @@ public class ProgramChairUI {
 	 * 
 	 * @version 5/22/16
 	 */
-	public static void printManuscripts(){
+	public void printManuscripts(){
 		System.out.println("------Submitted Manuscripts------");
 		System.out.println("Title\tAuthor\tAcceptance Status\n");
-		for (Manuscript manuscript : myUsers.get(myWhoAmI).getMyRoles().myProgramChair.viewManuscripts(myConf.getMyManuscripts())){
+		for (Manuscript manuscript : myUsers.get(myName).getMyRoles().myProgramChair.viewManuscripts(myConf.getMyManuscripts())){
 			System.out.print(manuscript.getMyTitle() + "\t" + manuscript.getMyAuthorName() + "\t");
 			switch (manuscript.getMyApproval()){
 			case NO_DECISION:

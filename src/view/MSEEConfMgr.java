@@ -1,3 +1,4 @@
+package view;
 
 
 import java.io.FileInputStream;
@@ -19,6 +20,9 @@ import java.util.List;
 //import java.io.ObjectInputStream;
 //import java.io.ObjectOutputStream;
 import java.util.Scanner;
+
+import model.Conference;
+import model.User;
 
 
 /**
@@ -112,8 +116,8 @@ public class MSEEConfMgr {
 	public static Conference selectConference() {
 		int i = 1;
 		System.out.println("Select a conference number:");
-		for (Conference conf : myConferences){
-			System.out.println(i + ". " + myConferences.get(i-1).getMyConfName());
+		for (i = 0; i < myConferences.size(); i++) {
+			System.out.println((i + 1) + ". " + myConferences.get(i).getMyConfName());
 		}
 		System.out.print("\n> ");
 		int selection = console.nextInt();
@@ -133,27 +137,30 @@ public class MSEEConfMgr {
 		System.out.print("Please enter your User Name > ");
 		String userName = console.nextLine();
 		
-		//Alexandria, 5/15/16 - the intent of the following code was to print out all
-		//of the roles available to a user. It appears to only be working for Peter, though.
-		//Anyone else only shows "User". Anyone know why that is?
-		//5/17/16 - EDIT it looks like Peter was the only one who had a role other than user to start with.
 		System.out.println(userName + " has the following roles for this conference:");
-		if (myUsers.get(userName).isRole(User.AUTHOR)) {
-			System.out.println("Author");
-		}
+		int i = 0;
+		String roles[] = new String[4];
+		roles[i++] = User.AUTHOR;
+		//System.out.println("Author");
 		if (myUsers.get(userName).isRole(User.PROGRAM_CHAIR)) {
-			System.out.println("Program Chair");
+			roles[i++] = User.PROGRAM_CHAIR;
+			//System.out.println("Program Chair");
 		}
 		if (myUsers.get(userName).isRole(User.REVIEWER)) {
-			System.out.println("Reviewer");
+			roles[i++] = User.REVIEWER;
+			//System.out.println("Reviewer");
 		} 
 		if (myUsers.get(userName).isRole(User.SUBPROGRAM_CHAIR)) {
-			System.out.println("Subprogram Chair");
+			roles[i++] = User.SUBPROGRAM_CHAIR;
+			//System.out.println("Subprogram Chair");
 		} 
-		System.out.println("User");
-		
-		System.out.print("Enter Your Role > ");
-		myRole = console.nextLine();
+		for (int j = 1; j <= i; j++) {
+			System.out.println(j + ". " + roles[j -1]);
+		}
+		System.out.print("Select Your Role > ");
+		i = console.nextInt();
+		console.nextLine();
+		myRole = roles[i -1];
 		return userName;
 	}
 	
@@ -163,10 +170,14 @@ public class MSEEConfMgr {
 	 * @version 5/8/2016
 	 */
 	public static void displayInterface(String theWhoIam, HashMap<String, User> theUsers) {
-		if (myUsers.get(myWhoAmI).isRole(myRole) && myRole.equals(User.AUTHOR)) {
+		if (myRole.equals(User.AUTHOR)) {
 			AuthorUI aui = new AuthorUI(myUsers, myConf, myWhoAmI, myRole, 
 					currDateString, console);
-			aui.authorInterface(myWhoAmI);
+			if (myUsers.get(myWhoAmI).isRole(myRole)) {
+				aui.authorInterfaceHasManuscripts();
+			} else {
+				aui.authorInterfaceNoManuscripts();
+			}
 		} else if (myUsers.get(myWhoAmI).isRole(myRole) && myRole.equals(User.PROGRAM_CHAIR)) {
 			ProgramChairUI pui = new ProgramChairUI(myUsers, myConf, myWhoAmI, myRole, 
 					currDateString, console);
@@ -179,11 +190,14 @@ public class MSEEConfMgr {
 			SubProgramChairUI spcui = new SubProgramChairUI(myUsers, myConf, myWhoAmI, myRole, 
 					currDateString, console); 
 			spcui.subpcInterface(myWhoAmI);
-		} else {
-			myRole = "User";
-			UserUI uui = new UserUI(myUsers, myConf, myWhoAmI, myRole, currDateString, console);
-			uui.userInterface(myWhoAmI);
-		}
+		} 
+	}
+	
+	public static void header(String role, String name, String date, String conference){
+		System.out.println("MSEE Conference Management");
+		System.out.println( role + " - " + name);
+		System.out.println(conference);
+		System.out.println("Date: " + date);
 	}
 	
 }

@@ -1,3 +1,4 @@
+package model; 
 
 import java.io.*;
 import java.util.ArrayList;
@@ -44,17 +45,31 @@ public class Manuscript implements Serializable {
 	private ManuscriptAcceptanceStatus myStatus;
 	
 	/**
-	 * Constructor.
-	 * 
-	 * @version 5/8/2016
+	 * @version 5/25/2016
 	 */
 	public Manuscript(File theManuscript, String theAuthorName, String theTitle) {
-		setMyManuscript(theManuscript);
-		setMyReviews(new ArrayList<Review>());
-		setMyAuthorName(theAuthorName);
-		setMyApproval(ManuscriptAcceptanceStatus.NO_DECISION);
-		setMyRecommendation(null);
-		setMyTitle(theTitle);
+		myManuscript = theManuscript;
+		myReviews = new ArrayList<Review>();
+		myAuthorName = theAuthorName;
+		myStatus = ManuscriptAcceptanceStatus.NO_DECISION;
+		myRecommendation = null;
+		myTitle = theTitle;
+	}
+	
+	/**
+	 * @version 5/26/2016
+	 * @param theOther the Manuscript to be copied
+	 */
+	public Manuscript(Manuscript theOther) {
+		myManuscript = theOther.myManuscript;
+		myReviews = new ArrayList<Review>();
+		for (Review r : theOther.myReviews) {
+			myReviews.add(new Review(r));
+		}
+		myAuthorName = theOther.myAuthorName;
+		myStatus = theOther.myStatus;
+		myRecommendation = theOther.myRecommendation;
+		myTitle = theOther.myTitle;
 	}
 
 	public String getMyTitle() {

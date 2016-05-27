@@ -1,47 +1,46 @@
-
+package view;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Scanner;
+
+import model.Conference;
+import model.Manuscript;
+import model.Review;
+import model.Reviewer;
+import model.User;
 	
 public class ReviewerUI {
 
-	static HashMap<String, User> myUsers;
-	static Conference myConf;
-	static String myWhoAmI;
-	static String myRole;
-	static String currDateString;
-	static Scanner console;
+	private HashMap<String, User> myUsers;
+	private Conference myConf;
+	private String myName;
+	private String myRole;
+	private String currDateString;
+	private Scanner console;
 
 	public ReviewerUI(HashMap<String, User> theUsers, Conference theConf, 
 			String theWhoAmI, String theRole, String theCurrDateString, Scanner theConsole) {
 		myUsers = theUsers; 
 		myConf = theConf;
-		myWhoAmI = theWhoAmI; 
+		myName = theWhoAmI; 
 		myRole = theRole;
 		currDateString = theCurrDateString;
 		console = theConsole;	
 	}
 
-	public static void header(String theWhoIam){
-		System.out.println("MSEE Conference Management");
-		System.out.println( myRole + " - " + theWhoIam);
-		System.out.println(myConf.getMyConfName());
-		System.out.println("Date: " + currDateString); //Alexandria, 5/15/16 - displays the current date
-	}
-	
 	/**
 	 * User interface for a reviewer to select actions. 
 	 * 
 	 * @version 5/8/2016
 	 */
-	public static void reviewerInterface(String theWhoIam) {
+	public void reviewerInterface(String theWhoIam) {
 		int temp = 0;
 		System.out.println();
 //		System.out.println("MSEE Conference Management");
 //		System.out.println("Reviewer - " + theWhoIam);
 //		System.out.println("Date: " + currDateString);
-		header(theWhoIam);
+		MSEEConfMgr.header(User.AUTHOR, myName, currDateString, myConf.getMyConfName());
 		System.out.println("Select an action:");
 		System.out.println("\t1. Submit a review");
 		System.out.println("\t2. View Submitted Reviews");
@@ -70,13 +69,13 @@ public class ReviewerUI {
 	 * 
 	 * @version 5/8/2016
 	 */
-	public static void submitReview() {
+	public void submitReview() {
 //		System.out.println("MSEE Conference Management");
 ////		System.out.println(myUsers.get(myWhoAmI).getClass().toString().
 ////				substring(6, myUsers.get(myWhoAmI).getClass().
 ////						toString().length()) +" " + myWhoAmI);
 //		System.out.println(myRole + " - " + myWhoAmI);
-		header(myWhoAmI);
+		MSEEConfMgr.header(User.AUTHOR, myName, currDateString, myConf.getMyConfName());
 		System.out.println("\nReviews Submitted:");
 		viewMyReviews();										  //Alexandria, 5/17/16 - not working currently
 		System.out.println("\nEnter the file path for the review"); //Alexandria, 5/15/16 - need to ask for number rating as well as show submitted reviews EDIT: now asks for number rating
@@ -88,7 +87,7 @@ public class ReviewerUI {
 		System.out.print("> ");
 		String file = console.nextLine();
 		if (file.equals("1")) {
-			reviewerInterface(myWhoAmI); //GO TO AUTHOR
+			reviewerInterface(myName); //GO TO AUTHOR
 		} else if (file.equals("2")) {
 			System.out.println("Exiting - Goodbye!");
 			//serial();
@@ -96,7 +95,7 @@ public class ReviewerUI {
 			System.out.print("\nPlease enter the numeric score of your review: "); //TODO Alexandria, 5/17/16 - We need a max score value stored somewhere. Also, wording help please.
 			int rating = console.nextInt();
 			System.out.println("\nPlease select the manuscript number you are reviewing: ");
-			Reviewer me = myUsers.get(myWhoAmI).getMyRoles().myReviewer;
+			Reviewer me = myUsers.get(myName).getMyRoles().myReviewer;
 			for (int i = 0; i < me.getManuscripts().size(); i++){
 				System.out.println((i+1) + me.getMyManuscripts().get(i).getMyTitle()); //Alexandria, 5/19/16 - this should now print the manuscript titles along with numbers
 			}
@@ -112,8 +111,8 @@ public class ReviewerUI {
 		}
 	}
 	
-	public static void viewMyReviews(){ //Alexandria, 5/19/16 - I had to make small changes to Review and Reviewer to make this work
-		for (Review r : myUsers.get(myWhoAmI).getMyRoles().myReviewer.getMyReview()){
+	public void viewMyReviews(){ //Alexandria, 5/19/16 - I had to make small changes to Review and Reviewer to make this work
+		for (Review r : myUsers.get(myName).getMyRoles().myReviewer.getMyReview()){
 			System.out.println("Manuscript title: " + r.getMyReviewedManuscriptTitle() + "\nRating: " + r.getMyRating() + "\n");
 		}
 	}

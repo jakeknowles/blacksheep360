@@ -1,10 +1,12 @@
-
+package test;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import view.MSEEConfMgr;
 
 public class MSEEConfMgrTest extends MSEEConfMgr {
 

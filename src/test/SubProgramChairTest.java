@@ -1,10 +1,15 @@
-
+package test;
 
 import static org.junit.Assert.*;
 
 import java.io.File;
 
 import org.junit.Test;
+
+import model.Manuscript;
+import model.Reviewer;
+import model.SubProgramChair;
+import model.User;
 
 /**
  * Test class for the subprogram chair.

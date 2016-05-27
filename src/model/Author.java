@@ -1,3 +1,4 @@
+package model; 
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,8 +33,6 @@ public class Author implements Serializable {
 	private String myName;
 	
 	/**
-	 * Constructor
-	 *  
 	 * @version 5/8/2016
 	 * 
 	 * @param theName the name of the author
@@ -41,6 +40,20 @@ public class Author implements Serializable {
 	public Author(String theName) {
 		myName = theName;
 		myManuscripts = new ArrayList<Manuscript>();
+	}
+	
+	/**
+	 * @version 5/25/2016
+	 * 
+	 * @param theName The name of the author
+	 * @param theManuscripts The manuscripts that the author has submitted.
+	 */
+	public Author(String theName, List<Manuscript> theManuscripts) {
+		myName = theName;
+		myManuscripts = new ArrayList<Manuscript>();
+		for(Manuscript m : theManuscripts) {
+			myManuscripts.add(new Manuscript(m));
+		}
 	}
 
 	/**
@@ -73,12 +86,24 @@ public class Author implements Serializable {
 	}
 
 	/**
-	 * Changes a submitted manuscript.
+	 * Changes a file of a submitted manuscript.
 	 * 
 	 * @version 5/8/2016
 	 */
-	public void editManuscript(Manuscript theManuscript, File theNewFile) {
+	public void editManuscriptFile(Manuscript theManuscript, File theNewFile) {
 		theManuscript.setMyManuscript(theNewFile);
+	}
+	
+	/**
+	 * Changes the title of a submitted manuscript.
+	 * 
+	 * @version 5/26/2016
+	 * 
+	 * @param theIndex 
+	 * @param theNewTitle
+	 */
+	public void editManuscriptTitle(Manuscript theManuscript, String theNewTitle) {
+		theManuscript.setMyTitle(theNewTitle);
 	}
 
 	/**
@@ -86,7 +111,9 @@ public class Author implements Serializable {
 	 * 
 	 * @return the list of this author's manuscripts
 	 */
-	public List<Manuscript> getMyManuscripts() { //Alexandria, 5/22/2016 - AuthorTest was having issues so I added this to fix it.
+	public List<Manuscript> getMyManuscripts() {
 		return myManuscripts;
 	}
+	
+	
 }

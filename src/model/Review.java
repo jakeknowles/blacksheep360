@@ -1,3 +1,4 @@
+package model; 
 
 import java.io.File;
 import java.io.Serializable;
@@ -31,8 +32,18 @@ public class Review implements Serializable {
 	 */
 	public Review(File theReviewForm, int theRating, String theReviewedManuscriptTitle) {
 		myReviewForm = theReviewForm;
-		setMyRating(theRating);
-		setMyReviewedManuscriptTitle(theReviewedManuscriptTitle);
+		myRating = theRating;
+		myReviewedManuscriptTitle = theReviewedManuscriptTitle;
+	}
+	
+	/**
+	 * @version 5/26/2016
+	 * @param theOther the Review to be copied.
+	 */
+	public Review(Review theOther) {
+		myReviewForm = theOther.myReviewForm;
+		myRating = theOther.myRating;
+		myReviewedManuscriptTitle = theOther.myReviewedManuscriptTitle;
 	}
 	
 	public String getMyReviewedManuscriptTitle() {
