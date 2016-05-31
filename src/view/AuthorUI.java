@@ -73,7 +73,7 @@ public class AuthorUI {
 		System.out.println("Select an action:");
 		System.out.println("\t1. Submit a manuscript");
 		System.out.println("\t2. Exit");
-		System.out.print("Enter a selection \n> ");
+		System.out.println("Enter a selection > ");
 		int selection = console.nextInt();
 		console.nextLine();
 		switch (selection) {
@@ -134,6 +134,9 @@ public class AuthorUI {
 			}
 			Manuscript newManuscript = null;
 			try {
+				System.out.println(paperName);
+				System.out.println(toBeSaved.getPath());
+				System.out.println(myConf.getMyManuscriptDeadline().toString());
 				newManuscript = me.getAuthor().submitManuscript(toBeSaved,
 						myConf.getMyManuscriptDeadline(), paperName);
 			} catch (PastDeadlineException e) {
@@ -148,11 +151,7 @@ public class AuthorUI {
 			myConf.addManuscript(newManuscript);
 			System.out.println(paperName + " has been submitted to " + myConf.getMyConfName() + ".");
 			myRole = User.AUTHOR;
-			if (myUsers.get(myName).isRole(myRole)) {
-				authorInterfaceHasManuscripts();
-			} else {
-				authorInterfaceNoManuscripts();
-			}
+			submitManuscript();
 		}
 	}
 	
