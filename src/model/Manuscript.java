@@ -133,4 +133,8 @@ public class Manuscript implements Serializable {
 		return myAssignedtoSubProgramChair;
 	}
 	
+	public void setAssignedtoSubProgramChair(boolean theState) {
+		myAssignedtoSubProgramChair = theState;
+	}
+	
 }
