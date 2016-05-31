@@ -73,7 +73,7 @@ public class AuthorUI {
 		System.out.println("Select an action:");
 		System.out.println("\t1. Submit a manuscript");
 		System.out.println("\t2. Exit");
-		System.out.println("Enter a selection > ");
+		System.out.print("Enter a selection \n> ");
 		int selection = console.nextInt();
 		console.nextLine();
 		switch (selection) {
@@ -148,7 +148,11 @@ public class AuthorUI {
 			myConf.addManuscript(newManuscript);
 			System.out.println(paperName + " has been submitted to " + myConf.getMyConfName() + ".");
 			myRole = User.AUTHOR;
-			submitManuscript();
+			if (myUsers.get(myName).isRole(myRole)) {
+				authorInterfaceHasManuscripts();
+			} else {
+				authorInterfaceNoManuscripts();
+			}
 		}
 	}
 	
