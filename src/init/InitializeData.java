@@ -1,14 +1,17 @@
 package init;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import model.Author;
 import model.Conference;
+import model.Manuscript;
 import model.ProgramChair;
 import model.Reviewer;
 import model.SubProgramChair;
@@ -61,11 +64,18 @@ public class InitializeData {
 		aaron.assignAuthor(new Author(aaron.getMyName()));
 
 		//conference
-		Conference conf1 = new Conference(peter, "Innovations in Science 2016", new Date(2016, 9, 27), 0, 100);
+//		Calendar date1 = new Date();
+//		date1.set(2016, 9, 17);
+//		date1.getTime();
+//		Calendar date2 = null;
+//		date2.set(2017, 4, 12);
+//		date1.getTime();
+		Conference conf1 = new Conference(peter, "Innovations in Science 2016", new Date(2016, 9, 17), 0, 100);
 		Conference conf2 = new Conference(patricia, "Nanotechnology in the Medical Sciences", new Date(2017, 4, 12), 1, 5);
 		Conference conf3 = new Conference(paul, "Traffic and Transportation Psychology", new Date(2015, 9, 27), 0, 100);
 		
 		//
+		conf1.getUserMap().put(peter.getMyName(), peter);
 		conf1.getUserMap().put(steve.getMyName(), steve);
 		conf1.getUserMap().put(sarah.getMyName(), sarah);
 		conf1.getUserMap().put(ron.getMyName(), ron);
@@ -74,6 +84,8 @@ public class InitializeData {
 		conf1.getUserMap().put(ashley.getMyName(), ashley);
 		conf1.getUserMap().put(arthur.getMyName(), arthur);
 		conf1.getUserMap().put(abigail.getMyName(), abigail);
+		conf1.addManuscript(new Manuscript(new File("Manuscript1"), ashley.getMyName(), "Science in the Classroom"));
+		conf1.addManuscript(new Manuscript(new File("Manuscript2"), abigail.getMyName(), "Nanotech"));
 		
 		conf2.getUserMap().put(steve.getMyName(), steve);
 		conf2.getUserMap().put(sarah.getMyName(), sarah);
