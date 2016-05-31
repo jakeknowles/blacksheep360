@@ -71,13 +71,13 @@ public class User implements Serializable {
 	 */
 	public boolean isRole(String theRole) {
 		if (theRole.equals(AUTHOR)) {
-			return (getAuthor() != null);
+			return getAuthor() != null;
 		} else if (theRole.equals(REVIEWER)) {
-			return (getReviewer() != null);
+			return getReviewer() != null;
 		} else if (theRole.equals(SUBPROGRAM_CHAIR)) {
-			return (getSubProgramChair() != null);
+			return getSubProgramChair() != null;
 		} else if (theRole.equals(PROGRAM_CHAIR)) {
-			return (getProgramChair() != null);
+			return getProgramChair() != null;
 		}
 		return false;
 	}
@@ -102,7 +102,7 @@ public class User implements Serializable {
 	
 	public void assignProgramChair(ProgramChair theProgramChair) {
 		if (myRoles.getProgramChair() == null) {
-			myRoles.setProgramChair(getProgramChair());
+			myRoles.setProgramChair(theProgramChair);
 		}
 	}
 }
