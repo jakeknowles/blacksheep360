@@ -1,7 +1,5 @@
 package model; 
 
-import java.util.Collection;
-import java.util.HashMap;
 import java.io.Serializable;
 
 /**
@@ -20,22 +18,11 @@ public class ProgramChair implements Serializable{
 	private static final long serialVersionUID = 8511840844224397611L;
 
 	/**
-	 * Constructor.
-	 * 
 	 * @version 5/8/2016
 	 */
 	public ProgramChair() {
 	}
 
-	/**
-	 * Returns all submitted manuscripts.
-	 * 
-	 * @version 5/22/2016
-	 */
-	public Collection<Manuscript> viewManuscripts(HashMap<String, Manuscript> theManuscripts) { //Alexandria, 5/22/16 - I changed this for the sake of keeping the UI separate. This was basically a toString.
-		return theManuscripts.values();
-	}
-	
 	/**
 	 * Gives decision on a manuscript.
 	 * 
@@ -58,10 +45,5 @@ public class ProgramChair implements Serializable{
 		result = theSubProgramChair.getMyRoles().mySubProgramChair.addManuscript(theManuscript, theSubProgramChair.getMyName());
 		return result;
 	}
-	
-//	public String toString() {
-//		return "I'm a ProgramChair";
-//	}
-	
 }
 

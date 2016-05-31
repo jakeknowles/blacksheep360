@@ -24,18 +24,12 @@ public class Recommendation implements Serializable {
 	private File myRecommendationForm;
 	
 	/**
-	 * Constructor.
-	 * 
 	 * @version 5/8/2016
 	 */
 	public Recommendation(File theRecommendationForm) {
 		myRecommendationForm = theRecommendationForm;
 	}
 	
-	public String toString() {
-		return getMyRecommendationForm().getName();
-	}
-
 	/**
 	 * Gets the recommendation form of this recommendation.
 	 * 

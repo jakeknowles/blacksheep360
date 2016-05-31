@@ -66,18 +66,7 @@ public class MSEEConfMgr {
 	        in.close();
 	        fileIn.close();
 		} catch(FileNotFoundException f) {
-			System.out.println("No existing data initializing new conference data\n");
-			myUsers = new HashMap<String, User>();
-			myUsers.put("Josh", new User("Josh")); //Name/Role
-			myUsers.put("Arthur", new User("Arthur")); //Name/Role
-			//myUsers.get("Arthur").myRoles.myAuthor = new Author("Arthur");
-			myUsers.put("Ron", new User("Ron")); //Name/Role
-			myUsers.put("Steve", new User("Steve")); //Name/Role
-			myUsers.put("Peter", new User("Peter")); //Name/Role
-			Date deadline = new Date(System.currentTimeMillis() + 1209600000);
-			myConf = new Conference(myUsers.get("Peter"), "Innovative Trends in Science", deadline);
-			myConferences = new ArrayList<Conference>();
-			myConferences.add(myConf);
+			initializeNewData();
 		} catch(IOException i) {
 	        i.printStackTrace();
 	        return;
@@ -181,15 +170,15 @@ public class MSEEConfMgr {
 		} else if (myUsers.get(myWhoAmI).isRole(myRole) && myRole.equals(User.PROGRAM_CHAIR)) {
 			ProgramChairUI pui = new ProgramChairUI(myUsers, myConf, myWhoAmI, myRole, 
 					currDateString, console);
-			pui.pcInterface(myWhoAmI);
+			pui.pcInterface();
 		} else if (myUsers.get(myWhoAmI).isRole(myRole) && myRole.equals(User.REVIEWER)) {
 			ReviewerUI rui = new ReviewerUI(myUsers, myConf, myWhoAmI, myRole, 
 					currDateString, console);
-			rui.reviewerInterface(myWhoAmI);
+			rui.reviewerInterface();
 		} else if (myUsers.get(myWhoAmI).isRole(myRole) && myRole.equals(User.SUBPROGRAM_CHAIR)) {
 			SubProgramChairUI spcui = new SubProgramChairUI(myUsers, myConf, myWhoAmI, myRole, 
 					currDateString, console); 
-			spcui.subpcInterface(myWhoAmI);
+			spcui.subpcInterface();
 		} 
 	}
 	
@@ -198,6 +187,20 @@ public class MSEEConfMgr {
 		System.out.println( role + " - " + name);
 		System.out.println(conference);
 		System.out.println("Date: " + date);
+	}
+	
+	public static void initializeNewData() {
+		System.out.println("No existing data initializing new conference data\n");
+		myUsers = new HashMap<String, User>();
+		myUsers.put("Josh", new User("Josh")); //Name/Role
+		myUsers.put("Arthur", new User("Arthur")); //Name/Role
+		myUsers.put("Ron", new User("Ron")); //Name/Role
+		myUsers.put("Steve", new User("Steve")); //Name/Role
+		myUsers.put("Peter", new User("Peter")); //Name/Role
+		Date deadline = new Date(System.currentTimeMillis() + 1209600000);
+		myConf = new Conference(myUsers.get("Peter"), "Innovative Trends in Science", deadline, 0, 5);
+		myConferences = new ArrayList<Conference>();
+		myConferences.add(myConf);
 	}
 	
 }

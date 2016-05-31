@@ -32,7 +32,7 @@ public class ConferenceTest {
 	@Before
 	public void setUp() {
 		deadline = new Date(System.currentTimeMillis() + 3600000);
-		testConf = new Conference(new User("Tester"), "TestConference", deadline);
+		testConf = new Conference(new User("Tester"), "TestConference", deadline, 0 , 5);
 		File manFile = null;
 		try {
 			manFile = new File("./TestDataFiles/AntiSocialNetwork.doc");

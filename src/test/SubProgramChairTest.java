@@ -34,7 +34,7 @@ public class SubProgramChairTest {
 		User subChair = new User("Sub Chairman");
 		User reviewer = new User("Rev Ewer");
 		subChair.getMyRoles().mySubProgramChair = new SubProgramChair();
-		reviewer.getMyRoles().myReviewer = new Reviewer(reviewer.getMyName());
+		reviewer.getMyRoles().myReviewer = new Reviewer();
 		File manFile = new File("./AntiSocialNetWork.doc");
 		Manuscript manu = new Manuscript(manFile, "Tester", "test");
 		assertTrue(subChair.getMyRoles().mySubProgramChair.assignReviewer(manu, reviewer));

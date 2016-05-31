@@ -1,8 +1,9 @@
 package model; 
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.io.Serializable;
 
 /**
@@ -19,28 +20,22 @@ import java.io.Serializable;
 public class Reviewer implements Serializable {
 
 	private static final long serialVersionUID = -497021263135386895L;
+	
 	/**
 	 * The maximum number of manuscripts that can be assigned to a reviewer.
 	 */
 	public static final int MANUSCRIPT_LIMIT = 4;
-	/**
-	 * A list of manuscripts that have been assigned to the reviewer.
-	 */
-	private List<Manuscript> myManuscripts;
+
 	/**
 	 * A list of reviews submitted by this reviewer.
 	 */
-	private List<Review> myReview;
+	private Map<Manuscript, Review> myReviews;
 	
 	/**
-	 * Constructor.
-	 * 
 	 * @version 5/8/2016
 	 */
-	public Reviewer(String theName) {
-		setMyManuscripts(new ArrayList<Manuscript>(MANUSCRIPT_LIMIT));
-		setMyReview(new ArrayList<Review>());
-
+	public Reviewer() {
+		myReviews = new HashMap<Manuscript, Review>();
 	}
 
 	/**
@@ -49,25 +44,17 @@ public class Reviewer implements Serializable {
 	 * @version 5/8/2016
 	 */
 	public void submitReview(File theReview, Manuscript theManuscript, int theRating) {
+		if(myReviews.containsKey(theManuscript)) {
+			myReviews.remove(theManuscript);
+		}
+		
 		Review rev = new Review(theReview, theRating, theManuscript.getMyTitle());
-		getMyReview().add(rev);
+		myReviews.put(theManuscript, rev);
 		theManuscript.getMyReviews().add(rev);
 	}
 	
-	public List<Manuscript> getMyManuscripts() {
-		return myManuscripts;
-	}
-
-	public void setMyManuscripts(List<Manuscript> myManuscripts) {
-		this.myManuscripts = myManuscripts;
-	}
-
-	public List<Review> getMyReview() {
-		return myReview;
-	}
-
-	public void setMyReview(List<Review> myReview) {
-		this.myReview = myReview;
+	public Map<Manuscript, Review> getMyReviews() {
+		return myReviews;
 	}
 
 	/**
@@ -79,8 +66,9 @@ public class Reviewer implements Serializable {
 	 */
 	public boolean addManuscript(Manuscript theManuscript, String theUserName) {
 		boolean result = false;
-		if(getMyManuscripts().size() < MANUSCRIPT_LIMIT && !theManuscript.getMyAuthorName().equals(theUserName)) {
-			getMyManuscripts().add(theManuscript);
+		if(myReviews.keySet().size() < MANUSCRIPT_LIMIT && !theManuscript.getMyAuthorName().equals(theUserName)
+				&& !hasReviewed(theManuscript)) {
+			myReviews.put(theManuscript, null);
 			result = true;
 		}
 		return result;
@@ -91,7 +79,15 @@ public class Reviewer implements Serializable {
 	 * 
 	 * @version 5/8/2016
 	 */
-	public List<Manuscript> getManuscripts() {
-		return getMyManuscripts();
+	public Set<Manuscript> getManuscripts() {
+		return myReviews.keySet();
+	}
+	
+	public boolean hasReviewed(Manuscript theManuscript) {
+		if (myReviews.get(theManuscript) == null) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 }

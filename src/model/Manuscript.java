@@ -44,6 +44,8 @@ public class Manuscript implements Serializable {
 	 */
 	private ManuscriptAcceptanceStatus myStatus;
 	
+	private boolean myAssignedtoSubProgramChair;
+	
 	/**
 	 * @version 5/25/2016
 	 */
@@ -54,6 +56,7 @@ public class Manuscript implements Serializable {
 		myStatus = ManuscriptAcceptanceStatus.NO_DECISION;
 		myRecommendation = null;
 		myTitle = theTitle;
+		myAssignedtoSubProgramChair = false;
 	}
 	
 	/**
@@ -70,6 +73,7 @@ public class Manuscript implements Serializable {
 		myStatus = theOther.myStatus;
 		myRecommendation = theOther.myRecommendation;
 		myTitle = theOther.myTitle;
+		myAssignedtoSubProgramChair = theOther.myAssignedtoSubProgramChair;
 	}
 
 	public String getMyTitle() {
@@ -88,36 +92,36 @@ public class Manuscript implements Serializable {
 		return myManuscript;
 	}
 
-	public void setMyManuscript(File myManuscript) {
-		this.myManuscript = myManuscript;
+	public void setMyManuscript(File theManuscript) {
+		this.myManuscript = theManuscript;
 	}
 
 	public List<Review> getMyReviews() {
 		return myReviews;
 	}
 
-	public void setMyReviews(List<Review> myReviews) {
-		this.myReviews = myReviews;
-	}
-
 	public Recommendation getMyRecommendation() {
 		return myRecommendation;
 	}
 
-	public void setMyRecommendation(Recommendation myRecommendation) {
-		this.myRecommendation = myRecommendation;
+	public void setMyRecommendation(Recommendation theRecommendation) {
+		this.myRecommendation = theRecommendation;
 	}
 
-	public void setMyApproval(ManuscriptAcceptanceStatus myApproval) {
-		this.myStatus = myApproval;
+	public void setMyApproval(ManuscriptAcceptanceStatus theApproval) {
+		this.myStatus = theApproval;
 	}
 
-	public void setMyAuthorName(String myAuthorName) {
-		this.myAuthorName = myAuthorName;
+	public void setMyAuthorName(String theAuthorName) {
+		this.myAuthorName = theAuthorName;
 	}
 
-	public void setMyTitle(String myTitle) {
-		this.myTitle = myTitle;
+	public void setMyTitle(String theTitle) {
+		this.myTitle = theTitle;
+	}
+	
+	public boolean isAssignedtoSubProgramChair() {
+		return myAssignedtoSubProgramChair;
 	}
 	
 }

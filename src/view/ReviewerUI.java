@@ -1,32 +1,33 @@
 package view;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 import model.Conference;
 import model.Manuscript;
-import model.Review;
 import model.Reviewer;
 import model.User;
 	
 public class ReviewerUI {
 
-	private HashMap<String, User> myUsers;
 	private Conference myConf;
 	private String myName;
-	private String myRole;
 	private String currDateString;
 	private Scanner console;
+	private Reviewer myReviewer;
+	private List<Manuscript> myAssignedManuscripts;
 
 	public ReviewerUI(HashMap<String, User> theUsers, Conference theConf, 
 			String theWhoAmI, String theRole, String theCurrDateString, Scanner theConsole) {
-		myUsers = theUsers; 
 		myConf = theConf;
 		myName = theWhoAmI; 
-		myRole = theRole;
 		currDateString = theCurrDateString;
 		console = theConsole;	
+		myReviewer = theUsers.get(myName).getMyRoles().myReviewer;
+		myAssignedManuscripts = new ArrayList<Manuscript>(myReviewer.getManuscripts());
 	}
 
 	/**
@@ -34,31 +35,26 @@ public class ReviewerUI {
 	 * 
 	 * @version 5/8/2016
 	 */
-	public void reviewerInterface(String theWhoIam) {
-		int temp = 0;
+	public void reviewerInterface() {
+		
 		System.out.println();
-//		System.out.println("MSEE Conference Management");
-//		System.out.println("Reviewer - " + theWhoIam);
-//		System.out.println("Date: " + currDateString);
-		MSEEConfMgr.header(User.AUTHOR, myName, currDateString, myConf.getMyConfName());
-		System.out.println("Select an action:");
+		MSEEConfMgr.header(User.REVIEWER, myName, currDateString, myConf.getMyConfName());
+		System.out.println("\nReviews Submitted:");
+		viewMyReviews();
+		
+		System.out.println("\nSelect an action:");
 		System.out.println("\t1. Submit a review");
-		System.out.println("\t2. View Submitted Reviews");
-		System.out.println("\t3. Exit");
+		System.out.println("\t2. Exit");
 		System.out.print("Enter a selection > ");
-		temp = console.nextInt();
+		int temp = console.nextInt();
 		console.nextLine();
 		System.out.println();
 		switch (temp) {
 		case 1:
 			submitReview();
 			break;
-		case 2:		//Alexandria, 5/15/16 - we need this in order to do submitReview() EDIT: done!
-			viewMyReviews();
-			break;
-		case 3:
+		case 2:
 			System.out.println("Exiting - Goodbye!");
-			//serial();
 			break;
 
 		}
@@ -70,50 +66,71 @@ public class ReviewerUI {
 	 * @version 5/8/2016
 	 */
 	public void submitReview() {
-//		System.out.println("MSEE Conference Management");
-////		System.out.println(myUsers.get(myWhoAmI).getClass().toString().
-////				substring(6, myUsers.get(myWhoAmI).getClass().
-////						toString().length()) +" " + myWhoAmI);
-//		System.out.println(myRole + " - " + myWhoAmI);
-		MSEEConfMgr.header(User.AUTHOR, myName, currDateString, myConf.getMyConfName());
+		int back = myAssignedManuscripts.size() + 1;
+		int exit = back + 1;
+		
+		MSEEConfMgr.header(User.REVIEWER, myName, currDateString, myConf.getMyConfName());
 		System.out.println("\nReviews Submitted:");
-		viewMyReviews();										  //Alexandria, 5/17/16 - not working currently
-		System.out.println("\nEnter the file path for the review"); //Alexandria, 5/15/16 - need to ask for number rating as well as show submitted reviews EDIT: now asks for number rating
-		System.out.println("you wish to submit");
-		System.out.println("ex. C:\\Documents\\example.doc");
+		viewMyReviews();
+		
+		System.out.println("\nSelect the manuscript to review"); 
+		//System.out.println("you wish to submit");
+		//System.out.println("ex. C:\\Documents\\example.doc");
 		System.out.println("\n\t- OR -");
-		System.out.println("\t1. Back");
-		System.out.println("\t2. Exit");
+		System.out.println("\t" + back + ". Back");
+		System.out.println("\t" + exit + ". Exit");
 		System.out.print("> ");
-		String file = console.nextLine();
-		if (file.equals("1")) {
-			reviewerInterface(myName); //GO TO AUTHOR
-		} else if (file.equals("2")) {
+		int selection = console.nextInt();
+		console.nextLine();
+		if (selection == back) {
+			reviewerInterface(); 
+		} else if (selection == exit) {
 			System.out.println("Exiting - Goodbye!");
-			//serial();
 		} else {
-			System.out.print("\nPlease enter the numeric score of your review: "); //TODO Alexandria, 5/17/16 - We need a max score value stored somewhere. Also, wording help please.
-			int rating = console.nextInt();
-			System.out.println("\nPlease select the manuscript number you are reviewing: ");
-			Reviewer me = myUsers.get(myName).getMyRoles().myReviewer;
-			for (int i = 0; i < me.getManuscripts().size(); i++){
-				System.out.println((i+1) + me.getMyManuscripts().get(i).getMyTitle()); //Alexandria, 5/19/16 - this should now print the manuscript titles along with numbers
+			Manuscript selectedManuscript = myAssignedManuscripts.get(selection - 1);
+			File reviewForm = null;
+			System.out.println("Enter the file path for the review form.");
+			System.out.print("\n> ");
+			
+			String filePath = console.nextLine();
+			try {
+				reviewForm = new File(filePath);
+			} catch (NullPointerException e) {
+				System.out.println("File not found at location: " + filePath + "\n");
+				submitReview();
 			}
-			//System.out.println(me.getManuscripts());
-			System.out.print("> ");
-			int selection = console.nextInt();
-			console.nextLine();
-			Manuscript man = me.getMyManuscripts().get(selection - 1);
-			me.submitReview(new File(file), man, rating); //Alexandria, 5/17/16 - added a rating to the review class
-			//me.addManuscript(man, myUsers.get(myWhoAmI).myName); //Alexandria, 5/17/16 - shouldn't this be calling me.submitReview(new File(file), man)?
-			System.out.println("\nReview submitted for " + man.getMyTitle()); //Alexandria, 5/15/16 - "review submitted for exampleManuscript"
+			
+			boolean validScore = false;
+			int rating = 0;
+			while (!validScore) {
+				System.out.println("\nPlease enter a score for your review, ");
+				System.out.println("from " + myConf.getLowScore() + "(lowest) to " + myConf.getHighScore() + "(highest)");
+				System.out.print("\n> ");
+				rating = console.nextInt();
+				console.nextLine();
+				if (rating >= myConf.getLowScore() && rating <= myConf.getHighScore()) {
+					validScore = true;
+				}
+			}
+			
+			myReviewer.submitReview(reviewForm, selectedManuscript, rating); 
+			System.out.println("\nReview submitted for " + selectedManuscript.getMyTitle()); 
 			submitReview();
 		}
 	}
 	
-	public void viewMyReviews(){ //Alexandria, 5/19/16 - I had to make small changes to Review and Reviewer to make this work
-		for (Review r : myUsers.get(myName).getMyRoles().myReviewer.getMyReview()){
-			System.out.println("Manuscript title: " + r.getMyReviewedManuscriptTitle() + "\nRating: " + r.getMyRating() + "\n");
+	public void viewMyReviews(){ 
+		if (myAssignedManuscripts.size() > 0) {
+			for (int i = 0; i < myAssignedManuscripts.size(); i++) {
+				System.out.print((i+1) + ". " + myAssignedManuscripts.get(i) + ", ");
+				if (myReviewer.hasReviewed(myAssignedManuscripts.get(i))) {
+					System.out.println("My Score: " + myReviewer.getMyReviews().get(myAssignedManuscripts.get(i)).getMyRating());
+				} else {
+					System.out.println("not yet reviewed");
+				}
+			}
+		} else {
+			System.out.println("No manuscripts assigned.");
 		}
 	}
 

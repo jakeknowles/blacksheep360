@@ -1,7 +1,9 @@
 package view;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 import model.Conference;
@@ -17,6 +19,7 @@ public class SubProgramChairUI {
 	private String myRole;
 	private String currDateString;
 	private Scanner console;
+	private SubProgramChair mySubChair;
 
 
 	public SubProgramChairUI(HashMap<String, User> theUsers, Conference theConf, 
@@ -27,6 +30,7 @@ public class SubProgramChairUI {
 		myRole = theRole;
 		currDateString = theCurrDateString;
 		console = theConsole;	
+		mySubChair = myUsers.get(myName).getMyRoles().mySubProgramChair;
 	}
 	
 	
@@ -35,19 +39,15 @@ public class SubProgramChairUI {
 	 * 
 	 * @version 5/8/2016
 	 */
-	public void subpcInterface(String theWhoIam) {
-		int temp = 0;
+	public void subpcInterface() {
 		System.out.println();
-//		System.out.println("MSEE Conference Management");
-//		System.out.println("Subprogram Chair - " + theWhoIam);
-//		System.out.println("Date: " + currDateString);
-		MSEEConfMgr.header(User.AUTHOR, myName, currDateString, myConf.getMyConfName());
+		MSEEConfMgr.header(User.SUBPROGRAM_CHAIR, myName, currDateString, myConf.getMyConfName());
 		System.out.println("Select an action:");
 		System.out.println("\t1. Assign a reviewer to a paper");
 		System.out.println("\t2. Submit recommendation");
 		System.out.println("\t3. Exit");
 		System.out.println("Enter a selection");
-		temp = console.nextInt();
+		int temp = console.nextInt();
 		console.nextLine();
 		switch (temp) {
 		case 1:
@@ -58,7 +58,6 @@ public class SubProgramChairUI {
 			break;
 		case 3:
 			System.out.println("Exiting - Goodbye!");
-			//serial();
 			break;
 		}
 	}
@@ -69,44 +68,71 @@ public class SubProgramChairUI {
 	 * @version 5/8/2016
 	 */
 	public void assignReviewer() {
-//		System.out.println("MSEE Conference Management");
-//		System.out.println("Subprogram Chair - " + myWhoAmI);
-		MSEEConfMgr.header(User.AUTHOR, myName, currDateString, myConf.getMyConfName());
-		System.out.println("Enter the name of the reviewer you want to assign."); //Alexandria, 5/15/16 - print list of reviewers here
+		List<String> users = new ArrayList<String>(myUsers.keySet());
+		int back = users.size() + 1;
+		int exit = back + 1;
+		
+		MSEEConfMgr.header(User.SUBPROGRAM_CHAIR, myName, currDateString, myConf.getMyConfName());
+		displayUsers(users);
+		System.out.println("\nSelect the reviewer you want to assign."); 
 		System.out.println("\n\t- OR -");
-		System.out.println("\t1. Back");
-		System.out.println("\t2. Exit");
+		System.out.println("\t" + back + ". Back");
+		System.out.println("\t" + exit + ". Exit");
 		System.out.println("> ");
-		String name = console.nextLine();
-		if (name.equals("1")) {
+		int name = console.nextInt();
+		console.nextLine();
+		if (name == back) {
 			if (myUsers.get(myName).isRole(myRole)) {
-				subpcInterface(myName); //GO TO AUTHOR
+				subpcInterface();
 			}
-		} else if (name.equals("2")) {
+		} else if (name == exit) {
 			System.out.println("Exiting - Goodbye!");
-			//serial();
 		} else {
+			User selectedReviewer = myUsers.get(users.get(name));
+			System.out.println(users.get(name) + " reviews: ");
+			if (selectedReviewer.isRole(User.REVIEWER)) {
+				for (Manuscript m : selectedReviewer.getMyRoles().myReviewer.getManuscripts()) {
+					System.out.println("\t" + m.getMyTitle());
+				}
+			} else {
+				System.out.println("\tnone");
+			}
 			//Show a list (with numbers) of papers with exception of those authored by that reviewer
+			
+			back = mySubChair.getManuscripts().size() + 1;
+			exit = back + 1;
+			System.out.println("\nManuscripts available to assign:");
+			for (int i = 1; i <= mySubChair.getManuscripts().size(); i++) {
+				System.out.println("\t" + i + ". " + mySubChair.getManuscripts().get(i - 1).getMyTitle());
+			}
+			
 			//Select a paper number
 			//Attach selected paper to selected reviewer			
-			System.out.println("Please select the manuscript number you wish to assign:");
-			int i = 1;
-			//Alexandria, 5/15/16 - I don't see where a number is being displayed. Need to fix that. Also, show manuscripts already assigned to this reviewer.
-			for (Manuscript manuscript: myUsers.get(myName).getMyRoles().mySubProgramChair.getManuscripts()){
-				System.out.println(i + ". " + manuscript.getMyTitle());
-				i++;
-			}
+			System.out.println("Select the manuscript you wish to assign:");
+			System.out.println("\n\t- OR -");
+			System.out.println("\t" + back + ". Back");
+			System.out.println("\t" + exit + ". Exit");
 			System.out.println("> ");
-			int selection = console.nextInt(); //Alexandria, 5/15/16 - should have a 0 as an option to return to reviewer selection instead of proceeding
+			int selection = console.nextInt(); 
 			console.nextLine();
-			SubProgramChair me = myUsers.get(myName).getMyRoles().mySubProgramChair;
-			boolean result = me.assignReviewer(me.getMyManuscripts().get(selection - 1), myUsers.get(name));
-			if (result) {
-				System.out.println("SUCCESS!");//Alexandria, 5/15/16 - "paperName assigned to reviewerName"
+			if (selection == back) {
+				assignReviewer();
+			} else if (selection == exit) {
+				System.out.println("Exiting - Goodbye!");
 			} else {
-				System.out.println("FAILED!");
+				Manuscript selectedManuscript = mySubChair.getMyManuscripts().get(selection - 1);
+				if (selectedReviewer.getMyRoles().myReviewer.hasReviewed(selectedManuscript)) {
+					System.out.println("Reviewer is already assigned to this manuscript.");
+					assignReviewer();
+				}
+				boolean result = mySubChair.assignReviewer(selectedManuscript, selectedReviewer);
+				if (result) {
+					System.out.println(selectedManuscript.getMyTitle() + "assigned to " + users.get(name));
+				} else {
+					System.out.println("FAILED!");
+				}
+				assignReviewer();
 			}
-			assignReviewer();
 		}
 	}
 		
@@ -116,37 +142,64 @@ public class SubProgramChairUI {
 	 * @version 5/8/2016
 	 */
 	public void submitRecommendation() {
-//		System.out.println("MSEE Conference Management");
-////		System.out.println(myUsers.get(myWhoAmI).getClass().toString().
-////				substring(6, myUsers.get(myWhoAmI).getClass().
-////						toString().length()) +" " + myWhoAmI);
-//		System.out.println(myRole + " - " + myWhoAmI);
 		MSEEConfMgr.header(User.AUTHOR, myName, currDateString, myConf.getMyConfName());
-		System.out.println("Enter the file path and name for the recommendation");//Alexandria, 5/15/16 - show recommendations already made
-		System.out.println("you wish to submit");
-		System.out.println("ex. C:\\Documents\\example.doc");
+		
+		int back = mySubChair.getManuscripts().size() + 1;
+		int exit = back + 1;
+		System.out.println("\nManuscripts available to assign:");
+		for (int i = 1; i <= mySubChair.getManuscripts().size(); i++) {
+			System.out.print("\t" + i + ". " + mySubChair.getManuscripts().get(i - 1).getMyTitle());
+			if (mySubChair.getManuscripts().get(i - 1).getMyRecommendation() != null) {
+				System.out.println(" - Already made recommendation");
+			} else {
+				System.out.println(" - No recommendation yet");
+			}
+		}
+		
+		System.out.println("Select the manuscript to submit a recommendation for:");
 		System.out.println("\n\t- OR -");
-		System.out.println("\t1. Back");
-		System.out.println("\t2. Exit");
+		System.out.println("\t" + back + ". Back");
+		System.out.println("\t" + exit + ". Exit");
 		System.out.println("> ");
-		String file = console.nextLine();
-		if (file.equals("1")) {
-			subpcInterface(myName); //GO TO AUTHOR
-		} else if (file.equals("2")) {
+		int choice = console.nextInt();
+		console.nextLine();
+		if (choice == back) {
+			subpcInterface();
+		} else if (choice == exit) {
 			System.out.println("Exiting - Goodbye!");
-			//serial();
 		} else {
-//			System.out.println(toBeSaved.length());
-			SubProgramChair me = myUsers.get(myName).getMyRoles().mySubProgramChair;
-			System.out.println("Please select the manuscript number ");
-			System.out.println("you are making a recommendation for:");
-			System.out.println(me.getManuscripts());
+			System.out.println("Enter the file path for the recommendation: ");
+			//System.out.println("you are making a recommendation for:");
+			System.out.println(mySubChair.getManuscripts());
 			System.out.println("> ");
-			int selection = console.nextInt();
-			console.nextLine();
-			me.submitRecommendation(me.getMyManuscripts().get(selection - 1), new File(file));
-			System.out.println("SUCCESS!");
+			String filePath = console.nextLine();
+			File recommendationFile = null;
+			try {
+				recommendationFile = new File(filePath);
+			} catch (NullPointerException e) {
+				System.out.println("File not found at location: " + filePath + "\n");
+				submitRecommendation();
+			}
+			mySubChair.submitRecommendation(mySubChair.getMyManuscripts().get(choice - 1), recommendationFile);
+			System.out.println("Recommendation made for " + mySubChair.getMyManuscripts().get(choice - 1).getMyTitle());
 			submitRecommendation();
+		}
+	}
+	
+	public void displayUsers(List<String> theUsers) {
+		for (int i = 0; i < theUsers.size(); i++) {
+			System.out.print((i+1) + ". " + theUsers.get(i));
+			if (myUsers.get(theUsers.get(i)).isRole(User.PROGRAM_CHAIR)) {
+				System.out.println(" - " + User.PROGRAM_CHAIR);
+			} else if (myUsers.get(theUsers.get(i)).isRole(User.SUBPROGRAM_CHAIR)) {
+				System.out.println(" - " + User.SUBPROGRAM_CHAIR);
+			} else if (myUsers.get(theUsers.get(i)).isRole(User.REVIEWER)) {
+				System.out.println(" - " + User.REVIEWER);
+			} else if (myUsers.get(theUsers.get(i)).isRole(User.AUTHOR)) {
+				System.out.println(" - " + User.AUTHOR);
+			} else {
+				System.out.println();
+			}
 		}
 	}
 	

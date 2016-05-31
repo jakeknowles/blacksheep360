@@ -54,16 +54,4 @@ public class Review implements Serializable {
 		return myRating;
 	}
 
-	public void setMyRating(int myRating) {
-		this.myRating = myRating;
-	}
-
-	public void setMyReviewedManuscriptTitle(String myReviewedManuscriptTitle) {
-		this.myReviewedManuscriptTitle = myReviewedManuscriptTitle;
-	}
-
-	public String toString() {
-		return myReviewForm.getName();
-	}
-
 }

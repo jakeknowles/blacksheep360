@@ -1,11 +1,14 @@
 package view;
 	
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 import model.Conference;
 import model.Manuscript;
 import model.ManuscriptAcceptanceStatus;
+import model.ProgramChair;
 import model.User;
 
 public class ProgramChairUI {
@@ -16,6 +19,7 @@ public class ProgramChairUI {
 	private String myRole;
 	private String currDateString;
 	private Scanner console;
+	private ProgramChair myProgChair;
 
 
 	public ProgramChairUI(HashMap<String, User> theUsers, Conference theConf, 
@@ -26,6 +30,7 @@ public class ProgramChairUI {
 		myRole = theRole;
 		currDateString = theCurrDateString;
 		console = theConsole;	
+		myProgChair = myUsers.get(myName).getMyRoles().myProgramChair;
 	}
 	
 	/**
@@ -33,12 +38,8 @@ public class ProgramChairUI {
 	 * 
 	 * @version 5/8/2016
 	 */
-	public void pcInterface(String theWhoIam) {
-		int temp = 0;
+	public void pcInterface() {
 		System.out.println();
-//		System.out.println("MSEE Conference Management");
-//		System.out.println("Program Chair - " + theWhoIam);
-//		System.out.println("Date: " + currDateString);
 		MSEEConfMgr.header(User.AUTHOR, myName, currDateString, myConf.getMyConfName());
 		System.out.println("Select an action:");
 		System.out.println("\t1. View list of submitted manuscripts.");
@@ -47,33 +48,24 @@ public class ProgramChairUI {
 		System.out.println("\t4. Assign a Subprogram Chair to a manuscript.");
 		System.out.println("\t5. Exit");
 		System.out.print("Enter a selection > ");
-		temp = console.nextInt();
+		int temp = console.nextInt();
 		console.nextLine();
 		System.out.println();
 		switch (temp) {
 		case 1:
-			//System.out.println(myUsers.get(theWhoIam).myRoles.myProgramChair.viewManuscripts(myConf.myManuscripts)); //Alexandria, 5/15/16 - can we put view manuscripts in a method so it can be called from acceptance()? EDIT: nevermind
 			viewManuscripts();
-			//pcInterface(myWhoAmI);
 			break;
 		case 2:
-			acceptance();
+			makeAcceptanceDecision();
 			break;
 		case 3:
-			for (String s : myUsers.keySet()) {
-				if (myUsers.get(s).isRole(User.SUBPROGRAM_CHAIR)) { 	//Alexandria, 5/15/16 - same goes for this code inside the for each loop. Could use it for assignSPC() EDIT: nevermind
-					System.out.println(s + ":");
-					System.out.println(myUsers.get(s).getMyRoles().mySubProgramChair.getManuscripts());
-				}
-			}
-			pcInterface(myName);
+			viewSubProgramChairManuscriptAssignments();
 			break;
 		case 4:
 			assignSPC();
 			break;
 		case 5:
 			System.out.println("Exiting - Goodbye!");
-			//serial();
 			break;
 		}
 	}
@@ -84,44 +76,52 @@ public class ProgramChairUI {
 	 * @version 5/8/2016
 	 */
 	public void assignSPC() {
-//		System.out.println("MSEE Conference Management");
-//		System.out.println("Program Chair - " + myWhoAmI);
 		MSEEConfMgr.header(User.AUTHOR, myName, currDateString, myConf.getMyConfName());
+		List<String> users = new ArrayList<String>(myUsers.keySet());
 		System.out.println("Subprogram Chairs: "); //Alexandria, 5/17/2016 - prints list of subprogram chairs
-		for (String str : myUsers.keySet()){
-			if (myUsers.get(str).isRole(User.SUBPROGRAM_CHAIR)){
-			System.out.println(myUsers.get(str).getMyName());
-			}
-		}
-		System.out.println("Enter the name of the subprogram chair you want to assign to a manuscript."); //Alexandria, 5/15/16 - display list of subprogram chairs here EDIT: done!
+		displayUsers(users);
+		int back = users.size() + 1;
+		int exit = back + 1;
+		System.out.println("Select the subprogram chair you want to assign to a manuscript.");
 		System.out.println("\n\t- OR -");
-		System.out.println("\t1. Back");
-		System.out.println("\t2. Exit");
+		System.out.println("\t" + back + ". Back");
+		System.out.println("\t" + exit + ". Exit");
 		System.out.println("> ");
-		String name = console.nextLine();
-		if (name.equals("1")) {
+		int  name = console.nextInt();
+		console.nextLine();
+		if (name == back) {
 			if (myUsers.get(myName).isRole(myRole)) {
-				pcInterface(myName); //GO TO AUTHOR
+				pcInterface();
 			}
-		} else if (name.equals("2")) {
+		} else if (name == exit) {
 			System.out.println("Exiting - Goodbye!");
-			//serial();
 		} else {
-			System.out.println("Manuscripts already assigned to " + name + ":");
+			User selectedSPC = myUsers.get(users.get(name));
+			
+			System.out.println("Manuscripts already assigned to " + selectedSPC.getMyName() + ":");
 			for (Manuscript manuscript : myUsers.get(name).getMyRoles().mySubProgramChair.getManuscripts()){
 				System.out.println(manuscript.getMyTitle());
 			}
-			System.out.println("\nPlease enter the name of the manuscript you wish to assign:"); //Alexandria, 5/15/16 - prior to this, print out the manuscripts already assigned to this SPC EDIT: done!
-			for (String str : myConf.getMyManuscripts().keySet()) {
-				if (!myConf.getMyManuscripts().get(str).getMyAuthorName().equals(name)) {
-					System.out.println(myConf.getMyManuscripts().get(str).getMyTitle()); //Alexandria, 5/17/16 - now prints the manuscript titles
+			
+			System.out.println("\nManuscripts available to assign:");
+			List<Manuscript> availableManuscripts = new ArrayList<Manuscript>();
+			int i = 0;
+			for (String title : myConf.getMyManuscripts().keySet()) {
+				Manuscript man = myConf.getMyManuscripts().get(title);
+				if (!man.isAssignedtoSubProgramChair()) {
+					System.out.println("\t" + (i+1) + ". " + man.getMyTitle());
+					availableManuscripts.add(man);
+					i++;
 				}
 			}
+			
+			System.out.println("\nSelect the manuscript you wish to assign:"); 
 			System.out.println("> ");
-			String selection = console.nextLine();
-			boolean result = myUsers.get(myName).getMyRoles().myProgramChair.assignManuscripts(myUsers.get(name), myConf.getMyManuscripts().get(selection));
+			int selection = console.nextInt();
+			console.nextLine();
+			boolean result = myProgChair.assignManuscripts(selectedSPC, availableManuscripts.get(selection));
 			if (result) {
-				System.out.println(myUsers.get(name).getMyName() + " has been assigned " + myConf.getMyManuscripts().get(selection).getMyTitle()); //Alexandria, 5/15/16 - this should either display "ExampleSPC has been assigned SamplePaperName" or a list of SPCs and their assigned papers.
+				System.out.println(selectedSPC.getMyName() + " has been assigned " + availableManuscripts.get(selection).getMyTitle());
 			} else {
 				System.out.println("FAILED!");
 			}
@@ -134,39 +134,40 @@ public class ProgramChairUI {
 	 * 
 	 * @version 5/8/2016
 	 */
-	public void acceptance() {
-//		System.out.println("MSEE Conference Management");
-//		System.out.println("Program Chair - " + myWhoAmI);
+	public void makeAcceptanceDecision() {
 		MSEEConfMgr.header(User.AUTHOR, myName, currDateString, myConf.getMyConfName());
-		printManuscripts();
+		List<Manuscript> submittedManuscripts = new ArrayList<Manuscript>(myConf.getMyManuscripts().values());
+		int back = submittedManuscripts.size() + 1;
+		int exit = back + 1;
+		printManuscripts(submittedManuscripts);
 		System.out.println("Enter the title of the "
-				+ "manuscript you want to accept/reject."); //Alexandria, 5/15/16 - problem here: we're telling them they can accept and reject, but when they input a name the system "accepts" it. Need group input on this one.
-		System.out.println("\n\t- OR -");					//5/22/16 fixed
-		System.out.println("\t1. Back");
-		System.out.println("\t2. Exit");
+				+ "manuscript you want to accept/reject."); 
+		System.out.println("\n\t- OR -");
+		System.out.println("\t" + back + ". Back");
+		System.out.println("\t" + exit + ". Exit");
 		System.out.print("> ");
-		String input = console.nextLine();
-		if (input.equals("1")) {
-			if (myUsers.get(myName).isRole(myRole)) {
-				pcInterface(myName); //GO TO AUTHOR
-			}
-		} else if (input.equals("2")) {
+		int input = console.nextInt();
+		console.nextLine();
+		if (input == back) {
+			pcInterface(); 
+		} else if (input == exit) {
 			System.out.println("Exiting - Goodbye!");
-			//serial();
 		} else {
-			//Alexandria, 5/19/16 - I think we somehow need to add the three states for manuscripts that Tennenberg talked about (undecided, accepted, rejected) EDIT: fixed.
 			System.out.println("\nSelect your acceptance decision for this manuscript:");
 			System.out.println("1. Accept");
 			System.out.println("2. Reject");
+			System.out.println("3. Back");
+			System.out.print("> ");
 			String decision = console.nextLine();
 			if (decision.equals("1")) {
-				myUsers.get(myName).getMyRoles().myProgramChair.submitDecision(myConf.getMyManuscripts().get(input), ManuscriptAcceptanceStatus.ACCEPTED);
+				myUsers.get(myName).getMyRoles().myProgramChair.submitDecision(submittedManuscripts.get(input - 1), ManuscriptAcceptanceStatus.ACCEPTED);
 			} else if (decision.equals("2")) {
-				myUsers.get(myName).getMyRoles().myProgramChair.submitDecision(myConf.getMyManuscripts().get(input), ManuscriptAcceptanceStatus.REJECTED);
+				myUsers.get(myName).getMyRoles().myProgramChair.submitDecision(submittedManuscripts.get(input - 1), ManuscriptAcceptanceStatus.REJECTED);
+			} else {
+				makeAcceptanceDecision();
 			}
-			//System.out.println(myConf.getMyManuscripts().get(input).getMyTitle() + " has been accepted to " + myConf.getMyConfName() + "."); //Alexandria, 5/15/16 - "nameOfPaper has been accepted" or something like that EDIT: done
 			System.out.println("Your decision has been submitted.");
-			acceptance();
+			makeAcceptanceDecision();
 		}
 	}
 	
@@ -176,18 +177,16 @@ public class ProgramChairUI {
 	 * @version 5/19/16
 	 */
 	public void viewManuscripts(){
-		printManuscripts();
+		List<Manuscript> submittedManuscripts = new ArrayList<Manuscript>(myConf.getMyManuscripts().values());
+		printManuscripts(submittedManuscripts);
 		System.out.println("\t1. Back");
 		System.out.println("\t2. Exit");
 		System.out.print("> ");
 		String input = console.nextLine();
 		if (input.equals("1")) {
-			if (myUsers.get(myName).isRole(myRole)) {
-				pcInterface(myName); //GO TO AUTHOR
-			}
+			pcInterface(); 	
 		} else if (input.equals("2")) {
 			System.out.println("Exiting - Goodbye!");
-			//serial();
 		}
 	}
 	
@@ -196,12 +195,12 @@ public class ProgramChairUI {
 	 * 
 	 * @version 5/22/16
 	 */
-	public void printManuscripts(){
+	public void printManuscripts(List<Manuscript> theManuscripts){
 		System.out.println("------Submitted Manuscripts------");
 		System.out.println("Title\tAuthor\tAcceptance Status\n");
-		for (Manuscript manuscript : myUsers.get(myName).getMyRoles().myProgramChair.viewManuscripts(myConf.getMyManuscripts())){
-			System.out.print(manuscript.getMyTitle() + "\t" + manuscript.getMyAuthorName() + "\t");
-			switch (manuscript.getMyApproval()){
+		for (int i = 0; i < theManuscripts.size(); i ++){
+			System.out.print((i+1) + ". " + theManuscripts.get(i).getMyTitle() + "\t" + theManuscripts.get(i).getMyAuthorName() + "\t");
+			switch (theManuscripts.get(i).getMyApproval()){
 			case NO_DECISION:
 				System.out.println("Undecided");
 				break;
@@ -213,5 +212,41 @@ public class ProgramChairUI {
 				break;
 			}
 		}
+	}
+	
+	public void displayUsers(List<String> theUsers) {
+		for (int i = 0; i < theUsers.size(); i++) {
+			System.out.print((i+1) + ". " + theUsers.get(i));
+			if (myUsers.get(theUsers.get(i)).isRole(User.PROGRAM_CHAIR)) {
+				System.out.println(" - " + User.PROGRAM_CHAIR);
+			} else if (myUsers.get(theUsers.get(i)).isRole(User.SUBPROGRAM_CHAIR)) {
+				System.out.println(" - " + User.SUBPROGRAM_CHAIR);
+			} else if (myUsers.get(theUsers.get(i)).isRole(User.REVIEWER)) {
+				System.out.println(" - " + User.REVIEWER);
+			} else if (myUsers.get(theUsers.get(i)).isRole(User.AUTHOR)) {
+				System.out.println(" - " + User.AUTHOR);
+			} else {
+				System.out.println();
+			}
+		}
+	}
+	
+	public void viewSubProgramChairManuscriptAssignments() {
+		for (String subPC : myUsers.keySet()) {
+			if (myUsers.get(subPC).isRole(User.SUBPROGRAM_CHAIR)) {
+				System.out.println("\nManuscripts assigned to " + subPC);
+				for (Manuscript manuscript : myUsers.get(subPC).getMyRoles().mySubProgramChair.getManuscripts()){
+					System.out.println("\t" + manuscript.getMyTitle());
+				}
+			}
+		}
+		System.out.println("\nManuscripts not assigned to a Subprogram Chair:");
+		for (String title : myConf.getMyManuscripts().keySet()) {
+			Manuscript man = myConf.getMyManuscripts().get(title);
+			if (!man.isAssignedtoSubProgramChair()) {
+				System.out.println("\t" + man.getMyTitle());
+			}
+		}
+		pcInterface();
 	}
 }

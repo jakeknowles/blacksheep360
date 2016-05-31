@@ -39,17 +39,22 @@ public class Conference implements Serializable {
 	 */
 	private Date myManuscriptDeadline;
 	
+	private int myLowestRating;
+	private int myHighestRating;
+	
 	/**
 	 * Constructor
 	 * 
 	 * @version 5/8/2016
 	 */
-	public Conference(User thePC, String theConfName, Date theDeadline) {
+	public Conference(User thePC, String theConfName, Date theDeadline, int theLowRating, int theHighRating) {
 		myProgramChair = thePC;
 		thePC.getMyRoles().myProgramChair = new ProgramChair();
-		setMyConfName(theConfName);
-		setMyManuscripts(new HashMap<String, Manuscript>());
-		setMyManuscriptDeadline(theDeadline);
+		myConfName = theConfName;
+		myManuscripts = new HashMap<String, Manuscript>();
+		myManuscriptDeadline = theDeadline;
+		myLowestRating = theLowRating;
+		myHighestRating = theHighRating;
 	}
 	
 	/**
@@ -72,17 +77,12 @@ public class Conference implements Serializable {
 	public String getMyConfName() {
 		return myConfName;
 	}
-
-	public void setMyConfName(String myConfName) {
-		this.myConfName = myConfName;
-	}
-
-	public void setMyManuscripts(HashMap<String, Manuscript> myManuscripts) {
-		this.myManuscripts = myManuscripts;
-	}
-
-	public void setMyManuscriptDeadline(Date myManuscriptDeadline) {
-		this.myManuscriptDeadline = myManuscriptDeadline;
+	
+	public void editManuscriptTitle(String theOldTitle, String theNewTitle) {
+		Manuscript man = myManuscripts.get(theOldTitle);
+		myManuscripts.remove(theOldTitle);
+		man.setMyTitle(theNewTitle);
+		myManuscripts.put(theNewTitle, man);
 	}
 
 	/**
@@ -92,5 +92,13 @@ public class Conference implements Serializable {
 	 */
 	public void removeManuscript(String theTitle) {
 		getMyManuscripts().remove(theTitle);
+	}
+	
+	public int getLowScore() {
+		return myLowestRating;
+	}
+	
+	public int getHighScore() {
+		return myHighestRating;
 	}
 }

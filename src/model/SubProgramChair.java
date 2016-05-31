@@ -34,7 +34,7 @@ public class SubProgramChair implements Serializable {
 	 * @version 5/8/2016
 	 */
 	public SubProgramChair() {
-		setMyManuscripts(new ArrayList<Manuscript>(MANUSCRIPT_LIMIT));
+		myManuscripts = new ArrayList<Manuscript>(MANUSCRIPT_LIMIT);
 	}
 
 	/**
@@ -52,7 +52,7 @@ public class SubProgramChair implements Serializable {
 	public boolean assignReviewer(final Manuscript theManuscript, final User theReviewer) {
 		boolean result = false;
 		if(!theReviewer.isRole(User.REVIEWER)) {
-			theReviewer.getMyRoles().myReviewer = new Reviewer(theReviewer.getMyName());
+			theReviewer.getMyRoles().myReviewer = new Reviewer();
 		}
 		result = theReviewer.getMyRoles().myReviewer.addManuscript(theManuscript, theReviewer.getMyName());
 		return result;
@@ -73,10 +73,6 @@ public class SubProgramChair implements Serializable {
 	
 	public List<Manuscript> getMyManuscripts() {
 		return myManuscripts;
-	}
-
-	public void setMyManuscripts(List<Manuscript> myManuscripts) {
-		this.myManuscripts = myManuscripts;
 	}
 
 	/**
@@ -103,10 +99,6 @@ public class SubProgramChair implements Serializable {
 	 */
 	public List<Manuscript> getManuscripts() {
 		return getMyManuscripts();
-	}
-	
-	public String toString() {
-		return "Im a SubPC";
 	}
 
 }

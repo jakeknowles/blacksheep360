@@ -61,15 +61,16 @@ public class Author implements Serializable {
 	 * to the authors list of manuscripts.
 	 * 
 	 * @version 5/8/2016
+	 * @throws PastDeadlineException 
 	 */
-	public Manuscript submitManuscript(File theManuscript, Date theDeadline, String theTitle) {
+	public Manuscript submitManuscript(File theManuscript, Date theDeadline, String theTitle) throws PastDeadlineException {
 		Date now = new Date(System.currentTimeMillis());
 		if (now.before(theDeadline)) {
 			Manuscript submitted = new Manuscript(theManuscript, myName, theTitle);
 			getMyManuscripts().add(submitted);
 			return submitted;
 		} else { 
-			return null;
+			throw new PastDeadlineException();
 		}
 	}
 	

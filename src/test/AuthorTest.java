@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import model.Author;
 import model.Manuscript;
+import model.PastDeadlineException;
 import model.User;
 
 /**
@@ -65,7 +66,11 @@ public class AuthorTest {
 	 */
 	@Test
 	public void testSubmitManuscript() {
-		noManuscriptUser.getMyRoles().myAuthor.submitManuscript(manuscriptFile, futureDeadline, "Anti Social Network");
+		try {
+			noManuscriptUser.getMyRoles().myAuthor.submitManuscript(manuscriptFile, futureDeadline, "Anti Social Network");
+		} catch (PastDeadlineException e) {
+			fail();
+		}
 		assertTrue(noManuscriptUser.getMyRoles().myAuthor.getMyManuscripts().get(0).getMyTitle().equals(testManuscript.getMyTitle()));
 	}
 	
@@ -73,10 +78,12 @@ public class AuthorTest {
 	 * tests the authors ability to submit a manuscript when the deadline is passed.
 	 * 
 	 * @version 5/26/2016
+	 * @throws PastDeadlineException 
 	 */
-	@Test
-	public void testSubmitManuscriptAfterDeadline() {
-		assertNull(noManuscriptUser.getMyRoles().myAuthor.submitManuscript(manuscriptFile, pastDeadline, "test"));
+	@Test (expected = PastDeadlineException.class)
+	public void testSubmitManuscriptAfterDeadline() throws PastDeadlineException {
+		noManuscriptUser.getMyRoles().myAuthor.submitManuscript(manuscriptFile, pastDeadline, "Anti Social Network");
+		fail();
 	}
 	
 	/**
