@@ -88,8 +88,8 @@ public class SubProgramChairUI {
 		} else if (name == exit) {
 			System.out.println("Exiting - Goodbye!");
 		} else {
-			User selectedReviewer = myUsers.get(users.get(name));
-			System.out.println(users.get(name) + " reviews: ");
+			User selectedReviewer = myUsers.get(users.get(name - 1));
+			System.out.println(users.get(name -1) + " reviews: ");
 			if (selectedReviewer.isRole(User.REVIEWER)) {
 				for (Manuscript m : selectedReviewer.getReviewer().getManuscripts()) {
 					System.out.println("\t" + m.getMyTitle());
@@ -127,7 +127,7 @@ public class SubProgramChairUI {
 				}
 				boolean result = mySubChair.assignReviewer(selectedManuscript, selectedReviewer);
 				if (result) {
-					System.out.println(selectedManuscript.getMyTitle() + "assigned to " + users.get(name));
+					System.out.println(selectedManuscript.getMyTitle() + "assigned to " + users.get(name -1));
 				} else {
 					System.out.println("FAILED!");
 				}
@@ -146,7 +146,7 @@ public class SubProgramChairUI {
 		
 		int back = mySubChair.getManuscripts().size() + 1;
 		int exit = back + 1;
-		System.out.println("\nManuscripts available to assign:");
+		System.out.println("\nManuscripts assigned:");
 		for (int i = 1; i <= mySubChair.getManuscripts().size(); i++) {
 			System.out.print("\t" + i + ". " + mySubChair.getManuscripts().get(i - 1).getMyTitle());
 			if (mySubChair.getManuscripts().get(i - 1).getMyRecommendation() != null) {
@@ -168,10 +168,10 @@ public class SubProgramChairUI {
 		} else if (choice == exit) {
 			System.out.println("Exiting - Goodbye!");
 		} else {
+			System.out.print("you are making a recommendation for: ");
+			System.out.println(mySubChair.getManuscripts().get(choice -1).getMyTitle());
 			System.out.println("Enter the file path for the recommendation: ");
-			//System.out.println("you are making a recommendation for:");
-			System.out.println(mySubChair.getManuscripts());
-			System.out.println("> ");
+			System.out.print("> ");
 			String filePath = console.nextLine();
 			File recommendationFile = null;
 			try {

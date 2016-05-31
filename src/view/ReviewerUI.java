@@ -122,7 +122,7 @@ public class ReviewerUI {
 	public void viewMyReviews(){ 
 		if (myAssignedManuscripts.size() > 0) {
 			for (int i = 0; i < myAssignedManuscripts.size(); i++) {
-				System.out.print((i+1) + ". " + myAssignedManuscripts.get(i) + ", ");
+				System.out.print((i+1) + ". " + myAssignedManuscripts.get(i).getMyTitle() + ", ");
 				if (myReviewer.hasReviewed(myAssignedManuscripts.get(i))) {
 					System.out.println("My Score: " + myReviewer.getMyReviews().get(myAssignedManuscripts.get(i)).getMyRating());
 				} else {
