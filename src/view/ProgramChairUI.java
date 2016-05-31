@@ -96,10 +96,10 @@ public class ProgramChairUI {
 		} else if (name == exit) {
 			System.out.println("Exiting - Goodbye!");
 		} else {
-			User selectedSPC = myUsers.get(users.get(name));
+			User selectedSPC = myUsers.get(users.get(name - 1));
 			
 			System.out.println("Manuscripts already assigned to " + selectedSPC.getMyName() + ":");
-			for (Manuscript manuscript : myUsers.get(name).getSubProgramChair().getManuscripts()){
+			for (Manuscript manuscript : selectedSPC.getSubProgramChair().getMyManuscripts()){
 				System.out.println(manuscript.getMyTitle());
 			}
 			
@@ -119,9 +119,10 @@ public class ProgramChairUI {
 			System.out.println("> ");
 			int selection = console.nextInt();
 			console.nextLine();
-			boolean result = myProgChair.assignManuscripts(selectedSPC, availableManuscripts.get(selection));
+			boolean result = myProgChair.assignManuscripts(selectedSPC, availableManuscripts.get(selection - 1));
 			if (result) {
-				System.out.println(selectedSPC.getMyName() + " has been assigned " + availableManuscripts.get(selection).getMyTitle());
+				System.out.println(selectedSPC.getMyName() + " has been assigned " + availableManuscripts.get(selection - 1).getMyTitle());
+				availableManuscripts.get(selection - 1).setAssignedtoSubProgramChair(true);
 			} else {
 				System.out.println("FAILED!");
 			}
