@@ -36,6 +36,10 @@ public class SubProgramChair implements Serializable {
 	public SubProgramChair() {
 		myManuscripts = new ArrayList<Manuscript>(MANUSCRIPT_LIMIT);
 	}
+	
+	public SubProgramChair(ArrayList<Manuscript> theManuscripts) {
+		myManuscripts = theManuscripts;
+	}
 
 	/**
 	 * Assigns the Reviewer to the Manuscript. If the Manuscript is not
@@ -52,9 +56,9 @@ public class SubProgramChair implements Serializable {
 	public boolean assignReviewer(final Manuscript theManuscript, final User theReviewer) {
 		boolean result = false;
 		if(!theReviewer.isRole(User.REVIEWER)) {
-			theReviewer.getMyRoles().myReviewer = new Reviewer();
+			theReviewer.assignReviewer(new Reviewer());
 		}
-		result = theReviewer.getMyRoles().myReviewer.addManuscript(theManuscript, theReviewer.getMyName());
+		result = theReviewer.getReviewer().addManuscript(theManuscript, theReviewer.getMyName());
 		return result;
 	}
 	

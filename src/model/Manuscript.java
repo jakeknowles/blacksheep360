@@ -59,6 +59,15 @@ public class Manuscript implements Serializable {
 		myAssignedtoSubProgramChair = false;
 	}
 	
+	public Manuscript(File theManuscript, String theAuthorName, String theTitle, List<Review> theReviews, boolean theAssigned) {
+		myManuscript = theManuscript;
+		myReviews = theReviews;
+		myAuthorName = theAuthorName;
+		myStatus = ManuscriptAcceptanceStatus.NO_DECISION;
+		myRecommendation = null;
+		myTitle = theTitle;
+		myAssignedtoSubProgramChair = theAssigned;
+	}
 	/**
 	 * @version 5/26/2016
 	 * @param theOther the Manuscript to be copied

@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @version 5/8/2016
  */
 
-public class ProgramChair implements Serializable{
+public class ProgramChair implements Serializable {
 
 	private static final long serialVersionUID = 8511840844224397611L;
 
@@ -40,9 +40,9 @@ public class ProgramChair implements Serializable{
 	public boolean assignManuscripts(User theSubProgramChair, Manuscript theManuscript) {
 		boolean result = false;
 		if(!theSubProgramChair.isRole(User.SUBPROGRAM_CHAIR)) {
-			theSubProgramChair.getMyRoles().mySubProgramChair = new SubProgramChair();
+			theSubProgramChair.assignSubProgramChair(new SubProgramChair());
 		}
-		result = theSubProgramChair.getMyRoles().mySubProgramChair.addManuscript(theManuscript, theSubProgramChair.getMyName());
+		result = theSubProgramChair.getSubProgramChair().addManuscript(theManuscript, theSubProgramChair.getMyName());
 		return result;
 	}
 }

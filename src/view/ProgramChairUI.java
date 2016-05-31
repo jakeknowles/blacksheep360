@@ -30,7 +30,7 @@ public class ProgramChairUI {
 		myRole = theRole;
 		currDateString = theCurrDateString;
 		console = theConsole;	
-		myProgChair = myUsers.get(myName).getMyRoles().myProgramChair;
+		myProgChair = myUsers.get(myName).getProgramChair();
 	}
 	
 	/**
@@ -99,7 +99,7 @@ public class ProgramChairUI {
 			User selectedSPC = myUsers.get(users.get(name));
 			
 			System.out.println("Manuscripts already assigned to " + selectedSPC.getMyName() + ":");
-			for (Manuscript manuscript : myUsers.get(name).getMyRoles().mySubProgramChair.getManuscripts()){
+			for (Manuscript manuscript : myUsers.get(name).getSubProgramChair().getManuscripts()){
 				System.out.println(manuscript.getMyTitle());
 			}
 			
@@ -160,9 +160,9 @@ public class ProgramChairUI {
 			System.out.print("> ");
 			String decision = console.nextLine();
 			if (decision.equals("1")) {
-				myUsers.get(myName).getMyRoles().myProgramChair.submitDecision(submittedManuscripts.get(input - 1), ManuscriptAcceptanceStatus.ACCEPTED);
+				myProgChair.submitDecision(submittedManuscripts.get(input - 1), ManuscriptAcceptanceStatus.ACCEPTED);
 			} else if (decision.equals("2")) {
-				myUsers.get(myName).getMyRoles().myProgramChair.submitDecision(submittedManuscripts.get(input - 1), ManuscriptAcceptanceStatus.REJECTED);
+				myProgChair.submitDecision(submittedManuscripts.get(input - 1), ManuscriptAcceptanceStatus.REJECTED);
 			} else {
 				makeAcceptanceDecision();
 			}
@@ -235,7 +235,7 @@ public class ProgramChairUI {
 		for (String subPC : myUsers.keySet()) {
 			if (myUsers.get(subPC).isRole(User.SUBPROGRAM_CHAIR)) {
 				System.out.println("\nManuscripts assigned to " + subPC);
-				for (Manuscript manuscript : myUsers.get(subPC).getMyRoles().mySubProgramChair.getManuscripts()){
+				for (Manuscript manuscript : myUsers.get(subPC).getSubProgramChair().getManuscripts()){
 					System.out.println("\t" + manuscript.getMyTitle());
 				}
 			}

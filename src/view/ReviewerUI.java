@@ -26,7 +26,7 @@ public class ReviewerUI {
 		myName = theWhoAmI; 
 		currDateString = theCurrDateString;
 		console = theConsole;	
-		myReviewer = theUsers.get(myName).getMyRoles().myReviewer;
+		myReviewer = theUsers.get(myName).getReviewer();
 		myAssignedManuscripts = new ArrayList<Manuscript>(myReviewer.getManuscripts());
 	}
 

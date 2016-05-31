@@ -9,7 +9,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +37,6 @@ import model.User;
 // since we use the same 3 lines in every menu.
 public class MSEEConfMgr {
 
-	static HashMap<String, User> myUsers;
 	static Conference myConf;
 	static String myWhoAmI;
 	static String myRole;
@@ -61,12 +59,12 @@ public class MSEEConfMgr {
 		try {
 			FileInputStream fileIn = new FileInputStream("./MSEEdata.ser");	
 	        ObjectInputStream in = new ObjectInputStream(fileIn);
-	        myUsers = (HashMap<String, User>) in.readObject();
 	        myConferences = (List) in.readObject();
 	        in.close();
 	        fileIn.close();
 		} catch(FileNotFoundException f) {
-			initializeNewData();
+			System.err.println("MSEEdata.ser not found.");
+			return;
 		} catch(IOException i) {
 	        i.printStackTrace();
 	        return;
@@ -76,23 +74,21 @@ public class MSEEConfMgr {
 	        return;
 		} 
 		
-		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy"); 	//Alexandria, 5/15/16 - to format the current date for display
-		Date currDate = new Date();							//the current date
-		currDateString = dateFormat.format(currDate);		//stored as a string
+		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy"); 	
+		Date currDate = new Date();							
+		currDateString = dateFormat.format(currDate);		
 		
 		console = new Scanner(System.in);
 		myConf = selectConference();
-		String whoAmI = login();
+		String whoAmI = login(myConf.getUserMap());
 		myWhoAmI = whoAmI;
-//		System.out.println(myUsers.get(whoAmI).getClass().toString());
 		System.out.println();
-		displayInterface(whoAmI, myUsers);
+		displayInterface(whoAmI, myConf.getUserMap());
 		console.close();
 		
 		try {
 	    	FileOutputStream fileOut = new FileOutputStream("./MSEEdata.ser");
 	        ObjectOutputStream out = new ObjectOutputStream(fileOut);
-	        out.writeObject(myUsers);
 	        out.writeObject(myConferences);
 	        out.close();
 	        fileOut.close();
@@ -121,7 +117,7 @@ public class MSEEConfMgr {
 	 * 
 	 * @version 5/8/2016
 	 */
-	public static String login() {
+	public static String login(HashMap<String, User> theUsers) {
 		System.out.println("Welcome to the MSEE Conference Manager.");
 		System.out.print("Please enter your User Name > ");
 		String userName = console.nextLine();
@@ -131,15 +127,15 @@ public class MSEEConfMgr {
 		String roles[] = new String[4];
 		roles[i++] = User.AUTHOR;
 		//System.out.println("Author");
-		if (myUsers.get(userName).isRole(User.PROGRAM_CHAIR)) {
+		if (theUsers.get(userName).isRole(User.PROGRAM_CHAIR)) {
 			roles[i++] = User.PROGRAM_CHAIR;
 			//System.out.println("Program Chair");
 		}
-		if (myUsers.get(userName).isRole(User.REVIEWER)) {
+		if (theUsers.get(userName).isRole(User.REVIEWER)) {
 			roles[i++] = User.REVIEWER;
 			//System.out.println("Reviewer");
 		} 
-		if (myUsers.get(userName).isRole(User.SUBPROGRAM_CHAIR)) {
+		if (theUsers.get(userName).isRole(User.SUBPROGRAM_CHAIR)) {
 			roles[i++] = User.SUBPROGRAM_CHAIR;
 			//System.out.println("Subprogram Chair");
 		} 
@@ -160,23 +156,23 @@ public class MSEEConfMgr {
 	 */
 	public static void displayInterface(String theWhoIam, HashMap<String, User> theUsers) {
 		if (myRole.equals(User.AUTHOR)) {
-			AuthorUI aui = new AuthorUI(myUsers, myConf, myWhoAmI, myRole, 
+			AuthorUI aui = new AuthorUI(theUsers, myConf, myWhoAmI, myRole, 
 					currDateString, console);
-			if (myUsers.get(myWhoAmI).isRole(myRole)) {
+			if (theUsers.get(myWhoAmI).isRole(myRole)) {
 				aui.authorInterfaceHasManuscripts();
 			} else {
 				aui.authorInterfaceNoManuscripts();
 			}
-		} else if (myUsers.get(myWhoAmI).isRole(myRole) && myRole.equals(User.PROGRAM_CHAIR)) {
-			ProgramChairUI pui = new ProgramChairUI(myUsers, myConf, myWhoAmI, myRole, 
+		} else if (theUsers.get(myWhoAmI).isRole(myRole) && myRole.equals(User.PROGRAM_CHAIR)) {
+			ProgramChairUI pui = new ProgramChairUI(theUsers, myConf, myWhoAmI, myRole, 
 					currDateString, console);
 			pui.pcInterface();
-		} else if (myUsers.get(myWhoAmI).isRole(myRole) && myRole.equals(User.REVIEWER)) {
-			ReviewerUI rui = new ReviewerUI(myUsers, myConf, myWhoAmI, myRole, 
+		} else if (theUsers.get(myWhoAmI).isRole(myRole) && myRole.equals(User.REVIEWER)) {
+			ReviewerUI rui = new ReviewerUI(theUsers, myConf, myWhoAmI, myRole, 
 					currDateString, console);
 			rui.reviewerInterface();
-		} else if (myUsers.get(myWhoAmI).isRole(myRole) && myRole.equals(User.SUBPROGRAM_CHAIR)) {
-			SubProgramChairUI spcui = new SubProgramChairUI(myUsers, myConf, myWhoAmI, myRole, 
+		} else if (theUsers.get(myWhoAmI).isRole(myRole) && myRole.equals(User.SUBPROGRAM_CHAIR)) {
+			SubProgramChairUI spcui = new SubProgramChairUI(theUsers, myConf, myWhoAmI, myRole, 
 					currDateString, console); 
 			spcui.subpcInterface();
 		} 
@@ -187,20 +183,5 @@ public class MSEEConfMgr {
 		System.out.println( role + " - " + name);
 		System.out.println(conference);
 		System.out.println("Date: " + date);
-	}
-	
-	public static void initializeNewData() {
-		System.out.println("No existing data initializing new conference data\n");
-		myUsers = new HashMap<String, User>();
-		myUsers.put("Josh", new User("Josh")); //Name/Role
-		myUsers.put("Arthur", new User("Arthur")); //Name/Role
-		myUsers.put("Ron", new User("Ron")); //Name/Role
-		myUsers.put("Steve", new User("Steve")); //Name/Role
-		myUsers.put("Peter", new User("Peter")); //Name/Role
-		Date deadline = new Date(System.currentTimeMillis() + 1209600000);
-		myConf = new Conference(myUsers.get("Peter"), "Innovative Trends in Science", deadline, 0, 5);
-		myConferences = new ArrayList<Conference>();
-		myConferences.add(myConf);
-	}
-	
+	}	
 }

@@ -37,6 +37,10 @@ public class Reviewer implements Serializable {
 	public Reviewer() {
 		myReviews = new HashMap<Manuscript, Review>();
 	}
+	
+	public Reviewer(HashMap<Manuscript, Review> theReviews) {
+		myReviews = theReviews;
+	}
 
 	/**
 	 * Submits a review of a manuscript.

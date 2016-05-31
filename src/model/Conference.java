@@ -2,6 +2,7 @@ package model;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.Serializable;
 
 /**
@@ -42,6 +43,8 @@ public class Conference implements Serializable {
 	private int myLowestRating;
 	private int myHighestRating;
 	
+	private HashMap<String, User> myUsers;
+	
 	/**
 	 * Constructor
 	 * 
@@ -49,9 +52,10 @@ public class Conference implements Serializable {
 	 */
 	public Conference(User thePC, String theConfName, Date theDeadline, int theLowRating, int theHighRating) {
 		myProgramChair = thePC;
-		thePC.getMyRoles().myProgramChair = new ProgramChair();
+		thePC.assignProgramChair(new ProgramChair());
 		myConfName = theConfName;
 		myManuscripts = new HashMap<String, Manuscript>();
+		myUsers = new HashMap<String, User>();
 		myManuscriptDeadline = theDeadline;
 		myLowestRating = theLowRating;
 		myHighestRating = theHighRating;
@@ -76,6 +80,10 @@ public class Conference implements Serializable {
 
 	public String getMyConfName() {
 		return myConfName;
+	}
+	
+	public HashMap<String, User> getUserMap() {
+		return myUsers;
 	}
 	
 	public void editManuscriptTitle(String theOldTitle, String theNewTitle) {

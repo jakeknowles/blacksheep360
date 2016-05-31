@@ -19,7 +19,6 @@ public class AuthorUI {
 	private String currDateString;
 	private Scanner console;
 
-
 	public AuthorUI(HashMap<String, User> theUsers, Conference theConf, 
 			String theWhoAmI, String theRole, String theCurrDateString, Scanner theConsole) {
 		myUsers = theUsers; 
@@ -130,17 +129,17 @@ public class AuthorUI {
 			System.out.println();
 			boolean newAuthor = false;
 			if (!me.isRole(User.AUTHOR)) {
-				me.getMyRoles().myAuthor = new Author(me.getMyName());
+				me.assignAuthor(new Author(me.getMyName()));
 				newAuthor = true;
 			}
 			Manuscript newManuscript = null;
 			try {
-				newManuscript = me.getMyRoles().myAuthor.submitManuscript(toBeSaved,
+				newManuscript = me.getAuthor().submitManuscript(toBeSaved,
 						myConf.getMyManuscriptDeadline(), paperName);
 			} catch (PastDeadlineException e) {
 				System.out.println("Submission Failed, deadline for manuscript submissions has passed.");
 				if(newAuthor) {
-					me.getMyRoles().myAuthor = null;
+					me.assignAuthor(null);
 					authorInterfaceNoManuscripts();
 				} else {
 					authorInterfaceHasManuscripts();
@@ -160,7 +159,7 @@ public class AuthorUI {
 	 */
 	public void editManuscript() {
 		MSEEConfMgr.header(User.AUTHOR, myName, currDateString, myConf.getMyConfName());
-		Author auth = myUsers.get(myName).getMyRoles().myAuthor;
+		Author auth = myUsers.get(myName).getAuthor();
 		viewMyManuscripts();
 		int back = auth.getMyManuscripts().size() + 1;
 		int exit = back + 1;
@@ -209,7 +208,7 @@ public class AuthorUI {
 					System.out.println("File not found at location: " + filePath + "\n");
 					break;
 				}
-				myUsers.get(myName).getMyRoles().myAuthor.editManuscriptFile(selectedManuscript, toBeSaved);
+				myUsers.get(myName).getAuthor().editManuscriptFile(selectedManuscript, toBeSaved);
 				System.out.println("File submission successful.");
 				break;
 			}
@@ -224,7 +223,7 @@ public class AuthorUI {
 	 */
 	public void removeManuscript() {
 		MSEEConfMgr.header(User.AUTHOR, myName, currDateString, myConf.getMyConfName());
-		Author auth = myUsers.get(myName).getMyRoles().myAuthor;
+		Author auth = myUsers.get(myName).getAuthor();
 		viewMyManuscripts();
 		int back = auth.getMyManuscripts().size() + 1;
 		int exit = back + 1;
@@ -246,7 +245,7 @@ public class AuthorUI {
 		} else {
 			Manuscript toBeDeleted = auth.getMyManuscripts().get(selection - 1);
 			myConf.removeManuscript(toBeDeleted.getMyTitle());
-			myUsers.get(myName).getMyRoles().myAuthor.deleteManuscript(toBeDeleted);
+			myUsers.get(myName).getAuthor().deleteManuscript(toBeDeleted);
 			System.out.println(toBeDeleted.getMyTitle() + " has been removed."); 
 			editManuscript();
 		}
@@ -261,7 +260,7 @@ public class AuthorUI {
 	public void viewMyManuscripts(){
 		if(myUsers.get(myName).isRole(User.AUTHOR)) {
 			System.out.println("Manuscripts submitted: ");
-			Author auth = myUsers.get(myName).getMyRoles().myAuthor;
+			Author auth = myUsers.get(myName).getAuthor();
 			for (int i = 0; i < auth.getMyManuscripts().size(); i++) {
 				System.out.println((i + 1) + ". " + auth.getMyManuscripts().get(i).getMyTitle());
 			}

@@ -33,31 +33,37 @@ public class User implements Serializable {
 	private Roles myRoles;
 	
 	/**
-	 * Constructor.
-	 * 
 	 * @version 5/8/2016
 	 */
 	public User(String theName) {
-		setMyName(theName);
-		setMyRoles(new Roles());
+		myName = theName;
+		myRoles = new Roles();
+	}
+	
+	public User(String theName, Roles theRoles) {
+		myName = theName;
+		myRoles = theRoles;
 	}
 
 	public String getMyName() {
 		return myName;
 	}
 
-	public void setMyName(String myName) {
-		this.myName = myName;
+	public Author getAuthor() {
+		return myRoles.getAuthor();
+	}
+	
+	public Reviewer getReviewer() {
+		return myRoles.getReviewer();
+	}
+	
+	public SubProgramChair getSubProgramChair() {
+		return myRoles.getSubProgramChair();
 	}
 
-	public Roles getMyRoles() {
-		return myRoles;
+	public ProgramChair getProgramChair() {
+		return myRoles.getProgramChair();
 	}
-
-	public void setMyRoles(Roles myRoles) {
-		this.myRoles = myRoles;
-	}
-
 	/**
 	 * Checks to see if the user has a given role.
 	 * 
@@ -65,61 +71,38 @@ public class User implements Serializable {
 	 */
 	public boolean isRole(String theRole) {
 		if (theRole.equals(AUTHOR)) {
-			return getMyRoles().myAuthor != null;
+			return getAuthor() != null;
 		} else if (theRole.equals(REVIEWER)) {
-			return getMyRoles().myReviewer != null;
+			return getReviewer() != null;
 		} else if (theRole.equals(SUBPROGRAM_CHAIR)) {
-			return getMyRoles().mySubProgramChair != null;
+			return getSubProgramChair() != null;
 		} else if (theRole.equals(PROGRAM_CHAIR)) {
-			return getMyRoles().myProgramChair != null;
+			return getProgramChair() != null;
 		}
 		return false;
 	}
 	
-	public String toString() {
-		return "I'm a User";
-	}
+	public void assignAuthor(Author theAuthor) {
+		if (myRoles.getAuthor() != null) {
+			myRoles.setAuthor(theAuthor);
+		}
+	} 
 	
-	/**
-	 * A class that stores the user's roles.
-	 * 
-	 * @version 5/8/2016
-	 */
-	public class Roles implements Serializable{
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = -8401286720437180771L;
-
-		/**
-		 * The user's author role.
-		 */
-		public Author myAuthor;
-		
-		/**
-		 * The user's reviewer role.
-		 */
-		public Reviewer myReviewer;
-		/**
-		 * The user's subprogram chair role.
-		 */
-		public SubProgramChair mySubProgramChair;
-		/**
-		 * The user's Program chair role.
-		 */
-		public ProgramChair myProgramChair;
-		
-		/**
-		 * Constructor.
-		 * 
-		 * @version 5/8/2016
-		 */
-		public Roles() {
-			myAuthor = null;
-			myReviewer = null;
-			mySubProgramChair = null;
-			myProgramChair = null;
+	public void assignReviewer(Reviewer theReviewer) {
+		if (myRoles.getReviewer() != null) {
+			myRoles.setReviewer(theReviewer);
 		}
 	}
 	
+	public void assignSubProgramChair(SubProgramChair theSubProgramChair) {
+		if (myRoles.getSubProgramChair() != null) {
+			myRoles.setSubProgramChair(theSubProgramChair);
+		}
+	}
+	
+	public void assignProgramChair(ProgramChair theProgramChair) {
+		if (myRoles.getProgramChair() != null) {
+			myRoles.setProgramChair(getProgramChair());
+		}
+	}
 }

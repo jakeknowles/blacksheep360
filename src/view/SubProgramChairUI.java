@@ -30,7 +30,7 @@ public class SubProgramChairUI {
 		myRole = theRole;
 		currDateString = theCurrDateString;
 		console = theConsole;	
-		mySubChair = myUsers.get(myName).getMyRoles().mySubProgramChair;
+		mySubChair = myUsers.get(myName).getSubProgramChair();
 	}
 	
 	
@@ -91,7 +91,7 @@ public class SubProgramChairUI {
 			User selectedReviewer = myUsers.get(users.get(name));
 			System.out.println(users.get(name) + " reviews: ");
 			if (selectedReviewer.isRole(User.REVIEWER)) {
-				for (Manuscript m : selectedReviewer.getMyRoles().myReviewer.getManuscripts()) {
+				for (Manuscript m : selectedReviewer.getReviewer().getManuscripts()) {
 					System.out.println("\t" + m.getMyTitle());
 				}
 			} else {
@@ -121,7 +121,7 @@ public class SubProgramChairUI {
 				System.out.println("Exiting - Goodbye!");
 			} else {
 				Manuscript selectedManuscript = mySubChair.getMyManuscripts().get(selection - 1);
-				if (selectedReviewer.getMyRoles().myReviewer.hasReviewed(selectedManuscript)) {
+				if (selectedReviewer.getReviewer().hasReviewed(selectedManuscript)) {
 					System.out.println("Reviewer is already assigned to this manuscript.");
 					assignReviewer();
 				}

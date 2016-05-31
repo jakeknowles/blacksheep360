@@ -52,10 +52,10 @@ public class AuthorTest {
 			System.err.println("PATHNAME ERROR");
 		}
 		testManuscript = new Manuscript(manuscriptFile, noManuscriptUser.getMyName(), "Anti Social Network");
-		noManuscriptUser.getMyRoles().myAuthor = new Author(noManuscriptUser.getMyName());
+		noManuscriptUser.assignAuthor(new Author(noManuscriptUser.getMyName()));
 		manList = new ArrayList<Manuscript>();
 		manList.add(testManuscript);
-		oneManuscriptUser.getMyRoles().myAuthor = new Author(oneManuscriptUser.getMyName(), manList);
+		oneManuscriptUser.assignAuthor(new Author(oneManuscriptUser.getMyName(), manList));
 		
 	}
 
@@ -67,11 +67,11 @@ public class AuthorTest {
 	@Test
 	public void testSubmitManuscript() {
 		try {
-			noManuscriptUser.getMyRoles().myAuthor.submitManuscript(manuscriptFile, futureDeadline, "Anti Social Network");
+			noManuscriptUser.getAuthor().submitManuscript(manuscriptFile, futureDeadline, "Anti Social Network");
 		} catch (PastDeadlineException e) {
 			fail();
 		}
-		assertTrue(noManuscriptUser.getMyRoles().myAuthor.getMyManuscripts().get(0).getMyTitle().equals(testManuscript.getMyTitle()));
+		assertTrue(noManuscriptUser.getAuthor().getMyManuscripts().get(0).getMyTitle().equals(testManuscript.getMyTitle()));
 	}
 	
 	/**
@@ -82,7 +82,7 @@ public class AuthorTest {
 	 */
 	@Test (expected = PastDeadlineException.class)
 	public void testSubmitManuscriptAfterDeadline() throws PastDeadlineException {
-		noManuscriptUser.getMyRoles().myAuthor.submitManuscript(manuscriptFile, pastDeadline, "Anti Social Network");
+		noManuscriptUser.getAuthor().submitManuscript(manuscriptFile, pastDeadline, "Anti Social Network");
 		fail();
 	}
 	
@@ -93,9 +93,9 @@ public class AuthorTest {
 	 */
 	@Test
 	public void testDeleteManuscript() {
-		Manuscript manuscriptObj = oneManuscriptUser.getMyRoles().myAuthor.getMyManuscripts().get(0);
-		oneManuscriptUser.getMyRoles().myAuthor.deleteManuscript(manuscriptObj);
-		assertEquals(oneManuscriptUser.getMyRoles().myAuthor.getMyManuscripts().size(), 0);
+		Manuscript manuscriptObj = oneManuscriptUser.getAuthor().getMyManuscripts().get(0);
+		oneManuscriptUser.getAuthor().deleteManuscript(manuscriptObj);
+		assertEquals(oneManuscriptUser.getAuthor().getMyManuscripts().size(), 0);
 	}
 	
 	/**
@@ -105,23 +105,23 @@ public class AuthorTest {
 	 */
 	@Test
 	public void testEditManuscriptFile() {
-		Manuscript man = oneManuscriptUser.getMyRoles().myAuthor.getMyManuscripts().get(0);
+		Manuscript man = oneManuscriptUser.getAuthor().getMyManuscripts().get(0);
 		File otherFile = null;
 		try {
 			otherFile = new File("./TestDataFiles/AlexTest.txt");
 		} catch (NullPointerException e) {
 			System.err.println("PATHNAME ERROR");
 		}
-		oneManuscriptUser.getMyRoles().myAuthor.editManuscriptFile(man, otherFile);
-		assertEquals(oneManuscriptUser.getMyRoles().myAuthor.getMyManuscripts().get(0).getMyManuscript(), otherFile);
+		oneManuscriptUser.getAuthor().editManuscriptFile(man, otherFile);
+		assertEquals(oneManuscriptUser.getAuthor().getMyManuscripts().get(0).getMyManuscript(), otherFile);
 	}
 	
 	@Test
 	public void testEditManuscriptTitle() {
-		Manuscript man = oneManuscriptUser.getMyRoles().myAuthor.getMyManuscripts().get(0);
+		Manuscript man = oneManuscriptUser.getAuthor().getMyManuscripts().get(0);
 		String newTitle = "New Title";
-		oneManuscriptUser.getMyRoles().myAuthor.editManuscriptTitle(man, newTitle);
-		assertEquals(oneManuscriptUser.getMyRoles().myAuthor.getMyManuscripts().get(0).getMyTitle(), newTitle);
+		oneManuscriptUser.getAuthor().editManuscriptTitle(man, newTitle);
+		assertEquals(oneManuscriptUser.getAuthor().getMyManuscripts().get(0).getMyTitle(), newTitle);
 	}
 
 }
