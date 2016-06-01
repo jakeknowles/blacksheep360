@@ -1,0 +1,90 @@
+Changes Document
+
+Changes to the classes, collaborations, and/or responsibilities since deliverable 2
+•	Change: Refactoring MSEEConfMgr.java to reduce its size substantially adding AuthorUI.java, ProgramChairUI.java, ReviewerUI.java, UserUI.java, and SubProgramChairUI.java.
+Reason:  to reduce complexity of MSEEConfMgr.java.
+•	Change: No new tasks were assigned to Geoffrey until the last week.
+Reason: We agreed as a team that Geoffrey is very good at final editing making our collective work a high quality of work. To ensure load balancing, we decided that Geoffrey would perform no work until the last week where no one else touched the code so he could focus on cleanup and final production making anything that didn’t work function correctly.
+•	Change: UML abandoned
+Reason: We verified with STAN that there were no circular dependencies and updating the UML would be too much time cost.
+
+
+
+Changes to the implementing code since deliverable 2
+•	Added: Choose a conference
+Reason: Requested by client for robust functionality
+•	Change: Return type for getManuscripts() method in Author class from String to List<Manuscripts>.
+Reason: We learned that it would be better to return the actual objects in the list rather than a string representation that is just for the user to see.
+•	Change: Return type for getManuscripts() method in Reviewer class from String to List<Manuscripts>.
+Reason: We learned that it would be better to return the actual objects in the list rather than a string representation that is just for the user to see.
+•	Change: Return type for getManuscripts() method in SubProgramChair class from String to List<Manuscripts>.
+Reason: We learned that it would be better to return the actual objects in the list rather than a string representation that is just for the user to see.
+•	Change: Got rid of some toString() methods in a few classes.(Manuscript, Conference, User)
+Reason: Not needed.
+•	Change: Made all fields private that needed to be.
+Reason: We learned that the client (Josh) wanted our data to not be accessible.
+•	Change: At login we added a list of roles available to the user for that conference
+Reason: We learned that the client (Josh) did not want to have to try to remember what roles he had for each conference.
+•	Change: A getMyManuscripts() method was added to the Author class.
+Reason: There was a problem in the Author class’ test file after privatizing fields.
+•	Change: A header() method was added to each of the UI classes.
+Reason: This reduced repetitive code in each of the menu screens.
+•	Change: At the screen for submitting a manuscript, a list of already submitted manuscripts was added.
+Reason: We learned that the client (Josh) wanted to avoid submitting the same manuscript twice.
+•	Change: The submitManuscript() method takes in the title of a manuscript as well as a file.
+Reason: We learned that the client (Josh) wanted authors to be able to name their submission something other than the file name.
+•	Change: Anywhere in code that input was asked for from the user, a list of available options (or of already stored data) would be printed out.
+Reason: We learned that the client (Josh) wanted to limit the amount that the user had to remember in order to operate the program.
+•	Change: After a user submits or changes anything, we confirm that the action has been completed through our output.
+Reason: We learned that it was necessary for the user to be able to confirm that their action had been successfully excecuted.
+•	Change: The editManuscript() method had a submenu added, asking the user if they would like to upload a more current file or change the title of their submission.
+Reason: We learned that this was desired by the client (Josh).
+•	Change: The submitDecision() method in program chair was changed to use an enum instead of a Boolean.
+Reason: This allowed for an “undecided” status.
+•	Change: Added a score to Reviews.
+Reason: This was desired by the client (Josh).
+•	Change: Added viewMyReviews() method.
+Reason: This was necessary to view previously submitted reviews when in submitReview().
+•	Change: Added numbering to printed list of manuscripts in assignReviewer() method.
+Reason: It was asking for a number but wasn’t providing any for the user to choose from.
+
+Change: Altered UI so that the user can select from a list whenever possible.
+Reason: To make the program easier to use for the user.
+
+Change:Added a PastDeadLineException
+Reason: to better handle a user trying to submit a paper after the deadline.
+
+Change: Removed the UserUI class and merged functionality into AuthorUI.java
+Reason: Less Redundant code.
+
+Change: Added review score bounds as fields in conference
+Reason: So that reviewers can provide a score of the papers they review.
+
+Change: Removed unnecessary setters
+Reason: Clean code.
+
+Change: Reviewer now stores reviews as map from the manuscript to the reviewer
+Reason: Simplified code, less data structures.
+
+Change: added methods to view lists of users or manuscripts in ReviewerUI, 	SubProgramChairUI, and ProgramChairUI.
+Reason: So that the user can be informed about the selections they make.
+
+Change: Separated Roles into its own class file.
+Reason: Cleaner code.
+
+Change: Created a separate initialize class to generate conferences and users.
+Reason:  Initializing in the main method made the code very messy.
+
+
+
+
+
+Changes to the tests since deliverable 2
+•	Change: Added descriptive names to tests.
+Reason: To ensure partitioning of tests were notable by reading the test themselves.
+•	Change: Update tests with changes to model code constructors that had a new string added.
+Reason: to ensure code was stable.
+•	Change: Added @Before Statements to tests.
+Reason: To make tests clearer and more accurate.
+•	Change: Added ManuscriptTest, ReviewTest, and RecommendationTest.
+Reason: To test the local storage of files. 
