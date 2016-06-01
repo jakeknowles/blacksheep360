@@ -96,13 +96,13 @@ public class SubProgramChairUI {
 	 */
 	public void assignReviewer() {
 		List<String> users = new ArrayList<String>(myUsers.keySet());
-		int back = users.size() + 1;
+		List<String> reviewers = getReviewers(users);
+		int back = reviewers.size() + 1;
 		int exit = back + 1;
 		
 		MSEEConfMgr.header(User.SUBPROGRAM_CHAIR, myName, currDateString, myConf.getMyConfName());
 		System.out.println("Reviewers: ");
 		displayReviewers(users);
-		List<String> reviewers = getReviewers(users);
 		System.out.println("\nSelect the reviewer you want to assign."); 
 		System.out.println("\n\t- OR -");
 		System.out.println("\t" + back + ". Back");
@@ -215,9 +215,8 @@ public class SubProgramChairUI {
 	public void displayReviewers(List<String> theUsers) {
 		int j = 1;
 		for (int i = 0; i < theUsers.size(); i++) {
-			System.out.print((i+1) + ". " + theUsers.get(i));
 			if (myUsers.get(theUsers.get(i)).isRole(User.REVIEWER)) {
-				System.out.print((j++) + ". " + theUsers.get(i));
+				System.out.println((j++) + ". " + theUsers.get(i));
 			}
 		}
 	}
