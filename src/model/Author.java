@@ -1,6 +1,7 @@
 package model; 
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -47,8 +48,9 @@ public class Author implements Serializable {
 	 * 
 	 * @param theName The name of the author
 	 * @param theManuscripts The manuscripts that the author has submitted.
+	 * @throws IOException 
 	 */
-	public Author(String theName, List<Manuscript> theManuscripts) {
+	public Author(String theName, List<Manuscript> theManuscripts) throws IOException {
 		myName = theName;
 		myManuscripts = new ArrayList<Manuscript>();
 		for(Manuscript m : theManuscripts) {
@@ -62,8 +64,9 @@ public class Author implements Serializable {
 	 * 
 	 * @version 5/8/2016
 	 * @throws PastDeadlineException 
+	 * @throws IOException 
 	 */
-	public Manuscript submitManuscript(File theManuscript, Date theDeadline, String theTitle) throws PastDeadlineException {
+	public Manuscript submitManuscript(File theManuscript, Date theDeadline, String theTitle) throws PastDeadlineException, IOException {
 		Date now = new Date(System.currentTimeMillis());
 		if (now.before(theDeadline)) {
 			Manuscript submitted = new Manuscript(theManuscript, myName, theTitle);
@@ -90,9 +93,10 @@ public class Author implements Serializable {
 	 * Changes a file of a submitted manuscript.
 	 * 
 	 * @version 5/8/2016
+	 * @throws IOException 
 	 */
-	public void editManuscriptFile(Manuscript theManuscript, File theNewFile) {
-		theManuscript.setMyManuscript(theNewFile);
+	public void editManuscriptFile(Manuscript theManuscript, File theNewFile) throws IOException {
+		theManuscript.editFile(theNewFile);
 	}
 	
 	/**

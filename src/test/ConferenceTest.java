@@ -3,6 +3,7 @@ package test;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 
 import org.junit.Before;
@@ -18,28 +19,41 @@ import model.User;
  * @author Geoffrey Tanay
  * @author Jake Knowles
  *  
- * @version 5/8/2016
+ * @version 5/31/2016
  */
 
 public class ConferenceTest {
 	
+	/**
+	 * A deadline
+	 */
 	public Date deadline;
 	
-	public Conference testConf;
+	/**
+	 * A test conference
+	 */
+	public Conference testConference;
 	
-	public Manuscript man;
+	/**
+	 * A manuscript
+	 */
+	public Manuscript manuscript;
 	
 	@Before
 	public void setUp() {
 		deadline = new Date(System.currentTimeMillis() + 3600000);
-		testConf = new Conference(new User("Tester"), "TestConference", deadline, 0 , 5);
+		testConference = new Conference(new User("Tester"), "TestConference", deadline, 0 , 5);
 		File manFile = null;
 		try {
-			manFile = new File("./TestDataFiles/AntiSocialNetwork.doc");
+			manFile = new File("./TestDataFiles/TestManuscriptFile");
 		} catch (NullPointerException e) {
 			System.err.println("PATHNAME ERROR");
 		}
-		man = new Manuscript(manFile, "Tester", "test");
+		try {
+			manuscript = new Manuscript(manFile, "Tester", "test");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -49,8 +63,8 @@ public class ConferenceTest {
 	 */
 	@Test
 	public void testAddManuscript() {
-		testConf.addManuscript(man);
-		assertEquals(testConf.getMyManuscripts().get(man.getMyTitle()), man);
+		testConference.addManuscript(manuscript);
+		assertEquals(testConference.getMyManuscripts().get(manuscript.getMyTitle()), manuscript);
 	}
 	
 	/**
@@ -60,9 +74,22 @@ public class ConferenceTest {
 	 */
 	@Test
 	public void testRemoveManuscript() {
-		testConf.addManuscript(man);
-		testConf.removeManuscript(man.getMyTitle());
-		assertTrue(testConf.getMyManuscripts().isEmpty());
+		testConference.addManuscript(manuscript);
+		testConference.removeManuscript(manuscript.getMyTitle());
+		assertTrue(testConference.getMyManuscripts().isEmpty());
+	}
+	
+	/**
+	 * tests editing the title of a submitted manuscript
+	 * 
+	 * @version 5/31/2016
+	 */
+	@Test
+	public void testEditManuscriptTitle() {
+		testConference.addManuscript(manuscript);
+		String newTitle = "New Title";
+		testConference.editManuscriptTitle("test", newTitle);
+		assertEquals(testConference.getMyManuscripts().get(newTitle).getMyTitle(), newTitle);
 	}
 
 }

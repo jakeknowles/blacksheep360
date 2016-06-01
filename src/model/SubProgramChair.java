@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 
 /**
@@ -29,14 +30,16 @@ public class SubProgramChair implements Serializable {
 	private List<Manuscript> myManuscripts;
 	
 	/**
-	 * Constructor.
-	 * 
 	 * @version 5/8/2016
 	 */
 	public SubProgramChair() {
 		myManuscripts = new ArrayList<Manuscript>(MANUSCRIPT_LIMIT);
 	}
 	
+	/**
+	 * @param theManuscripts A list of manuscripts assigned to the new SubprogramChair
+	 * @version 5/30/2016
+	 */
 	public SubProgramChair(ArrayList<Manuscript> theManuscripts) {
 		myManuscripts = theManuscripts;
 	}
@@ -70,14 +73,12 @@ public class SubProgramChair implements Serializable {
 	 * 
 	 * @author Geoffrey Tanay
 	 * @version 05/08/2016
+	 * @throws IOException 
 	 */
-	public void submitRecommendation(final Manuscript theManuscript, final File theRecommendation) {
-		theManuscript.setMyRecommendation(new Recommendation(theRecommendation));
+	public void submitRecommendation(final Manuscript theManuscript, final File theRecommendation, String theStatement) throws IOException {
+		theManuscript.setMyRecommendation(new Recommendation(theRecommendation, theStatement));
 	}
 	
-	public List<Manuscript> getMyManuscripts() {
-		return myManuscripts;
-	}
 
 	/**
 	 * Adds a manuscript to the list of assigned manuscripts.
@@ -89,8 +90,8 @@ public class SubProgramChair implements Serializable {
 	 */
 	public boolean addManuscript(final Manuscript theManuscript, final String theUserName) {
 		boolean result = false;
-		if(getMyManuscripts().size() < MANUSCRIPT_LIMIT && !theManuscript.getMyAuthorName().equals(theUserName)) {
-			getMyManuscripts().add(theManuscript);
+		if(myManuscripts.size() < MANUSCRIPT_LIMIT && !theManuscript.getMyAuthorName().equals(theUserName)) {
+			myManuscripts.add(theManuscript);
 			result = true;
 		}
 		return result;
@@ -102,7 +103,7 @@ public class SubProgramChair implements Serializable {
 	 * @version 5/8/2016
 	 */
 	public List<Manuscript> getManuscripts() {
-		return getMyManuscripts();
+		return myManuscripts;
 	}
 
 }

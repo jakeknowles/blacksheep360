@@ -1,6 +1,10 @@
 package view;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -10,15 +14,44 @@ import model.Manuscript;
 import model.PastDeadlineException;
 import model.User;
 
+/**
+ * @author Alexandria Reynolds
+ * @author Carl Huntington
+ * @author Geoffrey Tanay
+ * @author Jake Knowles
+ *  
+ * @version 5/31/2016
+ */
 public class AuthorUI {
 	
+	/**
+	 * A map of users.
+	 */
 	private HashMap<String, User> myUsers;
+	/**
+	 * The conference currently logged into.
+	 */
 	private Conference myConf;
+	/**
+	 * the name of the currently logged in user.
+	 */
 	private String myName;
+	/**
+	 * The role of the currently logged in user.
+	 */
 	private String myRole;
+	/**
+	 * The current date.
+	 */
 	private String currDateString;
+	/**
+	 * The input console.
+	 */
 	private Scanner console;
 
+	/**
+	 * @version 5/8/2016
+	 */
 	public AuthorUI(HashMap<String, User> theUsers, Conference theConf, 
 			String theWhoAmI, String theRole, String theCurrDateString, Scanner theConsole) {
 		myUsers = theUsers; 
@@ -96,6 +129,9 @@ public class AuthorUI {
 	public void submitManuscript() {
 		MSEEConfMgr.header(User.AUTHOR, myName, currDateString, myConf.getMyConfName());
 		viewMyManuscripts();
+		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy"); 	
+		System.out.println("\nThe deadline for manuscript submission is : " 
+							+ dateFormat.format(myConf.getMyManuscriptDeadline()) + "\n");
 		System.out.println("Enter the file path for the manuscript");
 		System.out.println("you wish to upload");
 		System.out.println("ex. C:\\Documents\\example.doc");
@@ -113,15 +149,9 @@ public class AuthorUI {
 			}
 		} else if (filePath.equals("2")) {
 			System.out.println("Exiting - Goodbye!");
-			//serial();
 		} else {
 			File toBeSaved = null;
-			try {
-				toBeSaved = new File(filePath);
-			} catch (NullPointerException e) {
-				System.out.println("File not found at location: " + filePath + "\n");
-				submitManuscript();
-			}
+			toBeSaved = new File(filePath);
 			
 			User me = myUsers.get(myName);
 			System.out.print("Now enter the title of your submission \n> ");
@@ -147,6 +177,9 @@ public class AuthorUI {
 				} else {
 					authorInterfaceHasManuscripts();
 				}
+			} catch (IOException e) {
+				System.out.println("File not found at location: " + filePath + "\n");
+				submitManuscript();
 			}
 			myConf.addManuscript(newManuscript);
 			System.out.println(paperName + " has been submitted to " + myConf.getMyConfName() + ".");
@@ -168,8 +201,6 @@ public class AuthorUI {
 		int exit = back + 1;
 		
 		System.out.println("Select the manuscript you wish to edit"); 
-		//System.out.println("you wish to edit");
-		//System.out.println("ex. C:\\Documents\\example.doc"); 
 		System.out.println("\n\t- OR -");
 		System.out.println("\t" + back + ". Back");
 		System.out.println("\t" + exit + ". Exit");
@@ -185,7 +216,7 @@ public class AuthorUI {
 			Manuscript selectedManuscript = auth.getMyManuscripts().get(selection - 1);
 			System.out.print("Please select what you would like to do: "
 					+ "\n1. Change manuscript title"
-					+ "\n2. Update manuscript file\n> ");
+					+ "\n2. Change manuscript file\n> ");
 			selection = console.nextInt();
 			console.nextLine();
 			System.out.println();
@@ -203,15 +234,13 @@ public class AuthorUI {
 				System.out.print("ex. C:\\Documents\\example.doc\n> ");
 				String filePath = console.nextLine();
 				System.out.println();
-				File toBeSaved = null;
-				try{
-					toBeSaved = new File(filePath);
-				}
-				catch (NullPointerException e) {
+				File toBeSaved = new File(filePath);
+				try {
+					myUsers.get(myName).getAuthor().editManuscriptFile(selectedManuscript, toBeSaved);
+				} catch (IOException e) {
 					System.out.println("File not found at location: " + filePath + "\n");
-					break;
+					editManuscript();
 				}
-				myUsers.get(myName).getAuthor().editManuscriptFile(selectedManuscript, toBeSaved);
 				System.out.println("File submission successful.");
 				break;
 			}
@@ -232,8 +261,6 @@ public class AuthorUI {
 		int exit = back + 1;
 		
 		System.out.println("Select the manuscript you wish to remove");
-		//System.out.println("you wish to remove");
-		//System.out.println("ex. C:\\Documents\\example.doc");
 		System.out.println("\n\t- OR -");
 		System.out.println("\t" + back + ". Back");
 		System.out.println("\t" + exit + ". Exit");
@@ -265,7 +292,34 @@ public class AuthorUI {
 			System.out.println("Manuscripts submitted: ");
 			Author auth = myUsers.get(myName).getAuthor();
 			for (int i = 0; i < auth.getMyManuscripts().size(); i++) {
-				System.out.println((i + 1) + ". " + auth.getMyManuscripts().get(i).getMyTitle());
+				Manuscript man = auth.getMyManuscripts().get(i);
+				System.out.print((i + 1) + ". " + man.getMyTitle());
+				
+				
+				if (myConf.getMyManuscriptDeadline().before(new Date())) {
+					System.out.print(", Reviews: ");
+					if (!man.getMyReviews().isEmpty()) {
+						System.out.print(man.getMyReviews().get(0).getMyRating());
+						for (int j = 1; j < man.getMyReviews().size(); j++) {
+							System.out.print(", " + man.getMyReviews().get(0).getMyRating());
+						}
+					} else {
+						System.out.print("no reviews");
+					}
+					System.out.print(", Approval Status: ");
+					switch (man.getMyApproval()){
+					case NO_DECISION:
+						System.out.print("Undecided");
+						break;
+					case REJECTED:
+						System.out.print("Rejected");
+						break;
+					case ACCEPTED:
+						System.out.print("Accepted");
+						break;
+					}
+				}
+				System.out.println();
 			}
 		}
 	}

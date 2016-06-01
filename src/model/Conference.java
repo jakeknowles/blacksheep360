@@ -2,7 +2,6 @@ package model;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 import java.io.Serializable;
 
 /**
@@ -70,22 +69,39 @@ public class Conference implements Serializable {
 		getMyManuscripts().put(theManuscript.getMyTitle(), theManuscript);
 	}
 	
+	/**
+	 * @version 5/30/2016
+	 */
 	public Date getMyManuscriptDeadline() {
 		return myManuscriptDeadline;
 	}
 
+	/**
+	 * @version 5/30/2016
+	 */
 	public HashMap<String, Manuscript> getMyManuscripts() {
 		return myManuscripts;
 	}
 
+	/**
+	 * @version 5/30/2016
+	 */
 	public String getMyConfName() {
 		return myConfName;
 	}
 	
+	/**
+	 * @version 5/30/2016
+	 */
 	public HashMap<String, User> getUserMap() {
 		return myUsers;
 	}
 	
+	/**
+	 * Changes the title of a manuscript in the conferences list of manuscripts.
+	 * @param theOldTitle
+	 * @param theNewTitle
+	 */
 	public void editManuscriptTitle(String theOldTitle, String theNewTitle) {
 		Manuscript man = myManuscripts.get(theOldTitle);
 		myManuscripts.remove(theOldTitle);
@@ -102,10 +118,16 @@ public class Conference implements Serializable {
 		getMyManuscripts().remove(theTitle);
 	}
 	
+	/**
+	 * @version 5/30/2016
+	 */
 	public int getLowScore() {
 		return myLowestRating;
 	}
 	
+	/**
+	 * @version 5/30/2016
+	 */
 	public int getHighScore() {
 		return myHighestRating;
 	}

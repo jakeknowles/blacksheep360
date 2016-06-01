@@ -30,11 +30,8 @@ import model.User;
  * @author Geoffrey Tanay
  * @author Jake Knowles
  *  
- * @version 5/8/2016
+ * @version 5/31/2016
  */
-
-// Alexandria, 5/15/16 - I think we should separate the headers of each interface into their own methods,
-// since we use the same 3 lines in every menu.
 public class MSEEConfMgr {
 
 	static Conference myConf;
@@ -98,6 +95,11 @@ public class MSEEConfMgr {
 	      }
 	}
 	
+	/**
+	 * Selects a conference from a list.
+	 * 
+	 * @version 5/20/2016
+	 */
 	public static Conference selectConference() {
 		int i = 1;
 		System.out.println("Select a conference number:");
@@ -115,10 +117,9 @@ public class MSEEConfMgr {
 	/**
 	 * Login as a user and role.
 	 * 
-	 * @version 5/8/2016
+	 * @version 5/31/2016
 	 */
 	public static String login(HashMap<String, User> theUsers) {
-		System.out.println("Welcome to the MSEE Conference Manager.");
 		System.out.print("Please enter your User Name > ");
 		String userName = console.nextLine();
 		
@@ -126,18 +127,14 @@ public class MSEEConfMgr {
 		int i = 0;
 		String roles[] = new String[4];
 		roles[i++] = User.AUTHOR;
-		//System.out.println("Author");
 		if (theUsers.get(userName).isRole(User.PROGRAM_CHAIR)) {
 			roles[i++] = User.PROGRAM_CHAIR;
-			//System.out.println("Program Chair");
 		}
 		if (theUsers.get(userName).isRole(User.REVIEWER)) {
 			roles[i++] = User.REVIEWER;
-			//System.out.println("Reviewer");
 		} 
 		if (theUsers.get(userName).isRole(User.SUBPROGRAM_CHAIR)) {
 			roles[i++] = User.SUBPROGRAM_CHAIR;
-			//System.out.println("Subprogram Chair");
 		} 
 		for (int j = 1; j <= i; j++) {
 			System.out.println(j + ". " + roles[j -1]);
@@ -178,8 +175,12 @@ public class MSEEConfMgr {
 		} 
 	}
 	
+	/**
+	 * Displays the program header
+	 * @version 5/25/2016
+	 */
 	public static void header(String role, String name, String date, String conference){
-		System.out.println("MSEE Conference Management");
+		System.out.println("\n\nMSEE Conference Management");
 		System.out.println( role + " - " + name);
 		System.out.println(conference);
 		System.out.println("Date: " + date);

@@ -11,17 +11,49 @@ import model.ManuscriptAcceptanceStatus;
 import model.ProgramChair;
 import model.User;
 
+/**
+ * @author Alexandria Reynolds
+ * @author Carl Huntington
+ * @author Geoffrey Tanay
+ * @author Jake Knowles
+ *  
+ * @version 5/31/2016
+ */
 public class ProgramChairUI {
 
+	/**
+	 * A map of users.
+	 */
 	private HashMap<String, User> myUsers;
+	/**
+	 * The conference currently logged into.
+	 */
 	private Conference myConf;
+	/**
+	 * The name of the current user.
+	 */
 	private String myName;
+	/**
+	 * The role of the current user.
+	 */
 	private String myRole;
+	/**
+	 * The current date.
+	 */
 	private String currDateString;
+	/**
+	 * the input console.
+	 */
 	private Scanner console;
+	/**
+	 * the current program chair
+	 */
 	private ProgramChair myProgChair;
 
 
+	/**
+	 * @version 5/30/2016
+	 */
 	public ProgramChairUI(HashMap<String, User> theUsers, Conference theConf, 
 			String theWhoAmI, String theRole, String theCurrDateString, Scanner theConsole) {
 		myUsers = theUsers; 
@@ -39,7 +71,6 @@ public class ProgramChairUI {
 	 * @version 5/8/2016
 	 */
 	public void pcInterface() {
-		System.out.println();
 		MSEEConfMgr.header(User.AUTHOR, myName, currDateString, myConf.getMyConfName());
 		System.out.println("Select an action:");
 		System.out.println("\t1. View list of submitted manuscripts.");
@@ -78,28 +109,29 @@ public class ProgramChairUI {
 	public void assignSPC() {
 		MSEEConfMgr.header(User.AUTHOR, myName, currDateString, myConf.getMyConfName());
 		List<String> users = new ArrayList<String>(myUsers.keySet());
-		System.out.println("Subprogram Chairs: "); //Alexandria, 5/17/2016 - prints list of subprogram chairs
-		displayUsers(users);
-		int back = users.size() + 1;
+		System.out.println("Subprogram Chairs: ");
+		List<String> subProgramChairs = getSubProgramChairs(users);
+		displaySubProgramChairs(subProgramChairs);
+		int back = subProgramChairs.size() + 1;
 		int exit = back + 1;
 		System.out.println("Select the subprogram chair you want to assign to a manuscript.");
 		System.out.println("\n\t- OR -");
 		System.out.println("\t" + back + ". Back");
 		System.out.println("\t" + exit + ". Exit");
 		System.out.println("> ");
-		int  name = console.nextInt();
+		int  selection = console.nextInt();
 		console.nextLine();
-		if (name == back) {
+		if (selection == back) {
 			if (myUsers.get(myName).isRole(myRole)) {
 				pcInterface();
 			}
-		} else if (name == exit) {
+		} else if (selection == exit) {
 			System.out.println("Exiting - Goodbye!");
 		} else {
-			User selectedSPC = myUsers.get(users.get(name - 1));
+			User selectedSPC = myUsers.get(subProgramChairs.get(selection - 1));
 			
 			System.out.println("Manuscripts already assigned to " + selectedSPC.getMyName() + ":");
-			for (Manuscript manuscript : selectedSPC.getSubProgramChair().getMyManuscripts()){
+			for (Manuscript manuscript : selectedSPC.getSubProgramChair().getManuscripts()){
 				System.out.println(manuscript.getMyTitle());
 			}
 			
@@ -117,7 +149,7 @@ public class ProgramChairUI {
 			
 			System.out.println("\nSelect the manuscript you wish to assign:"); 
 			System.out.println("> ");
-			int selection = console.nextInt();
+			selection = console.nextInt();
 			console.nextLine();
 			boolean result = myProgChair.assignManuscripts(selectedSPC, availableManuscripts.get(selection - 1));
 			if (result) {
@@ -141,8 +173,8 @@ public class ProgramChairUI {
 		int back = submittedManuscripts.size() + 1;
 		int exit = back + 1;
 		printManuscripts(submittedManuscripts);
-		System.out.println("Enter the title of the "
-				+ "manuscript you want to accept/reject."); 
+		System.out.println("\nSelect the "
+				+ "manuscript you want to make a decision for."); 
 		System.out.println("\n\t- OR -");
 		System.out.println("\t" + back + ". Back");
 		System.out.println("\t" + exit + ". Exit");
@@ -180,7 +212,7 @@ public class ProgramChairUI {
 	public void viewManuscripts(){
 		List<Manuscript> submittedManuscripts = new ArrayList<Manuscript>(myConf.getMyManuscripts().values());
 		printManuscripts(submittedManuscripts);
-		System.out.println("\t1. Back");
+		System.out.println("\n\n\t1. Back");
 		System.out.println("\t2. Exit");
 		System.out.print("> ");
 		String input = console.nextLine();
@@ -198,9 +230,14 @@ public class ProgramChairUI {
 	 */
 	public void printManuscripts(List<Manuscript> theManuscripts){
 		System.out.println("------Submitted Manuscripts------");
-		System.out.println("Title\tAuthor\tAcceptance Status\n");
+		System.out.println("Title, Author, Recommendation, Acceptance Status\n");
 		for (int i = 0; i < theManuscripts.size(); i ++){
-			System.out.print((i+1) + ". " + theManuscripts.get(i).getMyTitle() + "\t" + theManuscripts.get(i).getMyAuthorName() + "\t");
+			System.out.print((i+1) + ". " + theManuscripts.get(i).getMyTitle() + ", " + theManuscripts.get(i).getMyAuthorName() + ", ");
+			if (theManuscripts.get(i).getMyRecommendation() != null) {
+				System.out.print(theManuscripts.get(i).getMyRecommendation().getStatement() + ", ");
+			} else {
+				System.out.print("No Recommendation, ");
+			}
 			switch (theManuscripts.get(i).getMyApproval()){
 			case NO_DECISION:
 				System.out.println("Undecided");
@@ -215,23 +252,39 @@ public class ProgramChairUI {
 		}
 	}
 	
-	public void displayUsers(List<String> theUsers) {
+	/**
+	 * Displays a list of subprogram chairs.
+	 * @version 5/31/2016
+	 */
+	public void displaySubProgramChairs(List<String> theUsers) {
+		int j = 1;
 		for (int i = 0; i < theUsers.size(); i++) {
-			System.out.print((i+1) + ". " + theUsers.get(i));
-			if (myUsers.get(theUsers.get(i)).isRole(User.PROGRAM_CHAIR)) {
-				System.out.println(" - " + User.PROGRAM_CHAIR);
-			} else if (myUsers.get(theUsers.get(i)).isRole(User.SUBPROGRAM_CHAIR)) {
-				System.out.println(" - " + User.SUBPROGRAM_CHAIR);
-			} else if (myUsers.get(theUsers.get(i)).isRole(User.REVIEWER)) {
-				System.out.println(" - " + User.REVIEWER);
-			} else if (myUsers.get(theUsers.get(i)).isRole(User.AUTHOR)) {
-				System.out.println(" - " + User.AUTHOR);
-			} else {
-				System.out.println();
-			}
+			 if (myUsers.get(theUsers.get(i)).isRole(User.SUBPROGRAM_CHAIR)) {
+				 System.out.println((j++) + ". " + theUsers.get(i));
+			 }
 		}
 	}
 	
+	/**
+	 * Gets a list of all assigned subprogram chairs.
+	 * @version 5/31/2016
+	 */
+	public List<String> getSubProgramChairs(List<String> theUsers) {
+		List<String> spc = new ArrayList<String>();
+		for (int i = 0; i < theUsers.size(); i++) {
+			 if (myUsers.get(theUsers.get(i)).isRole(User.SUBPROGRAM_CHAIR)) {
+				 spc.add(theUsers.get(i));
+			 }
+		}
+		return spc;
+	}
+	
+	/**
+	 * Displays all subprogram chairs and the manuscripts that have been assigned to them.
+	 * Also displays manuscripts not assigned to a subprogram chair.
+	 * 
+	 * @version 5/31/2016
+	 */
 	public void viewSubProgramChairManuscriptAssignments() {
 		for (String subPC : myUsers.keySet()) {
 			if (myUsers.get(subPC).isRole(User.SUBPROGRAM_CHAIR)) {

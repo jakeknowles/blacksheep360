@@ -3,12 +3,15 @@ package test;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.IOException;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import model.Manuscript;
 import model.ManuscriptAcceptanceStatus;
 import model.ProgramChair;
+import model.SubProgramChair;
 import model.User;
 
 /**
@@ -23,6 +26,51 @@ import model.User;
  */
 
 public class ProgramChairTest {
+	
+	/**
+	 * A manuscript file.
+	 */
+	public File manuscriptFile;
+	
+	/**
+	 * a manuscript.
+	 */
+	public Manuscript aManuscript;
+	
+	/**
+	 * A manuscript authored by a subprogram chair.
+	 */
+	public Manuscript subprogChairsManuscript;
+	
+	/**
+	 * A program chair.
+	 */
+	public User progChair;
+	
+	/**
+	 * A subprogram chair.
+	 */
+	public User subprogChair;
+	
+	
+	@Before
+	public void setUp() {
+		manuscriptFile = new File("./TestDataFiles/TestManuscriptFile");
+		try {
+			aManuscript = new Manuscript(manuscriptFile, "Tester", "test");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		progChair = new User("Program Chairman");
+		progChair.assignProgramChair(new ProgramChair());
+		subprogChair = new User("Sub Chairman");
+		subprogChair.assignSubProgramChair(new SubProgramChair());
+		try {
+			subprogChairsManuscript = new Manuscript(manuscriptFile, "Sub Chairman", "test");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * tests submit decision.
@@ -31,10 +79,6 @@ public class ProgramChairTest {
 	 */
 	@Test
 	public void testSubmitDecision() {
-		File manFile = new File("./AlexTest.txt");
-		Manuscript aManuscript = new Manuscript(manFile, "Tester", "test");
-		User progChair = new User("Program Chairman");
-		progChair.assignProgramChair(new ProgramChair());
 		progChair.getProgramChair().submitDecision(aManuscript, ManuscriptAcceptanceStatus.ACCEPTED);
 		assertTrue(aManuscript.getMyApproval().equals(ManuscriptAcceptanceStatus.ACCEPTED));
 	}
@@ -46,13 +90,8 @@ public class ProgramChairTest {
 	 */
 	@Test
 	public void testAssignManuscript() {
-		User progChair = new User("Program Chairman");
-		progChair.assignProgramChair(new ProgramChair());
-		User subChair = new User("Sub Chairman");
-		File manFile = new File("./AlexTest.txt");
-		Manuscript manu = new Manuscript(manFile, "Tester", "test");
-		assertTrue(progChair.getProgramChair().assignManuscripts(subChair, manu));
-		assertEquals(subChair.getSubProgramChair().getMyManuscripts().size(), 1);
+		assertTrue(progChair.getProgramChair().assignManuscripts(subprogChair, aManuscript));
+		assertEquals(subprogChair.getSubProgramChair().getManuscripts().size(), 1);
 	}
 	
 	/**
@@ -63,13 +102,8 @@ public class ProgramChairTest {
 	 */
 	@Test
 	public void testAssignManuscriptToAuthor() {
-		User progChair = new User("Program Chairman");
-		progChair.assignProgramChair(new ProgramChair());
-		User subChair = new User("Sub Chairman");
-		File manFile = new File("./AlexTest.txt");
-		Manuscript manu = new Manuscript(manFile, "Sub Chairman", "test");
-		assertFalse(progChair.getProgramChair().assignManuscripts(subChair, manu));
-		assertEquals(subChair.getSubProgramChair().getMyManuscripts().size(), 0);	
+		assertFalse(progChair.getProgramChair().assignManuscripts(subprogChair, subprogChairsManuscript));
+		assertEquals(subprogChair.getSubProgramChair().getManuscripts().size(), 0);	
 	}
 
 }

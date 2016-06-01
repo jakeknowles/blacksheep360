@@ -1,6 +1,7 @@
 package view;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,15 +12,44 @@ import model.Manuscript;
 import model.Reviewer;
 import model.User;
 	
+/**
+ * @author Alexandria Reynolds
+ * @author Carl Huntington
+ * @author Geoffrey Tanay
+ * @author Jake Knowles
+ *  
+ * @version 5/31/2016
+ */
 public class ReviewerUI {
 
+	/**
+	 * The conference that the user is logged into.
+	 */
 	private Conference myConf;
+	/**
+	 * The name of the user logged in to the current session.
+	 */
 	private String myName;
+	/**
+	 * The current date.
+	 */
 	private String currDateString;
+	/**
+	 * The input console.
+	 */
 	private Scanner console;
+	/**
+	 * The reviewer currently logged in.
+	 */
 	private Reviewer myReviewer;
+	/**
+	 * A list of manuscripts assigned to the logged in reviewer.
+	 */
 	private List<Manuscript> myAssignedManuscripts;
 
+	/**
+	 * @version 5/31/2016
+	 */
 	public ReviewerUI(HashMap<String, User> theUsers, Conference theConf, 
 			String theWhoAmI, String theRole, String theCurrDateString, Scanner theConsole) {
 		myConf = theConf;
@@ -37,7 +67,6 @@ public class ReviewerUI {
 	 */
 	public void reviewerInterface() {
 		
-		System.out.println();
 		MSEEConfMgr.header(User.REVIEWER, myName, currDateString, myConf.getMyConfName());
 		System.out.println("\nReviews Submitted:");
 		viewMyReviews();
@@ -88,17 +117,11 @@ public class ReviewerUI {
 			System.out.println("Exiting - Goodbye!");
 		} else {
 			Manuscript selectedManuscript = myAssignedManuscripts.get(selection - 1);
-			File reviewForm = null;
 			System.out.println("Enter the file path for the review form.");
 			System.out.print("\n> ");
 			
 			String filePath = console.nextLine();
-			try {
-				reviewForm = new File(filePath);
-			} catch (NullPointerException e) {
-				System.out.println("File not found at location: " + filePath + "\n");
-				submitReview();
-			}
+			File reviewForm = new File(filePath);
 			
 			boolean validScore = false;
 			int rating = 0;
@@ -113,12 +136,21 @@ public class ReviewerUI {
 				}
 			}
 			
-			myReviewer.submitReview(reviewForm, selectedManuscript, rating); 
+			try {
+				myReviewer.submitReview(reviewForm, selectedManuscript, rating);
+			} catch (IOException e) {
+				System.out.println("File not found at location: " + filePath + "\n");
+				submitReview();
+			} 
 			System.out.println("\nReview submitted for " + selectedManuscript.getMyTitle()); 
 			submitReview();
 		}
 	}
 	
+	/**
+	 * Displays the reviews assigned to the reviewer, and the score that the reviewer has given.
+	 * @version 5/31/2016
+	 */
 	public void viewMyReviews(){ 
 		if (myAssignedManuscripts.size() > 0) {
 			for (int i = 0; i < myAssignedManuscripts.size(); i++) {

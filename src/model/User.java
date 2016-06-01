@@ -40,27 +40,48 @@ public class User implements Serializable {
 		myRoles = new Roles();
 	}
 	
+	/**
+	 * Constructor for creating a user with already established roles.
+	 * 
+	 * @param theName
+	 * @param theRoles
+	 */
 	public User(String theName, Roles theRoles) {
 		myName = theName;
 		myRoles = theRoles;
 	}
 
+	/**
+	 * @version 5/30/2016
+	 */
 	public String getMyName() {
 		return myName;
 	}
 
+	/**
+	 * @version 5/30/2016
+	 */
 	public Author getAuthor() {
 		return myRoles.getAuthor();
 	}
 	
+	/**
+	 * @version 5/30/2016
+	 */
 	public Reviewer getReviewer() {
 		return myRoles.getReviewer();
 	}
 	
+	/**
+	 * @version 5/30/2016
+	 */
 	public SubProgramChair getSubProgramChair() {
 		return myRoles.getSubProgramChair();
 	}
 
+	/**
+	 * @version 5/30/2016
+	 */
 	public ProgramChair getProgramChair() {
 		return myRoles.getProgramChair();
 	}
@@ -82,24 +103,48 @@ public class User implements Serializable {
 		return false;
 	}
 	
+	/**
+	 * Assigns the role of author to the user.
+	 * If the user is already an Author then it does nothing.
+	 * 
+	 * @version 5/31/2016
+	 */
 	public void assignAuthor(Author theAuthor) {
 		if (myRoles.getAuthor() == null) {
 			myRoles.setAuthor(theAuthor);
 		}
 	} 
 	
+	/**
+	 * Assigns the role of reviewer to the user.
+	 * If the user is already a reviewer then it does nothing.
+	 * 
+	 * @version 5/31/2016
+	 */
 	public void assignReviewer(Reviewer theReviewer) {
 		if (myRoles.getReviewer() == null) {
 			myRoles.setReviewer(theReviewer);
 		}
 	}
 	
+	/**
+	 * Assigns the role of Subprogram Chair to the user.
+	 * If the user is already a subprogram chair then it does nothing.
+	 * 
+	 * @version 5/31/2016
+	 */
 	public void assignSubProgramChair(SubProgramChair theSubProgramChair) {
 		if (myRoles.getSubProgramChair() == null) {
 			myRoles.setSubProgramChair(theSubProgramChair);
 		}
 	}
 	
+	/**
+	 * Assigns the role of program chair to the user.
+	 * If the user is already a program chair then it does nothing.
+	 * 
+	 * @version 5/31/2016
+	 */
 	public void assignProgramChair(ProgramChair theProgramChair) {
 		if (myRoles.getProgramChair() == null) {
 			myRoles.setProgramChair(theProgramChair);

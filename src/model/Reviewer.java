@@ -1,6 +1,7 @@
 package model; 
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -46,8 +47,9 @@ public class Reviewer implements Serializable {
 	 * Submits a review of a manuscript.
 	 * 
 	 * @version 5/8/2016
+	 * @throws IOException 
 	 */
-	public void submitReview(File theReview, Manuscript theManuscript, int theRating) {
+	public void submitReview(File theReview, Manuscript theManuscript, int theRating) throws IOException {
 		if(myReviews.containsKey(theManuscript)) {
 			myReviews.remove(theManuscript);
 		}
@@ -57,6 +59,9 @@ public class Reviewer implements Serializable {
 		theManuscript.getMyReviews().add(rev);
 	}
 	
+	/**
+	 * @version 5/31/2016
+	 */
 	public Map<Manuscript, Review> getMyReviews() {
 		return myReviews;
 	}
@@ -87,6 +92,12 @@ public class Reviewer implements Serializable {
 		return myReviews.keySet();
 	}
 	
+	/**
+	 * Checks that this reviewer has submitted a review for the 
+	 * given manuscript
+	 * 
+	 * @version 5/31/2016
+	 */
 	public boolean hasReviewed(Manuscript theManuscript) {
 		if (myReviews.get(theManuscript) == null) {
 			return false;

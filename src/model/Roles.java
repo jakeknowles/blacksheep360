@@ -45,33 +45,60 @@ public class Roles implements Serializable{
 			myProgramChair = theProgramChair;
 		}
 		
+		//Setters and Getters
+		
+		/**
+		 * @version 5/31/2016
+		 */
 		public void setAuthor(Author theAuthor) {
 			myAuthor = theAuthor;
 		}
 		
+		/**
+		 * @version 5/31/2016
+		 */
 		public Author getAuthor() {
 			return myAuthor;
 		}
 		
+		/**
+		 * @version 5/31/2016
+		 */
 		public void setReviewer(Reviewer theReviewer) {
 			myReviewer = theReviewer;
 		}
 		
+		/**
+		 * @version 5/31/2016
+		 */
 		public Reviewer getReviewer() {
 			return myReviewer;
 		}
+		
+		/**
+		 * @version 5/31/2016
+		 */
 		public SubProgramChair getSubProgramChair() {
 			return mySubProgramChair;
 		}
 		
+		/**
+		 * @version 5/31/2016
+		 */
 		public void setSubProgramChair(SubProgramChair theSubProgramChair) {
 			mySubProgramChair = theSubProgramChair;
 		}
 		
+		/**
+		 * @version 5/31/2016
+		 */
 		public ProgramChair getProgramChair() {
 			return myProgramChair;
 		}
 		
+		/**
+		 * @version 5/31/2016
+		 */
 		public void setProgramChair(ProgramChair theProgramChair) {
 			myProgramChair = theProgramChair;
 		}

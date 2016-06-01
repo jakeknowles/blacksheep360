@@ -3,10 +3,14 @@ package test;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import model.Manuscript;
+import model.Review;
 import model.Reviewer;
 import model.User;
 /**
@@ -17,10 +21,77 @@ import model.User;
  * @author Geoffrey Tanay
  * @author Jake Knowles
  *  
- * @version 5/8/2016
+ * @version 5/31/2016
  */
 
 public class ReviewerTest {
+	
+	/**
+	 * A reviewer with no assigned manuscripts.
+	 */
+	public User reviewerWithNoAssignedManuscripts;
+	
+	/**
+	 * A reviewer with the maximum amount of assigned manuscripts.
+	 */
+	public User reviewerWithMaxAssignedManuscripts;
+	
+	/**
+	 * A review file.
+	 */
+	public File reviewFile;
+	
+	/**
+	 * A manuscript file.
+	 */
+	public File manuscriptFile;
+	
+	/**
+	 * A manuscript.
+	 */
+	public Manuscript manuscript;
+	
+	/**
+	 * A manuscript authored by a reviewer.
+	 */
+	public Manuscript reviewersManuscript;
+	
+	/**
+	 * A score to assign to a manuscript.
+	 */
+	public int score;
+	
+	
+	@Before
+	public void setUp() {
+		reviewerWithNoAssignedManuscripts = new User("Ron");
+		reviewerWithNoAssignedManuscripts.assignReviewer(new Reviewer());
+		reviewFile = new File("./TestDataFiles/TestReview");
+		manuscriptFile = new File("./TestDataFiles/TestManuscriptFile");
+		
+		try {
+			manuscript = new Manuscript(manuscriptFile, "Arthur", "test");
+			reviewersManuscript = new Manuscript(manuscriptFile, reviewerWithNoAssignedManuscripts.getMyName(), "test");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		score = 79;
+		HashMap<Manuscript, Review> reviews = new HashMap<Manuscript, Review>();
+		for (int i = 0; i < Reviewer.MANUSCRIPT_LIMIT; i++) {
+			String testAuthor = "Test Author" + i;
+			String testTitle = "Test Title" + i;
+			Manuscript man;
+			try {
+				man = new Manuscript(manuscriptFile, testAuthor, testTitle);
+				reviews.put(man, new Review(reviewFile, score + i, man.getMyTitle()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		reviewerWithMaxAssignedManuscripts = new User("Randy");
+		reviewerWithMaxAssignedManuscripts.assignReviewer(new Reviewer(reviews));
+	}
 
 	/**
 	 * tests the submit review method.
@@ -29,15 +100,13 @@ public class ReviewerTest {
 	 */
 	@Test
 	public void testSubmitReview() {
-		User ron = new User("Ron");
-		ron.assignReviewer(new Reviewer());
-		File revFile = new File("./review.txt");
-		File manFile = new File("./AntiSocialNetwork.doc");
-		Manuscript manu = new Manuscript(manFile, "Arthur", "test");
-		int SCORE = 79;
-		ron.getReviewer().submitReview(revFile, manu, SCORE);
-		assertEquals(ron.getReviewer().getMyReviews().size(), 1);
-		assertEquals(ron.getReviewer().getMyReviews().get(manu), manu.getMyReviews().get(0));
+		try {
+			reviewerWithNoAssignedManuscripts.getReviewer().submitReview(reviewFile, manuscript, score);
+		} catch (IOException e) {
+			fail();
+		}
+		assertEquals(reviewerWithNoAssignedManuscripts.getReviewer().getMyReviews().size(), 1);
+		assertEquals(reviewerWithNoAssignedManuscripts.getReviewer().getMyReviews().get(manuscript), manuscript.getMyReviews().get(0));
 	}
 	
 	/**
@@ -48,12 +117,8 @@ public class ReviewerTest {
 	 */
 	@Test
 	public void testAddManuscript() {
-		User ron = new User("Ron");
-		ron.assignReviewer(new Reviewer());
-		File manFile = new File("./AntiSocialNetwork.doc");
-		Manuscript manu = new Manuscript(manFile, "Arthur", "test");
-		assertTrue(ron.getReviewer().addManuscript(manu, ron.getMyName()));
-		assertTrue(ron.getReviewer().getManuscripts().contains(manu));
+		assertTrue(reviewerWithNoAssignedManuscripts.getReviewer().addManuscript(manuscript, reviewerWithNoAssignedManuscripts.getMyName()));
+		assertTrue(reviewerWithNoAssignedManuscripts.getReviewer().getManuscripts().contains(manuscript));
 	}
 	
 	/**
@@ -64,12 +129,8 @@ public class ReviewerTest {
 	 */
 	@Test
 	public void testAddManuscriptSameAuthor() {
-		User ron = new User("Ron");
-		ron.assignReviewer(new Reviewer());
-		File manFile = new File("./AntiSocialNetwork.doc");
-		Manuscript manu = new Manuscript(manFile, "Ron", "test");
-		assertFalse(ron.getReviewer().addManuscript(manu, ron.getMyName()));
-		assertEquals(ron.getReviewer().getMyReviews().size(), 0);
+		assertFalse(reviewerWithNoAssignedManuscripts.getReviewer().addManuscript(reviewersManuscript, reviewerWithNoAssignedManuscripts.getMyName()));
+		assertEquals(reviewerWithNoAssignedManuscripts.getReviewer().getMyReviews().size(), 0);
 	}
 	
 	/**
@@ -80,24 +141,8 @@ public class ReviewerTest {
 	 */
 	@Test
 	public void testAddManuscriptAtLimit() {
-		User ron = new User("Ron");
-		ron.assignReviewer(new Reviewer());
-		File manFile = new File("./AntiSocialNetwork.doc");
-		File manFile2 = new File("./AlexTest.txt");
-		File manFile3 = new File("./checkin3.doc");
-		File manFile4 = new File("./review.txt");
-		File manFile5 = new File("./Class Diagram.pdf");
-		Manuscript manu = new Manuscript(manFile, "Arthur", "test");
-		Manuscript manu2 = new Manuscript(manFile2, "Arthur", "test");
-		Manuscript manu3 = new Manuscript(manFile3, "Arthur", "test");
-		Manuscript manu4 = new Manuscript(manFile4, "Arthur", "test");
-		Manuscript manu5 = new Manuscript(manFile5, "Arthur", "test");
-		assertTrue(ron.getReviewer().addManuscript(manu, ron.getMyName()));
-		assertTrue(ron.getReviewer().addManuscript(manu2, ron.getMyName()));
-		assertTrue(ron.getReviewer().addManuscript(manu3, ron.getMyName()));
-		assertTrue(ron.getReviewer().addManuscript(manu4, ron.getMyName()));
-		assertFalse(ron.getReviewer().addManuscript(manu5, ron.getMyName()));
-		assertEquals(ron.getReviewer().getManuscripts().size(), 4);
+		assertFalse(reviewerWithMaxAssignedManuscripts.getReviewer().addManuscript(manuscript, reviewerWithNoAssignedManuscripts.getMyName()));
+		assertEquals(reviewerWithMaxAssignedManuscripts.getReviewer().getManuscripts().size(), 4);
 	}
 	
 }

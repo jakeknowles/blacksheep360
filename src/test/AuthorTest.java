@@ -3,6 +3,7 @@ package test;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -25,19 +26,47 @@ import model.User;
 
 public class AuthorTest {
 	
+	/**
+	 * deadline in the future.
+	 */
 	private Date futureDeadline;
 	
+	/**
+	 * Deadline in the past.
+	 */
 	private Date pastDeadline;
 	
+	/**
+	 * A user that is an author with no manuscripts.
+	 */
 	private User noManuscriptUser;
 	
+	/**
+	 * A user that is an author with one manuscript.
+	 */
 	private User oneManuscriptUser;
 	
+	/**
+	 * A file that contains a manuscript.
+	 */
 	private File manuscriptFile;
 	
+	
+	/**
+	 * a manuscript.
+	 */
 	private Manuscript testManuscript;
 	
-	private ArrayList<Manuscript> manList;
+	
+	/**
+	 * A list of manuscripts.
+	 */
+	private ArrayList<Manuscript> manuscriptList;
+	
+	/**
+	 * A test title for a manuscript.
+	 */
+	private String testTitle;
 	
 	@Before
 	public void setUp() {
@@ -46,16 +75,21 @@ public class AuthorTest {
 		pastDeadline = new Date(System.currentTimeMillis() - someTimeInterval);
 		noManuscriptUser = new User("Arthur");
 		oneManuscriptUser = new User("Arthur");
+		manuscriptFile = new File("./TestDataFiles/TestManuscriptFile");
+		testTitle = "Test Title";
 		try {
-			manuscriptFile = new File("./TestDataFiles/AntiSocialNetwork.doc");
-		} catch (NullPointerException e) {
-			System.err.println("PATHNAME ERROR");
+			testManuscript = new Manuscript(manuscriptFile, noManuscriptUser.getMyName(), testTitle);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		testManuscript = new Manuscript(manuscriptFile, noManuscriptUser.getMyName(), "Anti Social Network");
 		noManuscriptUser.assignAuthor(new Author(noManuscriptUser.getMyName()));
-		manList = new ArrayList<Manuscript>();
-		manList.add(testManuscript);
-		oneManuscriptUser.assignAuthor(new Author(oneManuscriptUser.getMyName(), manList));
+		manuscriptList = new ArrayList<Manuscript>();
+		manuscriptList.add(testManuscript);
+		try {
+			oneManuscriptUser.assignAuthor(new Author(oneManuscriptUser.getMyName(), manuscriptList));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -67,8 +101,10 @@ public class AuthorTest {
 	@Test
 	public void testSubmitManuscript() {
 		try {
-			noManuscriptUser.getAuthor().submitManuscript(manuscriptFile, futureDeadline, "Anti Social Network");
+			noManuscriptUser.getAuthor().submitManuscript(manuscriptFile, futureDeadline, testTitle);
 		} catch (PastDeadlineException e) {
+			fail();
+		} catch (IOException e) {
 			fail();
 		}
 		assertTrue(noManuscriptUser.getAuthor().getMyManuscripts().get(0).getMyTitle().equals(testManuscript.getMyTitle()));
@@ -82,7 +118,11 @@ public class AuthorTest {
 	 */
 	@Test (expected = PastDeadlineException.class)
 	public void testSubmitManuscriptAfterDeadline() throws PastDeadlineException {
-		noManuscriptUser.getAuthor().submitManuscript(manuscriptFile, pastDeadline, "Anti Social Network");
+		try {
+			noManuscriptUser.getAuthor().submitManuscript(manuscriptFile, pastDeadline, testTitle);
+		} catch (IOException e) {
+			fail();
+		}
 		fail();
 	}
 	
@@ -108,14 +148,24 @@ public class AuthorTest {
 		Manuscript man = oneManuscriptUser.getAuthor().getMyManuscripts().get(0);
 		File otherFile = null;
 		try {
-			otherFile = new File("./TestDataFiles/AlexTest.txt");
+			otherFile = new File("./TestDataFiles/SecondTestManuscriptFile");
 		} catch (NullPointerException e) {
 			System.err.println("PATHNAME ERROR");
 		}
-		oneManuscriptUser.getAuthor().editManuscriptFile(man, otherFile);
+		try {
+			oneManuscriptUser.getAuthor().editManuscriptFile(man, otherFile);
+		} catch (IOException e) {
+			fail();
+		}
 		assertEquals(oneManuscriptUser.getAuthor().getMyManuscripts().get(0).getMyManuscript(), otherFile);
 	}
 	
+	/**
+	 * Tests that an author can change the title of a manuscript
+	 * he/she has submitted.
+	 * 
+	 * @version 5/31/2016
+	 */
 	@Test
 	public void testEditManuscriptTitle() {
 		Manuscript man = oneManuscriptUser.getAuthor().getMyManuscripts().get(0);

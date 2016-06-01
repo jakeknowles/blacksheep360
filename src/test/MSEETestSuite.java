@@ -9,7 +9,11 @@ import org.junit.runners.Suite;
 	ConferenceTest.class,
 	ProgramChairTest.class,
 	ReviewerTest.class,
-	SubProgramChairTest.class
+	SubProgramChairTest.class,
+	UserTest.class,
+	ManuscriptTest.class,
+	ReviewTest.class,
+	RecommendationTest.class
 })
 
 public class MSEETestSuite {
